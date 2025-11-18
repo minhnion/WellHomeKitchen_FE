@@ -1,0 +1,157 @@
+import {
+  FaHome,
+  FaBox,
+  FaShoppingCart,
+  FaUsers,
+  FaCog,
+  FaTags,
+  FaCertificate,
+  FaLayerGroup,
+  FaFilter,
+  FaStar,
+  FaListAlt,
+  FaPlusSquare,
+  FaTicketAlt,
+  FaRegNewspaper,
+  FaPhotoVideo,
+  FaFolderOpen,
+  FaFileAlt,
+  FaThList,
+} from "react-icons/fa";
+
+export const allMenuItems = [
+  {
+    label: "Dashboard",
+    icon: <FaHome size={18} />,
+    link: "/admin",
+    roles: ["content-creator", "product-manager", "admin"],
+  },
+  {
+    label: "Quản lý sản phẩm",
+    icon: <FaBox size={18} />,
+    hasSubmenu: true,
+    key: "products",
+    roles: ["product-manager", "admin"],
+    submenu: [
+      {
+        label: "Danh mục sản phẩm",
+        icon: <FaTags size={16} />,
+        link: "/admin/categories",
+        roles: ["product-manager", "admin"],
+      },
+      {
+        label: "Thương hiệu sản phẩm",
+        icon: <FaCertificate size={16} />,
+        link: "/admin/brands",
+        roles: ["product-manager", "admin"],
+      },
+      {
+        label: "Phân loại danh mục",
+        icon: <FaLayerGroup size={16} />,
+        link: "/admin/subcategories",
+        roles: ["product-manager", "admin"],
+      },
+      {
+        label: "Thuộc tính danh mục",
+        icon: <FaThList size={16} />,
+        link: "/admin/category-attributes",
+        roles: ["product-manager", "admin"],
+      },
+      {
+        label: "Bộ lọc sản phẩm",
+        icon: <FaFilter size={16} />,
+        link: "/admin/filter-attributes",
+        roles: ["product-manager", "admin"],
+      },
+      {
+        label: "Danh sách sản phẩm",
+        icon: <FaListAlt size={16} />,
+        link: "/admin/products",
+        roles: ["product-manager", "admin"],
+      },
+      {
+        label: "Thêm sản phẩm",
+        icon: <FaPlusSquare size={16} />,
+        link: "/admin/add-product",
+        roles: ["product-manager", "admin"],
+      },
+      {
+        label: "Voucher giảm giá",
+        icon: <FaTicketAlt size={16} />,
+        link: "/admin/vouchers",
+        roles: ["product-manager", "admin"],
+      },
+      {
+        label: "Nhãn sản phẩm",
+        icon: <FaStar size={16} />,
+        link: "/admin/labels",
+        roles: ["product-manager", "admin"],
+      },
+    ],
+  },
+  {
+    label: "Quản lý đơn hàng",
+    icon: <FaShoppingCart size={18} />,
+    link: "/admin/orders",
+    roles: ["product-manager", "admin"],
+  },
+  {
+    label: "Quản lý bài viết",
+    icon: <FaRegNewspaper size={18} />,
+    hasSubmenu: true,
+    key: "news",
+    roles: ["content-creator", "admin"],
+    submenu: [
+      {
+        label: "Danh mục bài viết",
+        icon: <FaFolderOpen size={16} />,
+        link: "/admin/news-categories",
+        roles: ["content-creator", "admin"],
+      },
+      {
+        label: "Danh sách bài viết",
+        icon: <FaTags size={16} />,
+        link: "/admin/news",
+        roles: ["content-creator", "admin"],
+      },
+      {
+        label: "Thêm bài viết",
+        icon: <FaPlusSquare size={16} />,
+        link: "/admin/add-news",
+        roles: ["content-creator", "admin"],
+      },
+    ],
+  },
+  {
+    label: "Quản lý banner",
+    icon: <FaPhotoVideo size={18} />,
+    link: "/admin/banners",
+    roles: ["content-creator", "admin"],
+  },
+  {
+    label: "Quản lý File",
+    icon: <FaFileAlt size={18} />,
+    link: "/admin/files",
+    roles: ["content-creator", "product-manager", "admin"],
+  },
+  {
+    label: "Quản lý tài khoản",
+    icon: <FaUsers size={18} />,
+    link: "/admin/accounts",
+    roles: ["admin"],
+  },
+  {
+    label: "Cài đặt",
+    icon: <FaCog size={18} />,
+    link: "/admin/settings",
+    roles: ["admin"],
+  },
+];
+
+export const typeMessageNavigation = {
+  ORDER: "/admin/orders",
+  PRODUCT: "/admin/products",
+  POST: "/admin/posts",
+  COMMENT: "/admin/comments",
+  REVIEW: "/admin/reviews",
+};
