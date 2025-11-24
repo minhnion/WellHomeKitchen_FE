@@ -110,24 +110,22 @@ export default function CategoryMenu({ categories = [] }) {
   return (
     <div className="md:relative" ref={menuRef}>
       <button
-        className={`flex items-center px-4 py-2 rounded-md transition-colors duration-200 ${
-          showCategoryMenu
-            ? "bg-white text-black"
-            : "text-white hover:bg-gray-700"
-        }`}
+        className={`ml-62 flex items-center px-4 py-2 rounded-md transition-colors duration-200 ${showCategoryMenu
+          ? "bg-white text-[#263B96]"
+          : "text-[#263B96] hover:bg-white-700"
+          }`}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onClick={toggleMenu}
       >
-        <Menu className={`w-5 h-5 ${showCategoryMenu ? "text-black" : ""}`} />
-        <span className="ml-2 text-sm font-medium">Danh mục</span>
+        <Menu className={`w-5 h-5 ${showCategoryMenu ? "text-[#263B96]" : ""}`} />
+        <span className="ml-2 text-sm font-medium">DANH MỤC SẢN PHẨM</span>
       </button>
 
       {showCategoryMenu && categories.length > 0 && (
         <div
-          className={`absolute left-0 mx-2 md:mx-0 top-full bg-white shadow-xl rounded-lg md:w-[min(100vw-2rem,70vw)] lg:w-[min(100vw-2rem,65vw)] xl:w-[min(100vw-2rem,60vw)] flex z-50 overflow-hidden border border-gray-100 ${
-            showCategoryMenu ? "transition-transform duration-300" : ""
-          }`}
+          className={`absolute left-65 mx-2 md:mx-0 top-full bg-white shadow-xl rounded-lg md:w-[min(100vw-2rem,70vw)] lg:w-[min(100vw-2rem,65vw)] xl:w-[min(100vw-2rem,60vw)] flex z-50 overflow-hidden border border-gray-100 ${showCategoryMenu ? "transition-transform duration-300" : ""
+            }`}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
@@ -156,11 +154,10 @@ export default function CategoryMenu({ categories = [] }) {
                   onClick={() => setShowCategoryMenu(false)}
                 >
                   <div
-                    className={`px-2 py-2 hover:bg-gray-50 cursor-pointer transition-colors duration-150 flex items-center justify-between border border-gray-200 ${
-                      activeCategory && activeCategory._id === category._id
-                        ? "bg-gray-50 font-medium text-blue-600"
-                        : ""
-                    }`}
+                    className={`px-2 py-2 hover:bg-gray-50 cursor-pointer transition-colors duration-150 flex items-center justify-between border border-gray-200 ${activeCategory && activeCategory._id === category._id
+                      ? "bg-gray-50 font-medium text-blue-600"
+                      : ""
+                      }`}
                     onMouseEnter={
                       isHoverSupported
                         ? () => handleCategorySelect(category)
@@ -191,7 +188,7 @@ export default function CategoryMenu({ categories = [] }) {
             {showScrollButtons && canScrollDown() && (
               <button
                 onClick={() => handleScroll("down")}
-                className="absolute bottom-0 left-0 right-0 z-10 bg-white bg-opacity-90 flex justify-center shadow-md hover:bg-gray-100 transition-colors"
+                className="absolute bottom-0 left-65 right-0 z-10 bg-white bg-opacity-90 flex justify-center shadow-md hover:bg-gray-100 transition-colors"
               >
                 <ChevronDown className="text-gray-600" />
               </button>
@@ -241,7 +238,7 @@ export default function CategoryMenu({ categories = [] }) {
               )}
 
               {activeCategory.subcategories &&
-              activeCategory.subcategories.length > 0 ? (
+                activeCategory.subcategories.length > 0 ? (
                 <div className="mb-2">
                   <h4 className="font-medium text-sm text-gray-700 mb-2">
                     PHÂN LOẠI SẢN PHẨM

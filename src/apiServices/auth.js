@@ -1,4 +1,5 @@
 import { privateAPI, publicAPI } from "./AxiosInstance/axiosInstance";
+import axios from "axios";
 
 export const login = async (email, password, token) => {
   try {
@@ -52,5 +53,39 @@ export const updateProfile = async (formData) => {
     return response.data;
   } catch (error) {
     throw error;
+  }
+};
+
+export const sendResetPasswordEmail = async (email) => {
+  try {
+    const response = await publicAPI.post("/api/auth/forgot-password", {
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const checkEmailExists = async (email) => {
+  try {
+    // Phương án 1: Gọi API check email riêng
+    const response = await publicAPI.post("/api/auth/check-email", { email });
+    return response.data.exists;
+  } catch (error) {
+    try {
+      // Phương án 2: Thử đăng nhập để kiểm tra
+      const loginResponse = await publicAPI.post("/api/auth/check-account", {
+        email,
+        password: 'dummy_password'
+      });
+      // Nếu trả về lỗi "Email chưa đăng ký" thì return false
+      return loginResponse.data.exists !== false;
+    } catch (loginError) {
+      // Nếu lỗi là "Email không tồn tại" thì return false
+      if (loginError.response?.data?.message?.includes('không tồn tại')) {
+        return false;
+      }
+      throw loginError;
+    }
   }
 };

@@ -75,9 +75,9 @@ export default function RegisterPage() {
       </Head>
 
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
-        <div className="w-full max-w-4xl bg-white rounded-xl shadow-lg overflow-hidden">
+        <div className="w-full max-w-md bg-white rounded-xl shadow-lg overflow-hidden mx-4">
           <div className="flex flex-col md:flex-row">
-            {/* Left side - Image */}
+            {/* Left side - Image
             <div className="relative w-full md:w-1/2 h-64 md:h-auto min-h-[600px]">
               <Image
                 src="/images/online-kitchen-design.png"
@@ -86,22 +86,31 @@ export default function RegisterPage() {
                 className="object-cover"
                 priority
               />
-            </div>
+            </div> */}
 
             {/* Right side - Form */}
-            <div className="w-full md:w-1/2 p-8 flex flex-col justify-center">
-              <div className="flex justify-end mb-6">
+            <div className="w-full p-8 flex flex-col justify-center">
+              {/* <div className="flex justify-end mb-6">
                 <div className="flex items-center">
                   <BsCart4 size={24} className="text-blue-600 mr-2" />
                   <span className="font-bold">Kitchen Care</span>
                 </div>
-              </div>
+              </div> */}
 
-              <div className="mb-6 text-center">
-                <h2 className="text-2xl font-bold mb-1">Tạo tài khoản mới</h2>
-                <p className="text-gray-500 text-sm">
-                  Vui lòng điền thông tin để đăng ký
-                </p>
+              <div className="flex justify-center space-x-4 mb-4">
+                <Link
+                  href="/dang-nhap"
+                  className="text-2xl font-bold text-gray-500 hover:text-gray-700 transition-colors"
+                >
+                  Đăng nhập
+                </Link>
+                <span className="text-2xl font-bold text-gray-300">|</span>
+                <Link
+                  href="/dang-ky"
+                  className="text-2xl font-bold text-black"
+                >
+                  Đăng ký
+                </Link>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-4">
@@ -255,15 +264,14 @@ export default function RegisterPage() {
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       onBlur={() => setConfirmPasswordTouched(true)}
-                      className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-200 ${
-                        confirmPasswordTouched &&
+                      className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-200 ${confirmPasswordTouched &&
                         confirmPassword &&
                         !isPasswordMatch
-                          ? "border-red-500"
-                          : confirmPasswordTouched && isPasswordMatch
+                        ? "border-red-500"
+                        : confirmPasswordTouched && isPasswordMatch
                           ? "border-green-500"
                           : ""
-                      }`}
+                        }`}
                       required
                     />
                     <button
@@ -305,15 +313,36 @@ export default function RegisterPage() {
                   />
                 </div>
 
+                <p className=" text-xs text-gray-500">
+                  This site is protected by reCAPTCHA and the Google{" "}
+                  <a
+                    href="https://policies.google.com/privacy"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 no-underline hover:underline"
+                  >
+                    Privacy Policy
+                  </a>{" "}
+                  and{" "}
+                  <a
+                    href="https://policies.google.com/terms"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 no-underline hover:underline"
+                  >
+                    Terms of Service
+                  </a>{" "}
+                  apply.
+                </p>
+
                 <div className="mt-6">
                   <button
                     type="submit"
                     disabled={loading || !isPasswordValid || !isPasswordMatch}
                     className={`w-full flex items-center justify-center gap-2 py-2 rounded-md text-white focus:outline-none focus:ring focus:ring-blue-200 transition-all duration-200
-                      ${
-                        loading || !isPasswordValid || !isPasswordMatch
-                          ? "bg-blue-400 cursor-not-allowed"
-                          : "bg-blue-600 hover:bg-blue-700"
+                      ${loading || !isPasswordValid || !isPasswordMatch
+                        ? "bg-blue-400 cursor-not-allowed"
+                        : "bg-blue-600 hover:bg-blue-700"
                       }`}
                   >
                     {loading && <AiOutlineLoading className="animate-spin" />}
@@ -338,3 +367,4 @@ export default function RegisterPage() {
     </>
   );
 }
+

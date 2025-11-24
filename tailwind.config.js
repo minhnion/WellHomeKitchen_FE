@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 
-import themeColors from '@/styles/theme,js';
+import themeColors from '@/styles/theme.js';
 
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
@@ -11,7 +11,8 @@ export default {
         secondary: themeColors.secondary,
         accent: themeColors.accent,
         neutral: themeColors.neutral,
-        primaryAdmin: themeColors.primaryAdmin
+        primaryAdmin: themeColors.primaryAdmin,
+        wellBlue: themeColors.wellBlue
       },
     },
   },

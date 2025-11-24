@@ -86,9 +86,9 @@ export default function LoginPage() {
       )}
 
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
-        <div className="w-full max-w-4xl bg-white rounded-xl shadow-lg overflow-hidden">
+        <div className="w-full max-w-md bg-white rounded-xl shadow-lg overflow-hidden mx-4">
           <div className="flex flex-col md:flex-row">
-            <div className="relative w-full md:w-1/2 h-64 md:h-auto min-h-[500px]">
+            {/* <div className="relative w-full md:w-1/2 h-64 md:h-auto min-h-[500px]">
               <Image
                 src="/images/online-kitchen-design.png"
                 alt="Kitchen illustration"
@@ -96,21 +96,37 @@ export default function LoginPage() {
                 className="object-cover"
                 priority
               />
-            </div>
+            </div> */}
 
-            <div className="w-full md:w-1/2 p-8 flex flex-col justify-center">
-              <div className="flex justify-end mb-6">
+            <div className="w-full  p-8 flex flex-col justify-center">
+              {/* <div className="flex justify-end mb-6">
                 <div className="flex items-center">
                   <BsCart4 size={24} className="text-blue-600 mr-2" />
                   <span className="font-bold">Kitchen Care</span>
                 </div>
-              </div>
+              </div> */}
 
-              <div className="mb-6 text-center">
+              {/* <div className="mb-6 text-center">
                 <h2 className="text-2xl font-bold mb-1">Chào mừng trở lại</h2>
                 <p className="text-gray-500 text-sm">
                   Vui lòng đăng nhập vào tài khoản của bạn
                 </p>
+              </div> */}
+
+              <div className="flex justify-center space-x-4 mb-4">
+                <Link
+                  href="/dang-nhap"
+                  className="text-2xl font-bold text-gray-500 hover:text-gray-700 transition-colors"
+                >
+                  Đăng nhập
+                </Link>
+                <span className="text-2xl font-bold text-gray-300">|</span>
+                <Link
+                  href="/dang-ky"
+                  className="text-2xl font-bold text-black"
+                >
+                  Đăng ký
+                </Link>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-4">
@@ -149,6 +165,28 @@ export default function LoginPage() {
                   </div>
                 </div>
 
+                <p className=" text-xs text-gray-500">
+                  This site is protected by reCAPTCHA and the Google{" "}
+                  <a
+                    href="https://policies.google.com/privacy"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 no-underline hover:underline"
+                  >
+                    Privacy Policy
+                  </a>{" "}
+                  and{" "}
+                  <a
+                    href="https://policies.google.com/terms"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 no-underline hover:underline"
+                  >
+                    Terms of Service
+                  </a>{" "}
+                  apply.
+                </p>
+
                 <div className="my-4">
                   {siteKey && (
                     <ReCAPTCHA
@@ -174,10 +212,9 @@ export default function LoginPage() {
                     type="submit"
                     disabled={loading}
                     className={`w-full flex items-center justify-center gap-2 py-2 rounded-md text-white focus:outline-none focus:ring focus:ring-blue-200 transition-all duration-200
-                      ${
-                        loading
-                          ? "bg-blue-400 cursor-not-allowed"
-                          : "bg-blue-600 hover:bg-blue-700"
+                      ${loading
+                        ? "bg-blue-400 cursor-not-allowed"
+                        : "bg-blue-600 hover:bg-blue-700"
                       }`}
                   >
                     {loading && <AiOutlineLoading className="animate-spin" />}
@@ -213,6 +250,15 @@ export default function LoginPage() {
                   className="text-blue-600 font-medium hover:underline"
                 >
                   Đăng ký
+                </Link>
+              </p>
+              <p className="mt-2 text-center text-sm text-gray-600">
+                Bạn quên mật khẩu?{" "}
+                <Link
+                  href="/quen-mat-khau"
+                  className="text-blue-600 font-medium hover:underline"
+                >
+                  Quên mật khẩu
                 </Link>
               </p>
             </div>

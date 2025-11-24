@@ -17,25 +17,41 @@ const SearchComponent = () => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const searchRef = useRef(null);
   const inputRef = useRef(null);
+  const [defaultSuggestions, setDefaultSuggestions] = useState([]);
 
-  // Debounce function
+  // Fetch trending products on mount
+  useEffect(() => {
+    async function fetchDefaultSuggestions() {
+      try {
+        const data = await autoSearchProducts("");
+        setDefaultSuggestions(data?.products || []);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchDefaultSuggestions();
+  }, []);
+
+  const handleFocus = () => {
+    if (!searchTerm && defaultSuggestions.length > 0) {
+      setSuggestions({ products: defaultSuggestions, categories: [] });
+      setShowSuggestions(true);
+    }
+  };
+
   const debounce = (func, delay) => {
     let timeoutId;
     return function (...args) {
       if (timeoutId) clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        func.apply(this, args);
-      }, delay);
+      timeoutId = setTimeout(() => func.apply(this, args), delay);
     };
   };
 
-  // Fetch suggestions
   const fetchSuggestions = async (term) => {
     if (!term || term.trim() === "") {
       setSuggestions(null);
       return;
     }
-
     setIsLoading(true);
     try {
       const data = await autoSearchProducts(term);
@@ -49,12 +65,10 @@ const SearchComponent = () => {
     }
   };
 
-  // Debounced version of fetchSuggestions
   const debouncedFetchSuggestions = useRef(
     debounce((term) => fetchSuggestions(term), 300)
   ).current;
 
-  // Handle input change
   const handleInputChange = (e) => {
     const value = e.target.value;
     setSearchTerm(value);
@@ -62,8 +76,10 @@ const SearchComponent = () => {
     debouncedFetchSuggestions(value);
   };
 
-  // Handle search form submit
   const handleSubmit = (e) => {
+    if (!searchTerm.trim()) {
+      return; // để trình duyệt tự bật "Please fill out this field"
+    }
     e.preventDefault();
     if (searchTerm.trim()) {
       router.push(`/tim-kiem?q=${encodeURIComponent(searchTerm.trim())}`);
@@ -72,49 +88,37 @@ const SearchComponent = () => {
     }
   };
 
-  // Handle keyboard navigation
   const handleKeyDown = (e) => {
     if (!suggestions) return;
-
     const totalSuggestions =
       (suggestions.products?.length || 0) +
       (suggestions.categories?.length || 0);
-
     if (totalSuggestions === 0) return;
 
-    // Arrow down
     if (e.key === "ArrowDown") {
       e.preventDefault();
-      setSelectedIndex((prevIndex) =>
-        prevIndex < totalSuggestions - 1 ? prevIndex + 1 : 0
+      setSelectedIndex((prev) =>
+        prev < totalSuggestions - 1 ? prev + 1 : 0
       );
-    }
-    // Arrow up
-    else if (e.key === "ArrowUp") {
+    } else if (e.key === "ArrowUp") {
       e.preventDefault();
-      setSelectedIndex((prevIndex) =>
-        prevIndex > 0 ? prevIndex - 1 : totalSuggestions - 1
+      setSelectedIndex((prev) =>
+        prev > 0 ? prev - 1 : totalSuggestions - 1
       );
-    }
-    // Enter
-    else if (e.key === "Enter" && selectedIndex >= 0) {
+    } else if (e.key === "Enter" && selectedIndex >= 0) {
       e.preventDefault();
       handleSuggestionSelect(selectedIndex);
     }
   };
 
-  // Handle suggestion selection
   const handleSuggestionSelect = (index) => {
     if (!suggestions) return;
-
     const productCount = suggestions.products?.length || 0;
 
     if (index < productCount) {
-      // Product selection
       const product = suggestions.products[index];
       router.push(`/san-pham/${product.slug}`);
     } else {
-      // Category selection
       const categoryIndex = index - productCount;
       const category = suggestions.categories[categoryIndex];
       router.push(`/${category.slug}`);
@@ -125,19 +129,18 @@ const SearchComponent = () => {
     setShowSuggestions(false);
   };
 
-  // Close suggestions when clicking outside
+  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (searchRef.current && !searchRef.current.contains(e.target)) {
         setShowSuggestions(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () =>
+      document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Format price
   const formatPrice = (price) => {
     return new Intl.NumberFormat("vi-VN", {
       style: "currency",
@@ -147,97 +150,114 @@ const SearchComponent = () => {
   };
 
   return (
-    <div className="w-full md:flex-1 flex justify-center mb-0" ref={searchRef}>
-      <form onSubmit={handleSubmit} className="relative w-full max-w-lg">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5" />
-        <input
-          ref={inputRef}
-          type="text"
-          placeholder="Bạn tìm gì ?"
-          className="w-full pl-10 pr-10 py-2.5 bg-white text-black border border-gray-300 rounded-full focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder-gray-500"
-          value={searchTerm}
-          onChange={handleInputChange}
-          onKeyDown={handleKeyDown}
-          onFocus={() => {
-            if (suggestions) setShowSuggestions(true);
-          }}
-          autoComplete="off"
-        />
-        {searchTerm && (
-          <button
-            type="button"
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-            onClick={() => {
-              setSearchTerm("");
-              setSuggestions(null);
-              setShowSuggestions(false);
-              inputRef.current?.focus();
-            }}
-          >
-            <X className="w-4 h-4" />
-          </button>
-        )}
+    <div className="w-full md:flex-1 flex justify-center" ref={searchRef}>
+      <form
+        onSubmit={handleSubmit}
+        className="relative w-full max-w-full md:max-w-[680px]"
+      >
+        <div className="relative flex items-center bg-white border border-gray-300 rounded-md shadow-sm h-[41px]">
+          {/* Input */}
+          <input
+            ref={inputRef}
+            type="text"
+            placeholder="Tìm kiếm sản phẩm..."
+            className="flex-1 px-3 sm:px-4 text-sm text-black placeholder-gray-400 rounded-l-md focus:outline-none focus:ring-0 focus:border-transparent h-full"
+            value={searchTerm}
+            onChange={handleInputChange}
+            onFocus={handleFocus}
+            onKeyDown={handleKeyDown}
+            autoComplete="off"
+            required
+          />
 
-        {showSuggestions && searchTerm && (
-          <div className="absolute z-50 w-full mt-1 bg-white rounded-lg shadow-lg max-h-[70vh] overflow-y-auto">
+          {/* Clear button */}
+          {/* {searchTerm && (
+            <button
+              type="button"
+              className="absolute right-10 sm:right-12 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              onClick={() => {
+                setSearchTerm("");
+                setSuggestions(null);
+                setShowSuggestions(false);
+                inputRef.current?.focus();
+              }}
+            >
+              <X className="w-4 h-4" />
+            </button>
+          )} */}
+
+          {/* Search button */}
+          <button
+            type="submit"
+            className="flex items-center justify-center px-3 sm:px-4 bg-[#263B96] text-white rounded-r-md hover:bg-[#263B96] active:bg-[#263B96] transition-colors h-full"
+          >
+            <Search className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Suggestions dropdown */}
+        {showSuggestions && (
+          <div className="absolute z-50 w-full md:max-w-[680px] mt-1 bg-white rounded-md shadow-md border border-gray-200 max-h-[70vh] overflow-y-auto left-0">
             {isLoading ? (
               <div className="p-4 text-center text-gray-500">
-                <div className="animate-spin w-6 h-6 border-2 border-primary border-t-transparent rounded-full mx-auto"></div>
+                <div className="animate-spin w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full mx-auto"></div>
               </div>
-            ) : !suggestions ||
+            ) : searchTerm === "" ? (
+              <div className="p-3 text-gray-700 text-sm font-medium">
+                Gợi ý cho bạn:
+              </div>
+            ) : (!suggestions ||
               ((!suggestions.products || suggestions.products.length === 0) &&
-                (!suggestions.categories ||
-                  suggestions.categories.length === 0)) ? (
-              <div className="p-4 text-center text-gray-500">
-                Không tìm thấy kết quả phù hợp
+                (!suggestions.categories || suggestions.categories.length === 0))) ? (
+              <div className="p-3 text-center text-gray-500 text-sm">
+                Không có sản phẩm nào...
               </div>
             ) : (
               <>
-                {suggestions.products && suggestions.products.length > 0 && (
+                {/* Products */}
+                {suggestions.products?.length > 0 && (
                   <div className="p-2">
-                    <h3 className="px-3 py-2 text-sm font-semibold text-gray-500 uppercase">
+                    <h3 className="px-2 pb-1 text-xs font-semibold text-gray-500 uppercase">
                       Sản phẩm
                     </h3>
                     <div className="divide-y divide-gray-100">
                       {suggestions.products.map((product, index) => (
                         <div
                           key={product._id}
-                          className={`flex items-center p-3 cursor-pointer hover:bg-gray-50 transition-colors duration-150 ${
-                            selectedIndex === index ? "bg-blue-50" : ""
-                          }`}
+                          className={`flex items-center p-2 cursor-pointer hover:bg-gray-100 transition ${selectedIndex === index ? "bg-blue-50" : ""
+                            }`}
                           onClick={() => handleSuggestionSelect(index)}
                         >
-                          <div className="flex-shrink-0 bg-gray-100 rounded overflow-hidden mr-3">
+                          <div className="w-12 h-12 bg-gray-100 rounded-md overflow-hidden flex-shrink-0 mr-3">
                             {product.mainImage ? (
                               <Image
                                 src={`${API_BASE_URL}${product.mainImage}`}
                                 alt={product.name}
-                                width={64}
-                                height={64}
-                                className="object-cover w-16 h-16"
-                                style={{ minHeight: "64px" }}
+                                width={48}
+                                height={48}
+                                className="object-cover w-full h-full"
                               />
                             ) : (
-                              <div className="w-16 h-16 flex items-center justify-center text-gray-400 bg-gray-100">
-                                <Search className="w-6 h-6" />
+                              <div className="w-full h-full flex justify-center items-center text-gray-400">
+                                <Search className="w-4 h-4" />
                               </div>
                             )}
                           </div>
-                          <div className="flex-1 min-w-0 py-1">
-                            <p className="text-sm font-medium text-gray-900 leading-5 mb-1">
+                          <div className="flex-1">
+                            <p className="text-sm font-medium text-gray-900 line-clamp-1">
                               {product.name}
                             </p>
                             {product.discountPercent > 0 && (
-                              <p className="text-sm text-gray-500 line-through">
+                              <p className="text-xs text-gray-400 line-through">
                                 {formatPrice(product.price)}
                               </p>
                             )}
                             <p className="text-sm text-blue-600 font-semibold">
                               {formatPrice(
                                 product.price -
-                                  (product.price *
-                                    (product.discountPercent || 0)) /
-                                    100
+                                (product.price *
+                                  (product.discountPercent || 0)) /
+                                100
                               )}
                             </p>
                           </div>
@@ -247,56 +267,56 @@ const SearchComponent = () => {
                   </div>
                 )}
 
-                {suggestions.categories &&
-                  suggestions.categories.length > 0 && (
-                    <div className="p-2 border-t border-gray-100">
-                      <h3 className="px-3 py-2 text-sm font-semibold text-gray-500 uppercase">
-                        Danh mục
-                      </h3>
-                      <div className="divide-y divide-gray-100">
-                        {suggestions.categories.map((category, index) => (
-                          <div
-                            key={category._id}
-                            className={`flex items-center p-3 cursor-pointer hover:bg-gray-50 transition-colors duration-150 ${
-                              selectedIndex ===
-                              suggestions.products.length + index
-                                ? "bg-blue-50"
-                                : ""
+                {/* Categories */}
+                {suggestions.categories?.length > 0 && (
+                  <div className="p-2 border-t border-gray-100">
+                    <h3 className="px-2 pb-1 text-xs font-semibold text-gray-500 uppercase">
+                      Danh mục
+                    </h3>
+                    <div className="divide-y divide-gray-100">
+                      {suggestions.categories.map((category, index) => (
+                        <div
+                          key={category._id}
+                          className={`flex items-center p-2 cursor-pointer hover:bg-gray-100 transition ${selectedIndex ===
+                            suggestions.products.length + index
+                            ? "bg-blue-50"
+                            : ""
                             }`}
-                            onClick={() =>
-                              handleSuggestionSelect(
-                                suggestions.products.length + index
-                              )
-                            }
-                          >
-                            <div className="h-8 w-8 flex-shrink-0 bg-gray-100 rounded-full overflow-hidden mr-3">
-                              {category.imageUrl ? (
-                                <Image
-                                  src={`${API_BASE_URL}${category.imageUrl}`}
-                                  alt={category.name}
-                                  width={32}
-                                  height={32}
-                                  className="object-cover"
-                                />
-                              ) : (
-                                <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100">
-                                  <Search className="w-4 h-4" />
-                                </div>
-                              )}
-                            </div>
-                            <p className="text-sm font-medium text-gray-800">
-                              {category.name}
-                            </p>
-                          </div>
-                        ))}
-                      </div>
+                          onClick={() =>
+                            handleSuggestionSelect(
+                              suggestions.products.length + index
+                            )
+                          }
+                        >
+                          {/* <div className="w-8 h-8 rounded-full bg-gray-100 overflow-hidden mr-3">
+                            {category.imageUrl ? (
+                              <Image
+                                src={`${API_BASE_URL}${category.imageUrl}`}
+                                alt={category.name}
+                                width={32}
+                                height={32}
+                                className="object-cover w-full h-full"
+                              />
+                            ) : (
+                              <div className="w-full h-full flex justify-center items-center text-gray-400">
+                                <Search className="w-4 h-4" />
+                              </div>
+                            )}
+                          </div> */}
+                          <p className="text-sm font-medium text-gray-800">
+                            {category.name}
+                          </p>
+                        </div>
+                      ))}
                     </div>
-                  )}
+                  </div>
+                )}
 
+                {/* View all */}
                 <div className="px-4 py-3 bg-gray-50 border-t">
                   <Link
                     href={`/tim-kiem?q=${encodeURIComponent(searchTerm)}`}
-                    className="text-sm text-blue-600 font-medium hover:underline flex items-center justify-center transition-colors duration-150"
+                    className="text-sm text-blue-600 font-medium hover:underline flex items-center justify-center"
                     onClick={() => setShowSuggestions(false)}
                   >
                     <Search className="w-4 h-4 mr-1" />
