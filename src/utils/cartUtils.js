@@ -23,6 +23,23 @@ async function syncCartWithServer() {
   }
 }
 
+export function getCartTotalLS() {
+  if (typeof window === "undefined") return 0;
+
+  const cartItems = JSON.parse(localStorage.getItem("cart") || "[]");
+
+  return cartItems.reduce((total, item) => {
+
+    const price =
+      item.price ||
+      item.product?.price ||
+      0;
+
+    return total + price * item.quantity;
+  }, 0);
+}
+
+
 export async function addToCartLS(product, quantity = 1) {
   // Get existing cart or initialize empty array
   const cartItems = JSON.parse(localStorage.getItem("cart") || "[]");
