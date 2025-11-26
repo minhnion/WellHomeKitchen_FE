@@ -252,7 +252,7 @@ export default function LoginPage() {
                   Đăng ký
                 </Link>
               </p>
-              <p className="mt-2 text-center text-sm text-gray-600">
+              {/* <p className="mt-2 text-center text-sm text-gray-600">
                 Bạn quên mật khẩu?{" "}
                 <Link
                   href="/quen-mat-khau"
@@ -260,7 +260,7 @@ export default function LoginPage() {
                 >
                   Quên mật khẩu
                 </Link>
-              </p>
+              </p> */}
             </div>
           </div>
         </div>

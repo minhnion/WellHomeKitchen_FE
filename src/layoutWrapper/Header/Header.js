@@ -319,12 +319,18 @@ export default function Header({ phoneNumber, categories }) {
 
                 {/* ReCAPTCHA */}
                 <div className="mb-3">
-                  <ReCAPTCHA
-                    ref={recaptchaRef}
-                    sitekey={siteKey}
-                    onChange={handleRecaptchaChange}
-                  />
-                  {loginErrors.recaptcha && <p className="text-red-500 text-xs mt-1">{loginErrors.recaptcha}</p>}
+                  <div className="flex justify-center scale-95 transform origin-center">
+                    <ReCAPTCHA
+                      ref={recaptchaRef}
+                      sitekey={siteKey}
+                      onChange={handleRecaptchaChange}
+                    />
+                  </div>
+                  {loginErrors.recaptcha && (
+                    <p className="text-red-500 text-xs mt-1 text-center">
+                      {loginErrors.recaptcha}
+                    </p>
+                  )}
                 </div>
 
                 <button
@@ -343,9 +349,9 @@ export default function Header({ phoneNumber, categories }) {
                 <p className="text-gray-500">
                   Khách hàng mới? <a href="/dang-ky" className="text-[#263B96] hover:underline">Tạo tài khoản</a>
                 </p>
-                <p className="text-gray-500">
+                {/* <p className="text-gray-500">
                   Quên mật khẩu? <a href="/quen-mat-khau" className="text-[#263B96] hover:underline">Khôi phục mật khẩu</a>
-                </p>
+                </p> */}
               </div>
             </div>
           )}
@@ -362,7 +368,7 @@ export default function Header({ phoneNumber, categories }) {
           <div className="hidden md:flex items-center text-sm space-x-1 -ml-14">
             <span className="font-semibold text-gray-300">Hotline:</span>
             <span className="text-white font-medium">
-              028 8887 5668
+              {phoneNumber}
             </span>
             <span className="text-white font-medium">
               (9h-12h,13h00-18h,T2-T6)
