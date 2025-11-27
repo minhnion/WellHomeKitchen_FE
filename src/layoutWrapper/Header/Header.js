@@ -343,9 +343,9 @@ export default function Header({ phoneNumber, categories }) {
                 <p className="text-gray-500">
                   Khách hàng mới? <a href="/dang-ky" className="text-[#263B96] hover:underline">Tạo tài khoản</a>
                 </p>
-                <p className="text-gray-500">
+                {/* <p className="text-gray-500">
                   Quên mật khẩu? <a href="/quen-mat-khau" className="text-[#263B96] hover:underline">Khôi phục mật khẩu</a>
-                </p>
+                </p> */}
               </div>
             </div>
           )}
@@ -485,7 +485,9 @@ export default function Header({ phoneNumber, categories }) {
       )}
       {/* Category menu - desktop only */}
       <div className="hidden md:block bg-white shadow">
-        <CategoryMenu categories={categories} />
+        <div className="max-w-[250px] mr-auto ml-65 border border-gray-300 bg-white p-0">
+          <CategoryMenu categories={categories} />
+        </div>
       </div>
       {/* <MenuTop categories={topCategories} /> */}
     </header>
