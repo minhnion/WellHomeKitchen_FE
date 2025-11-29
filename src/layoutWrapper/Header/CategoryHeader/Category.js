@@ -6,8 +6,8 @@ import { Menu, ChevronRight, Plus, Minus } from "lucide-react";
 import { API_BASE_URL } from "@/apiServices/constants";
 import Image from "next/image";
 
-export default function CategoryMenu({ categories = [] }) {
-  const [showCategoryMenu, setShowCategoryMenu] = useState(true);
+export default function CategoryMenu({ categories = [], isMobile = false }) {
+  const [showCategoryMenu, setShowCategoryMenu] = useState(!isMobile); // Desktop: true, Mobile: false
   const [activeCategory, setActiveCategory] = useState(null);
   const [isHoverSupported, setIsHoverSupported] = useState(true);
   const [showAllCategories, setShowAllCategories] = useState(false);
@@ -32,6 +32,10 @@ export default function CategoryMenu({ categories = [] }) {
         (popupRef.current && !popupRef.current.contains(event.target))
       ) {
         setActiveCategory(null);
+        // Nếu là mobile, đóng menu khi click ra ngoài
+        if (isMobile) {
+          setShowCategoryMenu(false);
+        }
       }
     };
 
@@ -39,11 +43,11 @@ export default function CategoryMenu({ categories = [] }) {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [isMobile]);
 
   // Đóng popup khi mouse leave menu
   const handleMenuMouseLeave = () => {
-    if (isHoverSupported) {
+    if (isHoverSupported && !isMobile) {
       timeoutRef.current = setTimeout(() => {
         setActiveCategory(null);
       }, 300);
@@ -59,7 +63,7 @@ export default function CategoryMenu({ categories = [] }) {
 
   // Đóng popup khi mouse leave popup
   const handlePopupMouseLeave = () => {
-    if (isHoverSupported) {
+    if (isHoverSupported && !isMobile) {
       timeoutRef.current = setTimeout(() => {
         setActiveCategory(null);
       }, 300);
@@ -91,30 +95,51 @@ export default function CategoryMenu({ categories = [] }) {
     setShowAllCategories(!showAllCategories);
   };
 
+  // Toggle menu khi click vào icon (chỉ trên mobile)
+  const toggleMenu = () => {
+    setShowCategoryMenu(!showCategoryMenu);
+    setActiveCategory(null); // Reset active category khi đóng/mở menu
+  };
+
   // Lấy danh sách categories để hiển thị
   const displayedCategories = showAllCategories
     ? categories
     : categories.slice(0, 10);
 
   return (
-    <div className="md:relative" ref={menuRef}>
-      <div className="flex items-center px-4 py-2 rounded-md bg-white text-[#263B96]">
-        <Menu className="w-5 h-5 text-[#263B96]" />
-        <span className="ml-2 text-base font-bold">DANH MỤC SẢN PHẨM</span>
+    <div className={`${isMobile ? 'relative' : 'md:relative'}`} ref={menuRef}>
+      {/* Header button */}
+      <div 
+        className={`flex items-center rounded-md ${
+          isMobile 
+            ? 'p-2 bg-transparent text-white cursor-pointer' 
+            : 'px-4 py-2 bg-white text-[#263B96]'
+        }`}
+        onClick={isMobile ? toggleMenu : undefined}
+      >
+        <Menu className={`w-5 h-5 ${isMobile ? 'text-white' : 'text-[#263B96]'}`} />
+        {/* Chỉ hiển thị text trên desktop */}
+        {!isMobile && (
+          <span className="ml-2 text-base font-bold">DANH MỤC SẢN PHẨM</span>
+        )}
       </div>
 
-      {categories.length > 0 && (
+      {categories.length > 0 && showCategoryMenu && (
         <>
           {/* Menu chính - chỉ chứa danh sách categories */}
           <div
-            className={`absolute left-0 mx-2 md:mx-0 top-full bg-white shadow-xl w-56 md:w-62 z-50 overflow-hidden border border-gray-100 h-150 overflow-y-auto ${showCategoryMenu ? "transition-transform duration-300" : ""}`}
+            className={`${
+              isMobile 
+                ? 'fixed left-4 right-4 top-[140px]' 
+                : 'absolute left-0 mx-0 top-full'
+            } bg-white shadow-xl ${isMobile ? 'w-auto' : 'w-62'} z-50 overflow-hidden border border-gray-100 transition-transform duration-300`}
           >
             <div className="bg-white text-xs md:text-sm">
               {displayedCategories.map((category) => (
                 <div
                   key={category._id}
                   onMouseEnter={
-                    isHoverSupported
+                    isHoverSupported && !isMobile
                       ? (e) => handleCategorySelect(category, e)
                       : undefined
                   }
@@ -124,7 +149,6 @@ export default function CategoryMenu({ categories = [] }) {
                     ? "bg-blue-50 text-[#C94669] border-l-4 border-[#263B96]"
                     : "hover:bg-gray-50"
                     }`}>
-                    {/* Dấu gạch xanh dọc */}
                     <span className="font-semibold">
                       {category.name}
                     </span>
@@ -165,9 +189,9 @@ export default function CategoryMenu({ categories = [] }) {
                   >
                     <div className="flex items-center space-x-2">
                       {showAllCategories ? (
-                        <Minus className="w-4 h-4" /> // Icon - cho Ẩn bớt
+                        <Minus className="w-4 h-4" />
                       ) : (
-                        <Plus className="w-4 h-4" /> // Icon + cho Xem thêm
+                        <Plus className="w-4 h-4" />
                       )}
                       <span>{showAllCategories ? "Ẩn bớt" : "Xem thêm"}</span>
                     </div>
@@ -176,14 +200,14 @@ export default function CategoryMenu({ categories = [] }) {
               )}
 
               {/* Khoảng trống để giữ chiều cao cố định khi chưa xem thêm */}
-              {!showAllCategories && categories.length > 10 && (
+              {!showAllCategories && categories.length > 10 && !isMobile && (
                 <div className="h-32 bg-white"></div>
               )}
             </div>
           </div>
 
-          {/* Popup thông tin sản phẩm - khung riêng biệt */}
-          {activeCategory && (
+          {/* Popup thông tin sản phẩm - khung riêng biệt - CHỈ HIỆN TRÊN DESKTOP */}
+          {activeCategory && !isMobile && (
             <div
               ref={popupRef}
               className="fixed bg-white shadow-2xl rounded-lg z-50 border border-gray-200 min-w-[600px] max-w-[800px] max-h-[80vh] overflow-y-auto"
@@ -244,6 +268,70 @@ export default function CategoryMenu({ categories = [] }) {
                   </div>
                 ) : (
                   <p className="text-gray-500 italic">
+                    Chưa có phân loại cho danh mục này
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Hiển thị subcategories trực tiếp trên mobile */}
+          {activeCategory && isMobile && (
+            <div className="fixed left-4 right-4 top-[140px] bg-white shadow-xl z-[60] border border-gray-200 rounded-lg">
+              <div className="p-4">
+                <h3 className="font-bold text-[#263B96] mb-3 pb-2 border-b">
+                  {activeCategory.name}
+                </h3>
+                
+                {activeCategory.brands && activeCategory.brands.length > 0 && (
+                  <div className="mb-4">
+                    <h4 className="font-semibold text-gray-700 mb-2 text-sm">
+                      THƯƠNG HIỆU NỔI BẬT
+                    </h4>
+                    <div className="flex flex-col gap-2">
+                      {activeCategory.brands.map((brand) => (
+                        <Link
+                          href={`/${activeCategory.slug}/${brand.slug}`}
+                          key={brand._id}
+                          onClick={() => {
+                            setShowCategoryMenu(false);
+                            setActiveCategory(null);
+                          }}
+                          className="text-sm text-gray-600 hover:text-[#263B96] py-1"
+                        >
+                          {brand.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {activeCategory.subcategories && activeCategory.subcategories.length > 0 && (
+                  <div>
+                    <h4 className="font-semibold text-gray-700 mb-2 text-sm">
+                      PHÂN LOẠI SẢN PHẨM
+                    </h4>
+                    <div className="flex flex-col gap-2">
+                      {activeCategory.subcategories.map((sub) => (
+                        <Link
+                          href={`/${activeCategory.slug}/${sub.slug}`}
+                          key={sub._id}
+                          onClick={() => {
+                            setShowCategoryMenu(false);
+                            setActiveCategory(null);
+                          }}
+                          className="text-sm text-gray-600 hover:text-[#263B96] py-1"
+                        >
+                          {sub.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {(!activeCategory.brands || activeCategory.brands.length === 0) && 
+                 (!activeCategory.subcategories || activeCategory.subcategories.length === 0) && (
+                  <p className="text-gray-500 text-sm italic">
                     Chưa có phân loại cho danh mục này
                   </p>
                 )}

@@ -290,7 +290,7 @@ export default function Header({ phoneNumber, categories }) {
               <form onSubmit={handleLogin}>
                 <div className="mb-3">
                   <input
-                    type="text" // Đổi từ "email" sang "text"
+                    type="text"
                     placeholder="Email"
                     value={loginEmail}
                     onChange={handleLoginEmailChange}
@@ -349,9 +349,6 @@ export default function Header({ phoneNumber, categories }) {
                 <p className="text-gray-500">
                   Khách hàng mới? <a href="/dang-ky" className="text-[#263B96] hover:underline">Tạo tài khoản</a>
                 </p>
-                {/* <p className="text-gray-500">
-                  Quên mật khẩu? <a href="/quen-mat-khau" className="text-[#263B96] hover:underline">Khôi phục mật khẩu</a>
-                </p> */}
               </div>
             </div>
           )}
@@ -377,10 +374,11 @@ export default function Header({ phoneNumber, categories }) {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between py-3">
+      {/* Main header with padding for mobile */}
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between py-3 px-4 md:px-0">
         {/* Top section for mobile (logo + category menu + cart) */}
         <div className="w-full md:w-auto flex items-center justify-between mb-0">
-          <Link href="/" className="flex-shrink-0 -ml-0 md:-ml-10">
+          <Link href="/" className="flex-shrink-0 md:-ml-10">
             <Image
               src="/images/wellhome-logo-white.png"
               alt="WellHome Logo"
@@ -391,11 +389,11 @@ export default function Header({ phoneNumber, categories }) {
             />
           </Link>
 
-          {/* Mobile actions - Category menu, cart and user icon */}
+          {/* Mobile actions - Category menu icon, cart and user icon */}
           <div className="md:hidden flex items-center space-x-3">
-            <div className="mr-2">
-              <CategoryMenu categories={categories} />
-            </div>
+            {/* Category Menu on mobile - chỉ hiển thị icon */}
+            <CategoryMenu categories={categories} isMobile={true} />
+            
             <Link href="/cart" className="text-white">
               <ShoppingCart className="w-6 h-6" />
             </Link>
@@ -416,50 +414,13 @@ export default function Header({ phoneNumber, categories }) {
         </div>
 
         <div className="w-full flex flex-col md:flex-row md:items-center md:space-x-6 md:ml-10">
-          {/* Category menu - desktop only */}
-          {/* <div className="hidden md:block">
-            <CategoryMenu categories={categories} />
-          </div> */}
-
-          {/* Search bar - full width on mobile */}
-          <div className="flex-1 mx-0 md:mx-20">
+          {/* Search bar - full width on mobile with proper spacing */}
+          <div className="flex-1 mx-0 md:mx-20 mt-3 md:mt-0">
             <SearchComponent />
           </div>
 
           {/* Right action items - desktop only */}
           <div className="hidden md:flex items-center space-x-1">
-            {/* <Link
-              href={phoneNumber ? `tel:${phoneNumber}` : "#"}
-              className="flex items-center text-white hover:text-gray-200"
-            >
-              <Phone className="w-5 h-5" />
-              <span className="ml-2 text-sm font-medium">
-                {phoneNumber ? phoneNumber : "Loading..."}
-              </span>
-            </Link> */}
-
-            {/* <Link
-              href="/showrooms"
-              className="flex items-center text-white hover:text-gray-200"
-            >
-              <MapPin className="w-5 h-5" />
-              <span className="ml-2 text-sm font-medium">
-                Hệ thống showroom
-              </span>
-            </Link> */}
-
-
-
-            {/* <Link
-              href="/don-hang"
-              className="flex items-center text-white hover:text-gray-200"
-            >
-              <Package className="w-5 h-5" />
-              <span className="ml-2 text-sm font-medium">
-                Đơn hàng
-              </span>
-            </Link> */}
-
             {/* Dynamic user section based on login status */}
             <div className="w-px h-6 bg-gray-400 "></div>
             {renderUserSection()}
@@ -489,13 +450,13 @@ export default function Header({ phoneNumber, categories }) {
           </button>
         </div>
       )}
+      
       {/* Category menu - desktop only */}
       <div className="hidden md:block bg-white shadow">
-        <div className="max-w-[250px] mr-auto ml-65 border border-gray-300 bg-white p-0">
-          <CategoryMenu categories={categories} />
+        <div className="max-w-[250px] mr-auto ml-20 border border-gray-300 bg-white p-0">
+          <CategoryMenu categories={categories} isMobile={false} />
         </div>
       </div>
-      {/* <MenuTop categories={topCategories} /> */}
     </header>
   );
 }
