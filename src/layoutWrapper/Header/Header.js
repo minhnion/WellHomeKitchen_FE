@@ -453,7 +453,7 @@ export default function Header({ phoneNumber, categories }) {
       
       {/* Category menu - desktop only */}
       <div className="hidden md:block bg-white shadow">
-        <div className="max-w-[250px] mr-auto ml-20 border border-gray-300 bg-white p-0">
+        <div className="max-w-[250px] mr-auto ml-30 border border-gray-300 bg-white p-0">
           <CategoryMenu categories={categories} isMobile={false} />
         </div>
       </div>

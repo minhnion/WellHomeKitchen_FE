@@ -6,6 +6,10 @@ import Link from "next/link";
 import { API_BASE_URL } from "@/apiServices/constants";
 import { useState, useEffect } from "react";
 
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+
 export default function GridBannerSlider({ banners }) {
   const [isMobile, setIsMobile] = useState(false);
 
@@ -22,106 +26,94 @@ export default function GridBannerSlider({ banners }) {
     return null;
   }
 
-  const bannerPairs = [];
-  for (let i = 0; i < banners.length; i += 2) {
-    bannerPairs.push(banners.slice(i, i + 2));
-  }
-
   return (
     <div className="my-6 relative rounded-lg overflow-hidden shadow-md w-full">
       <Swiper
-        spaceBetween={10}
+        spaceBetween={16}
         slidesPerView={1}
-        loop={bannerPairs.length > 1}
+        breakpoints={{
+          640: {
+            slidesPerView: 2,
+            spaceBetween: 16,
+          },
+          768: {
+            slidesPerView: 2,
+            spaceBetween: 16,
+          },
+          1024: {
+            slidesPerView: 3,
+            spaceBetween: 16,
+          },
+        }}
+        loop={banners.length > 3}
         autoplay={{
           delay: 5000,
           disableOnInteraction: false,
         }}
         pagination={{
           clickable: true,
-          el: ".custom-pagination",
+          dynamicBullets: true,
         }}
-        navigation={{
-          nextEl: ".custom-next",
-          prevEl: ".custom-prev",
-        }}
+        navigation={true}
         modules={[Autoplay, Pagination, Navigation]}
         className="grid-banner-slider"
-        style={{ height: "auto" }}
       >
-        {bannerPairs.map((pair, pairIndex) => (
-          <SwiperSlide key={pairIndex}>
-            <div
-              className={`grid gap-4 w-full ${
-                isMobile
-                  ? "grid-cols-1"
-                  : pair.length === 1
-                  ? "grid-cols-1 max-w-1/2 mx-auto"
-                  : "grid-cols-2"
-              }`}
-            >
-              {pair.map((banner, index) => (
-                <Link key={`${pairIndex}-${index}`} href={banner.link || "#"}>
-                  <div className="relative w-full min-h-[200px] overflow-hidden rounded-lg">
-                    <Image
-                      src={
-                        isMobile && banner.mobileUrl
-                          ? new URL(banner.mobileUrl, API_BASE_URL).href
-                          : new URL(banner.url, API_BASE_URL).href
-                      }
-                      alt={banner.title || `Banner ${index + 1}`}
-                      fill
-                      priority={pairIndex === 0 && index === 0}
-                      quality={95}
-                      className="object-cover hover:scale-105 transition-transform duration-300"
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                    />
-                  </div>
-                </Link>
-              ))}
-            </div>
+        {banners.map((banner, index) => (
+          <SwiperSlide key={index}>
+            <Link href={banner.link || "#"}>
+              <div className="relative w-full aspect-[16/9] overflow-hidden rounded-lg">
+                <Image
+                  src={
+                    isMobile && banner.mobileUrl
+                      ? new URL(banner.mobileUrl, API_BASE_URL).href
+                      : new URL(banner.url, API_BASE_URL).href
+                  }
+                  alt={banner.title || `Banner ${index + 1}`}
+                  fill
+                  priority={index === 0}
+                  quality={95}
+                  className="object-cover hover:scale-105 transition-transform duration-300"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                />
+              </div>
+            </Link>
           </SwiperSlide>
         ))}
-
-        <div className="custom-pagination swiper-pagination mt-4"></div>
-
-        {bannerPairs.length > 1 && (
-          <>
-            <div className="custom-prev absolute top-1/2 left-2 transform -translate-y-1/2 z-10 bg-white/80 hover:bg-white rounded-full p-2 cursor-pointer shadow-lg transition-all duration-200 hover:scale-110">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                className="w-5 h-5 text-gray-800"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
-            </div>
-            <div className="custom-next absolute top-1/2 right-2 transform -translate-y-1/2 z-10 bg-white/80 hover:bg-white rounded-full p-2 cursor-pointer shadow-lg transition-all duration-200 hover:scale-110">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                className="w-5 h-5 text-gray-800"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
-            </div>
-          </>
-        )}
       </Swiper>
+
+      <style jsx global>{`
+        .grid-banner-slider .swiper-button-next,
+        .grid-banner-slider .swiper-button-prev {
+          background: rgba(255, 255, 255, 0.9);
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          color: #1f2937;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          transition: all 0.2s;
+        }
+
+        .grid-banner-slider .swiper-button-next:hover,
+        .grid-banner-slider .swiper-button-prev:hover {
+          background: white;
+          transform: scale(1.1);
+        }
+
+        .grid-banner-slider .swiper-button-next::after,
+        .grid-banner-slider .swiper-button-prev::after {
+          font-size: 16px;
+          font-weight: bold;
+        }
+
+        .grid-banner-slider .swiper-pagination-bullet {
+          background: #cbd5e1;
+          opacity: 1;
+        }
+
+        .grid-banner-slider .swiper-pagination-bullet-active {
+          background: #263b96;
+        }
+      `}</style>
     </div>
   );
 }

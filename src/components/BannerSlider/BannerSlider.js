@@ -12,7 +12,6 @@ import "swiper/css/pagination";
 export default function BannerSlider({ banners }) {
   const [isMobile, setIsMobile] = useState(false);
 
-  // Kiểm tra kích thước màn hình
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.matchMedia("(max-width: 767px)").matches);
@@ -23,7 +22,7 @@ export default function BannerSlider({ banners }) {
   }, []);
 
   return (
-    <div className="mb-6 relative w-full rounded-lg overflow-hidden shadow-md">
+    <div className="mb-6 relative rounded-lg overflow-hidden shadow-md h-full">
       <Swiper
         spaceBetween={0}
         slidesPerView={1}
@@ -42,7 +41,7 @@ export default function BannerSlider({ banners }) {
         {banners.map((banner, index) => (
           <SwiperSlide key={index}>
             <Link href={banner.link}>
-              <div className="relative w-full aspect-[3/2] md:aspect-[15/4]">
+              <div className="relative h-full aspect-[3/2]">
                 <Image
                   src={
                     isMobile && banner.mobileUrl

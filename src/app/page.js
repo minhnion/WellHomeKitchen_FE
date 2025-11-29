@@ -95,10 +95,47 @@ export default async function Home() {
       }
     )
   );
+
+  const rightBanners = sliderPartBanners.slice(0, 3);
+
   return (
-    <main className="bg-secondary px-4 sm:px-6 md:px-10 lg:px-20 py-4 sm:py-6 md:py-8 lg:py-10">
-      {/* Main banner */}
-      {sliderFullBanners && <BannerSlider banners={sliderFullBanners} />}
+    <main className="bg-secondary py-4">
+      <div className="hidden md:flex md:gap-4 mb-6 md:ml-64">
+        <div className="flex-grow w-3/4 h-full">
+          {sliderFullBanners && sliderFullBanners.length > 0 && (
+            <BannerSlider banners={sliderFullBanners} />
+          )}
+        </div>
+
+        <div className="flex flex-col gap-4 w-1/4">
+          {rightBanners.length > 0 &&
+            rightBanners.map((banner, index) => (
+              <Link
+                key={banner._id || index}
+                href={`/${banner.link || ""}`}
+                className="relative w-full rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow"
+              >
+                <div className="relative w-full aspect-[3/2]">
+                  <Image
+                    src={new URL(banner.url, API_BASE_URL).href}
+                    alt={banner.title || `Banner ${index + 1}`}
+                    fill
+                    className="object-cover"
+                    quality={90}
+                  />
+                </div>
+              </Link>
+            ))}
+        </div>
+      </div>
+
+      {/* Mobile: Chỉ hiển thị BannerSlider */}
+      <div className="md:hidden mb-6">
+        {sliderFullBanners && sliderFullBanners.length > 0 && (
+          <BannerSlider banners={sliderFullBanners} />
+        )}
+        <GridBannerSlider banners={sliderPartBanners} />
+      </div>
 
       {/* Category Grid */}
       <CategoriesGrid categories={categories} />
@@ -126,6 +163,7 @@ export default async function Home() {
         categoriesWithProducts={categoriesWithTopSellingProduct}
       />
       <ProductViewHistory />
+
       {/* CategoryProducts */}
       <h2 className="text-xl font-bold text-gray-900 px-4 py-2 inline-block">
         Mua Online Giá Siêu Rẻ
@@ -137,8 +175,6 @@ export default async function Home() {
         categoriesWithProducts={categoriesWithProducts}
         isExtend={true}
       />
-
-      <GridBannerSlider banners={sliderPartBanners} />
 
       {/* Smart gadgets banner */}
       {sliderFullBanners && sliderFullBanners[2] && (
