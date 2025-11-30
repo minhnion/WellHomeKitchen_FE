@@ -5,9 +5,14 @@ import Link from "next/link";
 import { Menu, ChevronRight, Plus, Minus } from "lucide-react";
 import { API_BASE_URL } from "@/apiServices/constants";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 export default function CategoryMenu({ categories = [], isMobile = false }) {
-  const [showCategoryMenu, setShowCategoryMenu] = useState(!isMobile); // Desktop: true, Mobile: false
+  const pathname = usePathname();
+  const isHomePage = pathname === "/";
+
+  // QUAN TRỌNG: Trang chủ luôn hiện, trang khác BAN ĐẦU = false
+  const [showCategoryMenu, setShowCategoryMenu] = useState(isHomePage && !isMobile);
   const [activeCategory, setActiveCategory] = useState(null);
   const [isHoverSupported, setIsHoverSupported] = useState(true);
   const [showAllCategories, setShowAllCategories] = useState(false);
@@ -24,6 +29,12 @@ export default function CategoryMenu({ categories = [], isMobile = false }) {
     return () => mediaQuery.removeEventListener("change", handleChange);
   }, []);
 
+  // Reset menu state khi chuyển trang
+  useEffect(() => {
+    setShowCategoryMenu(isHomePage && !isMobile);
+    setActiveCategory(null);
+  }, [pathname, isHomePage, isMobile]);
+
   // Đóng popup khi click ra ngoài
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -32,8 +43,7 @@ export default function CategoryMenu({ categories = [], isMobile = false }) {
         (popupRef.current && !popupRef.current.contains(event.target))
       ) {
         setActiveCategory(null);
-        // Nếu là mobile, đóng menu khi click ra ngoài
-        if (isMobile) {
+        if (isMobile || !isHomePage) {
           setShowCategoryMenu(false);
         }
       }
@@ -43,7 +53,7 @@ export default function CategoryMenu({ categories = [], isMobile = false }) {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isMobile]);
+  }, [isMobile, isHomePage]);
 
   // Đóng popup khi mouse leave menu
   const handleMenuMouseLeave = () => {
@@ -71,7 +81,6 @@ export default function CategoryMenu({ categories = [], isMobile = false }) {
   };
 
   const handleCategorySelect = (category, event) => {
-    // Clear timeout cũ
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
@@ -95,13 +104,11 @@ export default function CategoryMenu({ categories = [], isMobile = false }) {
     setShowAllCategories(!showAllCategories);
   };
 
-  // Toggle menu khi click vào icon (chỉ trên mobile)
   const toggleMenu = () => {
     setShowCategoryMenu(!showCategoryMenu);
-    setActiveCategory(null); // Reset active category khi đóng/mở menu
+    setActiveCategory(null);
   };
 
-  // Lấy danh sách categories để hiển thị
   const displayedCategories = showAllCategories
     ? categories
     : categories.slice(0, 10);
@@ -109,16 +116,14 @@ export default function CategoryMenu({ categories = [], isMobile = false }) {
   return (
     <div className={`${isMobile ? 'relative' : 'md:relative'}`} ref={menuRef}>
       {/* Header button */}
-      <div 
-        className={`flex items-center rounded-md ${
-          isMobile 
-            ? 'p-2 bg-transparent text-white cursor-pointer' 
-            : 'px-4 py-2 bg-white text-[#263B96]'
-        }`}
-        onClick={isMobile ? toggleMenu : undefined}
+      <div
+        className={`flex items-center rounded-md ${isMobile
+          ? 'p-2 bg-transparent text-white cursor-pointer'
+          : `px-4 py-2 bg-white text-[#263B96] ${!isHomePage ? 'cursor-pointer' : ''}`
+          }`}
+        onClick={!isHomePage ? toggleMenu : undefined}
       >
         <Menu className={`w-5 h-5 ${isMobile ? 'text-white' : 'text-[#263B96]'}`} />
-        {/* Chỉ hiển thị text trên desktop */}
         {!isMobile && (
           <span className="ml-2 text-base font-bold">DANH MỤC SẢN PHẨM</span>
         )}
@@ -126,13 +131,13 @@ export default function CategoryMenu({ categories = [], isMobile = false }) {
 
       {categories.length > 0 && showCategoryMenu && (
         <>
-          {/* Menu chính - chỉ chứa danh sách categories */}
+          {/* Menu chính */}
           <div
-            className={`${
-              isMobile 
-                ? 'fixed left-4 right-4 top-[140px]' 
-                : 'absolute left-0 mx-0 top-full'
-            } bg-white shadow-xl ${isMobile ? 'w-auto' : 'w-62'} z-50 overflow-hidden border border-gray-100 transition-transform duration-300`}
+            className={`${isMobile
+              ? 'fixed left-4 right-4 top-[140px]'
+              : 'absolute left-0 mx-0 top-full'
+              } bg-white shadow-xl ${isMobile ? 'w-auto' : 'w-62'} z-50 overflow-hidden border border-gray-100 transition-transform duration-300`}
+            onMouseLeave={!isMobile ? handleMenuMouseLeave : undefined}
           >
             <div className="bg-white text-xs md:text-sm">
               {displayedCategories.map((category) => (
@@ -162,7 +167,6 @@ export default function CategoryMenu({ categories = [], isMobile = false }) {
                 </div>
               ))}
 
-              {/* Mục "Thông tin" - chỉ hiện khi xem thêm */}
               {showAllCategories && (
                 <div>
                   <div
@@ -180,7 +184,6 @@ export default function CategoryMenu({ categories = [], isMobile = false }) {
                 </div>
               )}
 
-              {/* Nút Xem thêm / Ẩn bớt */}
               {categories.length > 10 && (
                 <div>
                   <button
@@ -199,14 +202,13 @@ export default function CategoryMenu({ categories = [], isMobile = false }) {
                 </div>
               )}
 
-              {/* Khoảng trống để giữ chiều cao cố định khi chưa xem thêm */}
               {!showAllCategories && categories.length > 10 && !isMobile && (
                 <div className="h-32 bg-white"></div>
               )}
             </div>
           </div>
 
-          {/* Popup thông tin sản phẩm - khung riêng biệt - CHỈ HIỆN TRÊN DESKTOP */}
+          {/* Popup thông tin sản phẩm */}
           {activeCategory && !isMobile && (
             <div
               ref={popupRef}
@@ -229,7 +231,11 @@ export default function CategoryMenu({ categories = [], isMobile = false }) {
                         <Link
                           href={`/${activeCategory.slug}/${brand.slug}`}
                           key={brand._id}
-                          onClick={() => setShowCategoryMenu(false)}
+                          onClick={() => {
+                            if (!isHomePage) {
+                              setShowCategoryMenu(false);
+                            }
+                          }}
                           className="group flex items-center transition-transform hover:scale-105"
                         >
                           <span className="font-medium text-sm">
@@ -256,7 +262,11 @@ export default function CategoryMenu({ categories = [], isMobile = false }) {
                         <Link
                           href={`/${activeCategory.slug}/${sub.slug}`}
                           key={sub._id}
-                          onClick={() => setShowCategoryMenu(false)}
+                          onClick={() => {
+                            if (!isHomePage) {
+                              setShowCategoryMenu(false);
+                            }
+                          }}
                           className="group flex items-center transition-transform hover:scale-105"
                         >
                           <span className="font-medium text-sm">
@@ -282,7 +292,7 @@ export default function CategoryMenu({ categories = [], isMobile = false }) {
                 <h3 className="font-bold text-[#263B96] mb-3 pb-2 border-b">
                   {activeCategory.name}
                 </h3>
-                
+
                 {activeCategory.brands && activeCategory.brands.length > 0 && (
                   <div className="mb-4">
                     <h4 className="font-semibold text-gray-700 mb-2 text-sm">
@@ -329,12 +339,12 @@ export default function CategoryMenu({ categories = [], isMobile = false }) {
                   </div>
                 )}
 
-                {(!activeCategory.brands || activeCategory.brands.length === 0) && 
-                 (!activeCategory.subcategories || activeCategory.subcategories.length === 0) && (
-                  <p className="text-gray-500 text-sm italic">
-                    Chưa có phân loại cho danh mục này
-                  </p>
-                )}
+                {(!activeCategory.brands || activeCategory.brands.length === 0) &&
+                  (!activeCategory.subcategories || activeCategory.subcategories.length === 0) && (
+                    <p className="text-gray-500 text-sm italic">
+                      Chưa có phân loại cho danh mục này
+                    </p>
+                  )}
               </div>
             </div>
           )}

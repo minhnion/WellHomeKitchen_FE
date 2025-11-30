@@ -58,25 +58,36 @@ export default function GridBannerSlider({ banners }) {
         modules={[Autoplay, Pagination, Navigation]}
         className="grid-banner-slider"
       >
-        {banners.map((banner, index) => (
-          <SwiperSlide key={index}>
-            <Link href={banner.link || "#"}>
-              <div className="relative w-full aspect-[16/9] overflow-hidden rounded-lg">
-                <Image
-                  src={
-                    isMobile && banner.mobileUrl
-                      ? new URL(banner.mobileUrl, API_BASE_URL).href
-                      : new URL(banner.url, API_BASE_URL).href
-                  }
-                  alt={banner.title || `Banner ${index + 1}`}
-                  fill
-                  priority={index === 0}
-                  quality={95}
-                  className="object-cover hover:scale-105 transition-transform duration-300"
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                />
-              </div>
-            </Link>
+        {bannerPairs.map((pair, pairIndex) => (
+          <SwiperSlide key={pairIndex}>
+            <div
+              className={`grid gap-4 w-full ${isMobile
+                ? "grid-cols-1"
+                : pair.length === 1
+                  ? "grid-cols-1 max-w-1/2 mx-auto"
+                  : "grid-cols-2"
+                }`}
+            >
+              {pair.map((banner, index) => (
+                <Link key={`${pairIndex}-${index}`} href={banner.link || "#"}>
+                  <div className="relative w-full min-h-[200px] overflow-hidden rounded-lg">
+                    <Image
+                      src={
+                        isMobile && banner.mobileUrl
+                          ? new URL(banner.mobileUrl, API_BASE_URL).href
+                          : new URL(banner.url, API_BASE_URL).href
+                      }
+                      alt={banner.title || `Banner ${index + 1}`}
+                      fill
+                      priority={pairIndex === 0 && index === 0}
+                      quality={95}
+                      className="object-cover hover:scale-105 transition-transform duration-300"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
+                  </div>
+                </Link>
+              ))}
+            </div>
           </SwiperSlide>
         ))}
       </Swiper>
