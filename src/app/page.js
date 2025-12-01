@@ -10,6 +10,8 @@ import BannerSlider from "@/components/BannerSlider/BannerSlider";
 import CategoriesGrid from "@/components/CategoriesGrid/CategoriesGrid";
 import CategoryProducts from "@/components/CategoryProducts/CategoryProducts";
 import GridBannerSlider from "@/components/GridBannerSlider/GridBannerSlider";
+import VerticalBanners from "@/components/VerticalBanners/VerticalBanners";
+import HorizontalBanners from "@/components/HorizontalBanners/HorizontalBanners";
 import News from "@/components/News/News";
 import ProductViewHistory from "@/components/ProductViewHistory/ProductViewHistory";
 import SpecialProductsFrame from "@/components/SpecialProductsFrame/SpecialProductsFrame";
@@ -23,7 +25,7 @@ export default async function Home() {
     : [];
 
   const currentPage = 1;
-  const limit = 10;
+  const limit = 20;
   const limitTopSelling = 5;
 
   const categoriesWithProducts = await Promise.all(
@@ -59,17 +61,27 @@ export default async function Home() {
   const isShow = true;
   const banners = await getBanners(currentPage, limit, isShow);
   const sliderFullBanners = [];
-  const sliderPartBanners = [];
+  const sliderPartCenterBanners = [];
+  const sliderPartRightBanners = [];
+  const sliderPartHorizontalBanners = [];
 
   if (banners) {
     banners.data.forEach((banner) => {
       if (banner.type === "slider-full") {
         sliderFullBanners.push(banner);
-      } else if (banner.type === "slider-part") {
-        sliderPartBanners.push(banner);
+      } else if (banner.type === "slider-part-center") {
+        sliderPartCenterBanners.push(banner);
+      } else if (banner.type === "slider-part-right") {
+        sliderPartRightBanners.push(banner);
+      }
+      else if (banner.type === "slider-part") {
+        sliderPartHorizontalBanners.push(banner);
       }
     });
   }
+  console.log(sliderPartCenterBanners.length)
+  console.log(sliderPartRightBanners.length)
+  console.log(sliderPartHorizontalBanners.length)
 
   const isPostCategoriesRoot = "true";
   const postCategoryResponse = await getPostCategories(
@@ -99,43 +111,23 @@ export default async function Home() {
   const rightBanners = sliderPartBanners.slice(0, 3);
 
   return (
-    <main className="bg-secondary py-4">
-      <div className="hidden md:flex md:gap-4 mb-6 md:ml-64">
-        <div className="flex-grow w-3/4 h-full">
-          {sliderFullBanners && sliderFullBanners.length > 0 && (
-            <BannerSlider banners={sliderFullBanners} />
-          )}
+    <main className="bg-secondary px-4 sm:px-6 md:px-10 lg:px-20 py-0">
+      {/* Banner Section - Hiển thị ngang */}
+      <div className="flex flex-col md:flex-row gap-4 mb-6 justify-center">
+        {/* Banner Center - Chiếm 2/3 chiều rộng */}
+        <div className="w-full md:w-2/3 mx-auto">
+          {sliderPartCenterBanners && <BannerSlider banners={sliderPartCenterBanners} />}
         </div>
 
-        <div className="flex flex-col gap-4 w-1/4">
-          {rightBanners.length > 0 &&
-            rightBanners.map((banner, index) => (
-              <Link
-                key={banner._id || index}
-                href={`/${banner.link || ""}`}
-                className="relative w-full rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow"
-              >
-                <div className="relative w-full aspect-[3/2]">
-                  <Image
-                    src={new URL(banner.url, API_BASE_URL).href}
-                    alt={banner.title || `Banner ${index + 1}`}
-                    fill
-                    className="object-cover"
-                    quality={90}
-                  />
-                </div>
-              </Link>
-            ))}
+        {/* Banner Right - Chiếm 1/3 chiều rộng */}
+        <div className="w-full md:w-1/3">
+          {sliderPartRightBanners && <VerticalBanners banners={sliderPartRightBanners} />}
         </div>
       </div>
 
-      {/* Mobile: Chỉ hiển thị BannerSlider */}
-      <div className="md:hidden mb-6">
-        {sliderFullBanners && sliderFullBanners.length > 0 && (
-          <BannerSlider banners={sliderFullBanners} />
-        )}
-        <GridBannerSlider banners={sliderPartBanners} />
-      </div>
+
+      {/* HorizontalBanners */}
+      {sliderPartHorizontalBanners && <HorizontalBanners banners={sliderPartHorizontalBanners} />}
 
       {/* Category Grid */}
       <CategoriesGrid categories={categories} />
@@ -175,6 +167,8 @@ export default async function Home() {
         categoriesWithProducts={categoriesWithProducts}
         isExtend={true}
       />
+
+      <GridBannerSlider banners={sliderPartCenterBanners} />
 
       {/* Smart gadgets banner */}
       {sliderFullBanners && sliderFullBanners[2] && (

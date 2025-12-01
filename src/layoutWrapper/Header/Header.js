@@ -393,7 +393,7 @@ export default function Header({ phoneNumber, categories }) {
           <div className="md:hidden flex items-center space-x-3">
             {/* Category Menu on mobile - chỉ hiển thị icon */}
             <CategoryMenu categories={categories} isMobile={true} />
-            
+
             <Link href="/cart" className="text-white">
               <ShoppingCart className="w-6 h-6" />
             </Link>
@@ -450,13 +450,16 @@ export default function Header({ phoneNumber, categories }) {
           </button>
         </div>
       )}
-      
+
       {/* Category menu - desktop only */}
       <div className="hidden md:block bg-white shadow">
         <div className="max-w-[250px] mr-auto ml-30 border border-gray-300 bg-white p-0">
           <CategoryMenu categories={categories} isMobile={false} />
         </div>
       </div>
+
+
+
     </header>
   );
 }
