@@ -162,7 +162,7 @@ export default async function Home() {
         isExtend={true}
       />
 
-      {/* <GridBannerSlider banners={sliderPartCenterBanners} /> */}
+
 
       {/* Smart gadgets banner */}
       {sliderFullBanners && sliderFullBanners[2] && (
