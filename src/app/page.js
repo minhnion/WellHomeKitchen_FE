@@ -79,9 +79,7 @@ export default async function Home() {
       }
     });
   }
-  console.log(sliderPartCenterBanners.length)
-  console.log(sliderPartRightBanners.length)
-  console.log(sliderPartHorizontalBanners.length)
+
 
   const isPostCategoriesRoot = "true";
   const postCategoryResponse = await getPostCategories(
@@ -107,9 +105,6 @@ export default async function Home() {
       }
     )
   );
-
-  const rightBanners = sliderPartBanners.slice(0, 3);
-
   return (
     <main className="bg-secondary px-4 sm:px-6 md:px-10 lg:px-20 py-0">
       {/* Banner Section - Hiển thị ngang */}
@@ -155,7 +150,6 @@ export default async function Home() {
         categoriesWithProducts={categoriesWithTopSellingProduct}
       />
       <ProductViewHistory />
-
       {/* CategoryProducts */}
       <h2 className="text-xl font-bold text-gray-900 px-4 py-2 inline-block">
         Mua Online Giá Siêu Rẻ
@@ -168,7 +162,7 @@ export default async function Home() {
         isExtend={true}
       />
 
-      <GridBannerSlider banners={sliderPartCenterBanners} />
+      {/* <GridBannerSlider banners={sliderPartCenterBanners} /> */}
 
       {/* Smart gadgets banner */}
       {sliderFullBanners && sliderFullBanners[2] && (
