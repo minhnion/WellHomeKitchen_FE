@@ -163,7 +163,6 @@ export default async function Home() {
       />
 
 
-
       {/* Smart gadgets banner */}
       {sliderFullBanners && sliderFullBanners[2] && (
         <div className="my-6 relative w-full rounded-lg overflow-hidden shadow-md">
