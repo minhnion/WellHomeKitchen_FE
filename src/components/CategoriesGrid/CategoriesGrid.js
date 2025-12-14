@@ -4,24 +4,46 @@ import Link from "next/link";
 
 const CategoriesGrid = ({ categories }) => {
   return (
-    <div className="bg-white rounded-lg p-3 sm:p-4 shadow-md mb-1">
-      <div className="grid grid-cols-5 gap-2 lg:grid-cols-6 xl:grid-cols-8">
+    <div className="mb-6 mt-14">
+      {/* Tiêu đề */}
+      <Link href="/" className="block">
+        <div className="bg-white text-xl font-bold text-blue-900 uppercase pb-2 px-4 py-3">
+          DANH MỤC GIA DỤNG
+        </div>
+      </Link>
+
+      {/* danh sách sản phẩm */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-0">
         {categories?.map((category) => (
-          <Link
+          <div
             key={category._id}
-            href={`/${category.slug}`}
-            title={category.name}
-            className="flex flex-col items-center p-1 sm:p-2 hover:opacity-80 transition-opacity"
+            className="
+              bg-white shadow-sm hover:shadow-md 
+              border border-gray-200 
+              active:scale-105 active:shadow-lg active:z-10
+              transition-transform duration-150 ease-out
+              hover:scale-[1.02]
+            "
           >
-            <Image
-              src={new URL(category.imageUrl, API_BASE_URL).href}
-              alt={category.name}
-              width={70}
-              height={70}
-              className="object-contain max-w-full max-h-full"
-            />
-            <p className="mt-2 sm:mt-4 text-center text-xs">{category.name}</p>
-          </Link>
+            <Link
+              href={`/${category.slug}`}
+              title={category.name}
+              className="flex flex-col items-center p-4"
+            >
+              <div className="w-16 h-16 flex items-center justify-center mb-3">
+                <Image
+                  src={new URL(category.imageUrl, API_BASE_URL).href}
+                  alt={category.name}
+                  width={64}
+                  height={64}
+                  className="object-contain max-w-full max-h-full"
+                />
+              </div>
+              <p className="text-center text-sm font-medium text-gray-800 line-clamp-2">
+                {category.name}
+              </p>
+            </Link>
+          </div>
         ))}
       </div>
     </div>
