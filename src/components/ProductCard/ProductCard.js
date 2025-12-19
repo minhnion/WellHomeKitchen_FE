@@ -67,7 +67,7 @@ const ProductCard = ({
     }
   };
 
-  const truncatedTitle = name.length > 35 ? name.slice(0, 35) + "..." : name;
+  // const truncatedTitle = name.length > 20 ? name.slice(0, 20) + "..." : name;
 
   const isNew =
     new Date(createdAt) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
@@ -84,7 +84,7 @@ const ProductCard = ({
   return (
     <>
       <div
-        className="flex flex-col justify-between bg-white  shadow-md m-1 overflow-hidden w-55 aspect-[9/17] border border-gray-200 max-xl:w-48 max-sm:w-44 max-[25rem]:w-40 transition-shadow duration-300 hover:shadow-xl group relative"
+        className="flex flex-col justify-between bg-white  shadow-md m-1 overflow-hidden w-55 aspect-[9/17] max-sm:aspect-[9/19] border border-gray-200 max-xl:w-48 max-sm:w-44 max-[25rem]:w-40 transition-shadow duration-300 hover:shadow-xl group relative"
         onMouseEnter={() => setShowEye(true)}
         onMouseLeave={() => setShowEye(false)}
       >
@@ -167,9 +167,18 @@ const ProductCard = ({
           <div className="px-3 ">
             <h3
               title={name}
-              className="h-10 text-base mb-2 text-gray-800 max-sm:text-[13px] max-sm:h-7"
+              className="
+    text-base
+    mb-2
+    text-gray-800
+    line-clamp-2
+    leading-5
+    min-h-[40px]
+    max-sm:text-[13px]
+    max-sm:min-h-[28px]
+  "
             >
-              {truncatedTitle}
+              {name}
             </h3>
 
             <div className="flex flex-col items-start my-3">
