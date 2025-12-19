@@ -15,10 +15,14 @@ import HorizontalBanners from "@/components/HorizontalBanners/HorizontalBanners"
 import News from "@/components/News/News";
 import ProductViewHistory from "@/components/ProductViewHistory/ProductViewHistory";
 import SpecialProductsFrame from "@/components/SpecialProductsFrame/SpecialProductsFrame";
+import ProductCard from "@/components/ProductCard/ProductCard";
 import Image from "next/image";
 import Link from "next/link";
 
 export default async function Home() {
+  const topSellingResponse = await getTopSellingProducts(1, 5, null);
+  const top5Products = topSellingResponse?.data || [];
+
   const categories = await getAllCategories();
   const categoriesHightLight = Array.isArray(categories)
     ? categories.slice(0, 8)
@@ -124,8 +128,38 @@ export default async function Home() {
       {/* HorizontalBanners */}
       {sliderPartHorizontalBanners && <HorizontalBanners banners={sliderPartHorizontalBanners} />}
 
+      {/* Best sell products */}
+      {top5Products.length > 0 && (
+        <>
+          <h2 className="text-xl font-bold text-blue-900 mb-4 mt-14">
+            SẢN PHẨM BÁN CHẠY
+          </h2>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+            {top5Products.map((product) => (
+              <ProductCard
+                key={product._id}
+                id={product._id}
+                {...product}
+              />
+            ))}
+          </div>
+        </>
+      )}
+
+
+
       {/* Category Grid */}
       <CategoriesGrid categories={categories} />
+
+      {/* Best sell products */}
+      <h2 className="text-xl font-bold text-blue-900  py-2 inline-block">
+        Top sản phẩm bán chạy
+      </h2>
+      <CategoryProducts
+        // categories={categoriesHightLight}
+        categoriesWithProducts={categoriesWithTopSellingProduct}
+      />
 
       {/* Special Products */}
       {specialProducts && specialProducts.data.length > 0 && (
@@ -141,14 +175,7 @@ export default async function Home() {
         </>
       )}
 
-      {/* Best sell products */}
-      <h2 className="text-xl font-bold text-gray-900 px-4 py-2 inline-block">
-        Top sản phẩm bán chạy
-      </h2>
-      <CategoryProducts
-        categories={categoriesHightLight}
-        categoriesWithProducts={categoriesWithTopSellingProduct}
-      />
+
       <ProductViewHistory />
       {/* CategoryProducts */}
       <h2 className="text-xl font-bold text-gray-900 px-4 py-2 inline-block">
