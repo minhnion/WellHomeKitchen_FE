@@ -26,6 +26,7 @@ export default function CategoryProducts({
 
   const products = activeCategoryWithProducts?.products || [];
   const activeCategoryName = activeCategoryWithProducts?.category?.name || "";
+  const [isTouched, setIsTouched] = useState(false);
 
   return (
     <div className="w-full border-b border-gray-200 px-2">
@@ -97,13 +98,47 @@ export default function CategoryProducts({
         <div className="mt-8 flex justify-center">
           <Link
             href={`/${activeCategoryWithProducts.category.slug}`}
-            className="inline-flex items-center px-5 py-2.5 border border-black-300 text-black-600 bg-white rounded-lg hover:bg-blue-50 transition text-sm"
+            onTouchStart={() => setIsTouched(true)}
+            onTouchEnd={() => setTimeout(() => setIsTouched(false), 300)}
+            className={`
+        relative overflow-hidden
+        inline-flex items-center px-5 py-2.5
+        border border-black
+        text-black
+        bg-white
+        rounded-lg
+        transition-colors duration-300
+        group
+      `}
           >
-            Xem tất cả {activeCategoryName.toLowerCase()}
+            {/* Background trượt */}
+            <span
+              className={`
+          absolute inset-0
+          bg-red-600
+          -translate-x-full
+          transition-transform duration-300 ease-out
+          group-hover:translate-x-0
+          ${isTouched ? "translate-x-0" : ""}
+        `}
+            />
 
+            {/* Text */}
+            <span
+              className={`
+          relative z-10 flex items-center gap-2
+          transition-colors duration-300
+          group-hover:text-white
+          ${isTouched ? "text-white" : ""}
+        `}
+            >
+              Xem tất cả {activeCategoryName.toLowerCase()}
+            </span>
           </Link>
         </div>
       )}
+
+
     </div>
   );
 }

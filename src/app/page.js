@@ -18,12 +18,30 @@ import SpecialProductsFrame from "@/components/SpecialProductsFrame/SpecialProdu
 import ProductCard from "@/components/ProductCard/ProductCard";
 import Image from "next/image";
 import Link from "next/link";
+import ProductRowCard from "@/components/ProductRowCard/ProductRowCard";
+import PartnerBanners from "@/components/PartnerBanners/PartnerBanners";
 
 export default async function Home() {
+
+
   const topSellingResponse = await getTopSellingProducts(1, 5, null);
   const top5Products = topSellingResponse?.data || [];
 
   const categories = await getAllCategories();
+  const fridgeCategory = categories.find(
+    (cat) => cat.name.toLowerCase() === "tủ lạnh"
+  );
+  const cookwareCategories = categories.filter(
+    (cat) => {
+      const name = cat.name?.toLowerCase();
+      return (
+        name?.startsWith("nồi") ||
+        name === "bếp từ" ||
+        name === "gia dụng"
+      );
+    }
+  );
+
   const categoriesHightLight = Array.isArray(categories)
     ? categories.slice(0, 8)
     : [];
@@ -31,6 +49,30 @@ export default async function Home() {
   const currentPage = 1;
   const limit = 10;
   const limitTopSelling = 5;
+
+  const fridgeProducts = fridgeCategory?._id
+    ? (await getTopSellingProducts(1, 9, fridgeCategory._id))?.data || []
+    : [];
+
+  const cookwareProducts = await Promise.all(
+    cookwareCategories.map(async (category) => {
+      const res = await getTopSellingProducts(1, 5, category._id);
+      const products = res?.data || [];
+
+
+      return products.filter((product) => {
+        const name = product.name;
+        if (!name) return false;
+        const lower = name.toLowerCase();
+        return lower.startsWith("nồi") || lower.startsWith("chảo");
+      });
+    })
+  );
+
+  const finalCookwareProducts = cookwareProducts
+    .flat()
+    .slice(0, 5);
+
 
   const categoriesWithProducts = await Promise.all(
     (categories || []).map(async (category) => {
@@ -63,7 +105,7 @@ export default async function Home() {
   );
 
   const isShow = true;
-  const banners = await getBanners(currentPage, 20, isShow);
+  const banners = await getBanners(currentPage, 30, isShow);
   const sliderFullBanners = [];
   const sliderPartCenterBanners = [];
   const sliderPartRightBanners = [];
@@ -83,7 +125,6 @@ export default async function Home() {
       }
     });
   }
-  console.log(sliderPartHorizontalBanners.length);
 
 
   const isPostCategoriesRoot = "true";
@@ -128,7 +169,7 @@ export default async function Home() {
 
 
       {/* HorizontalBanners */}
-      {sliderPartHorizontalBanners && <HorizontalBanners banners={sliderPartHorizontalBanners} />}
+      {sliderPartHorizontalBanners && <HorizontalBanners banners={sliderPartHorizontalBanners.slice(0, 4)} />}
 
       {/* Best sell products */}
       {top5Products.length > 0 && (
@@ -182,25 +223,51 @@ export default async function Home() {
         categoriesWithProducts={categoriesWithProducts}
         isExtend={true}
       />
+      {/* CookwareProducts */}
+      {finalCookwareProducts.length > 0 && (
+        <>
+          <h2 className="text-xl font-bold text-blue-900 mb-4 mt-14">
+            NỒI CHẢO CHUẨN CHÂU ÂU
+          </h2>
 
-
-      {/* Smart gadgets banner */}
-      {sliderFullBanners && sliderFullBanners[3] && (
-        <div className="my-6 relative w-full rounded-lg overflow-hidden shadow-md">
-          <Link href={`/${sliderFullBanners[3].link}`}>
-            <div className="relative w-full md:aspect-[15/4]">
-              <Image
-                src={new URL(sliderFullBanners[3].url, API_BASE_URL).href}
-                alt="main-banner"
-                fill
-                priority
-                quality={95}
-                className="object-cover"
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+            {finalCookwareProducts.map((product) => (
+              <ProductCard
+                key={product._id}
+                id={product._id}
+                {...product}
               />
-            </div>
-          </Link>
+            ))}
+          </div>
+        </>
+      )}
+      {/* fridgeProducts */}
+      {fridgeProducts.length > 0 && (
+        <div className="bg-white my-10">
+          <h2 className="text-xl font-bold text-blue-900 px-4 py-4">
+            TỦ LẠNH
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 max-w-[1000px] ">
+            {fridgeProducts.map((product, index) => (
+              <div
+                key={product._id}
+                className="
+        border-b border-gray-200
+        md:[&:nth-last-child(-n+3)]:border-b-0
+      "
+              >
+                <ProductRowCard {...product} />
+              </div>
+            ))}
+          </div>
         </div>
       )}
+
+      {sliderPartHorizontalBanners && <PartnerBanners banners={sliderPartHorizontalBanners} />}
+
+
+
 
       {/* Post */}
       {categoriesWithPosts && categoriesWithPosts.length > 0 && (
