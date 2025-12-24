@@ -27,6 +27,7 @@ const ProductCard = ({
   brand = null,
   starAverage = 4.5,
   numberOfReviews = 0,
+  fluid = false,
 }) => {
   const [showEye, setShowEye] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -84,7 +85,17 @@ const ProductCard = ({
   return (
     <>
       <div
-        className="flex flex-col justify-between bg-white  shadow-md m-1 overflow-hidden w-55 aspect-[9/17] max-sm:aspect-[9/19] border border-gray-200 max-xl:w-48 max-sm:w-44 max-[25rem]:w-40 transition-shadow duration-300 hover:shadow-xl group relative"
+        className={`
+    flex flex-col justify-between
+    bg-white shadow-md m-1 overflow-hidden
+    border border-gray-200
+    transition-shadow duration-300 hover:shadow-xl
+    group relative
+
+    ${fluid
+            ? "w-full h-auto"
+            : "w-55 aspect-[9/17] max-sm:aspect-[9/19] max-xl:w-48 max-sm:w-44 max-[25rem]:w-40"}
+  `}
         onMouseEnter={() => setShowEye(true)}
         onMouseLeave={() => setShowEye(false)}
       >

@@ -29,7 +29,7 @@ export default async function Home() {
     : [];
 
   const currentPage = 1;
-  const limit = 20;
+  const limit = 10;
   const limitTopSelling = 5;
 
   const categoriesWithProducts = await Promise.all(
@@ -63,7 +63,7 @@ export default async function Home() {
   );
 
   const isShow = true;
-  const banners = await getBanners(currentPage, limit, isShow);
+  const banners = await getBanners(currentPage, 20, isShow);
   const sliderFullBanners = [];
   const sliderPartCenterBanners = [];
   const sliderPartRightBanners = [];
@@ -83,6 +83,7 @@ export default async function Home() {
       }
     });
   }
+  console.log(sliderPartHorizontalBanners.length);
 
 
   const isPostCategoriesRoot = "true";
@@ -118,6 +119,7 @@ export default async function Home() {
           {sliderPartCenterBanners && <BannerSlider banners={sliderPartCenterBanners} />}
         </div>
 
+
         {/* Banner Right - Chiếm 1/3 chiều rộng */}
         <div className="w-full md:w-1/3">
           {sliderPartRightBanners && <VerticalBanners banners={sliderPartRightBanners} />}
@@ -152,14 +154,6 @@ export default async function Home() {
       {/* Category Grid */}
       <CategoriesGrid categories={categories} />
 
-      {/* Best sell products */}
-      <h2 className="text-xl font-bold text-blue-900  py-2 inline-block">
-        Top sản phẩm bán chạy
-      </h2>
-      <CategoryProducts
-        // categories={categoriesHightLight}
-        categoriesWithProducts={categoriesWithTopSellingProduct}
-      />
 
       {/* Special Products */}
       {specialProducts && specialProducts.data.length > 0 && (
@@ -178,8 +172,8 @@ export default async function Home() {
 
       <ProductViewHistory />
       {/* CategoryProducts */}
-      <h2 className="text-xl font-bold text-gray-900 px-4 py-2 inline-block">
-        Mua Online Giá Siêu Rẻ
+      <h2 className="text-xl font-bold text-blue-900  py-2 inline-block">
+        ƯU ĐÃI DANH MỤC
       </h2>
 
       <CategoryProducts
@@ -191,12 +185,12 @@ export default async function Home() {
 
 
       {/* Smart gadgets banner */}
-      {sliderFullBanners && sliderFullBanners[2] && (
+      {sliderFullBanners && sliderFullBanners[3] && (
         <div className="my-6 relative w-full rounded-lg overflow-hidden shadow-md">
-          <Link href={`/${sliderFullBanners[2].link}`}>
+          <Link href={`/${sliderFullBanners[3].link}`}>
             <div className="relative w-full md:aspect-[15/4]">
               <Image
-                src={new URL(sliderFullBanners[2].url, API_BASE_URL).href}
+                src={new URL(sliderFullBanners[3].url, API_BASE_URL).href}
                 alt="main-banner"
                 fill
                 priority

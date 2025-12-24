@@ -35,6 +35,9 @@ export default function Banners() {
   const typeOptions = [
     { value: "slider-full", label: "Rộng toàn màn hình" },
     { value: "slider-part", label: "Rộng một phần màn hình" },
+    { value: "slider-part-right", label: "Banner bên phải" },
+    { value: "slider-part-center", label: "Banner trung tâm" },
+
   ];
   const [typeSelect, setTypeSelect] = useState(null);
 
