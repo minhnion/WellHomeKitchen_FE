@@ -25,6 +25,7 @@ import { login } from "@/apiServices/auth";
 import ReCAPTCHA from "react-google-recaptcha";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useRouter } from "next/navigation";
 
 
 export default function Header({ phoneNumber, categories }) {
@@ -41,7 +42,7 @@ export default function Header({ phoneNumber, categories }) {
   const [recaptchaToken, setRecaptchaToken] = useState("");
   const topCategories = categories ? categories.slice(0, 10) : [];
   const recaptchaRef = useRef(null);
-
+  const router = useRouter();
   useEffect(() => {
     setIsMounted(true);
 
@@ -158,6 +159,17 @@ export default function Header({ phoneNumber, categories }) {
           if (recaptchaRef.current) recaptchaRef.current.reset();
 
           toast.success(response.message || "Đăng nhập thành công!");
+
+          const userRole = response.data.user?.role;
+
+
+          if (userRole === "admin" || userRole === "superadmin") {
+            // Nếu là admin, chuyển sang trang admin
+            router.push("/admin");
+          } else {
+            // Nếu là user thường, chuyển về trang chủ hoặc trang cá nhân
+            router.push("/tai-khoan");
+          }
         } else {
           throw new Error(response.message || "Đăng nhập thất bại");
         }
@@ -394,7 +406,7 @@ export default function Header({ phoneNumber, categories }) {
             {/* Category Menu on mobile - chỉ hiển thị icon */}
             <CategoryMenu categories={categories} isMobile={true} />
 
-            <Link href="/cart" className="text-white">
+            <Link href="/gio-hang" className="text-white">
               <ShoppingCart className="w-6 h-6" />
             </Link>
             {!isMounted ? (
@@ -453,7 +465,7 @@ export default function Header({ phoneNumber, categories }) {
 
       {/* Category menu - desktop only */}
       <div className="hidden md:block bg-white shadow">
-        <div className="max-w-[250px] mr-auto ml-30 border border-gray-300 bg-white p-0">
+        <div className="max-w-[250px] mr-auto  border border-gray-300 bg-white p-0">
           <CategoryMenu categories={categories} isMobile={false} />
         </div>
       </div>

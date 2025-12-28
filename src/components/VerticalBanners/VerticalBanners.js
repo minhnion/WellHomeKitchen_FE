@@ -30,7 +30,7 @@ export default function VerticalBanners({ banners }) {
     const displayBanners = banners;
 
     return (
-        <div className="mt-6 mb-0 w-full max-w-[400px] mx-auto">
+        <div className="mt-6 mb-0 w-full max-w-[410px] mx-auto">
             {/* Desktop: Hiển thị cố định */}
             <div className="hidden md:block">
                 <div className="flex flex-col gap-4">
@@ -38,15 +38,19 @@ export default function VerticalBanners({ banners }) {
                         <div key={index} className="w-full">
                             <Link href={banner.link || "#"}>
                                 <div className="relative w-full">
-                                    <div className="w-full h-[189px] relative">
+                                    <div className="w-full h-[161px] relative">
                                         <Image
                                             src={new URL(banner.url, API_BASE_URL).href}
                                             alt={banner.title || `Banner ${index + 1}`}
                                             fill
                                             priority={index === 0}
                                             quality={95}
-                                            className="object-cover rounded-lg shadow-lg"
-                                            sizes="400px"
+                                            className="p-1"
+                                            style={{
+                                                objectFit: 'fill', // <-- KÉO GIÃN để fill container
+                                                objectPosition: 'center',
+                                            }}
+                                            sizes="410px"
                                         />
                                     </div>
                                 </div>

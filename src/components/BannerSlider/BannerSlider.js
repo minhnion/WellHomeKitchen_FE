@@ -52,16 +52,16 @@ export default function BannerSlider({ banners }) {
             <div className="w-full">
               <Link href={banner.link || "#"}>
                 <div className="relative w-full">
-                  {/* Ảnh cho desktop - kích thước cố định 747x599 */}
+                  {/* Ảnh cho desktop - kích thước cố định 747x510 */}
                   <div className="hidden md:block mx-auto">
-                    <div className="w-[747px] h-[599px] relative">
+                    <div className="w-[747px] h-[510px] relative overflow-hidden rounded-lg shadow-md">
                       <Image
                         src={new URL(banner.url, API_BASE_URL).href}
                         alt={banner.title || `Banner ${index + 1}`}
                         fill
                         priority={index === 0}
                         quality={95}
-                        className="object-cover rounded-lg shadow-md"
+                        className="object-cover object-top" // Hiển thị phần TOP của ảnh
                         sizes="747px"
                       />
                     </div>
