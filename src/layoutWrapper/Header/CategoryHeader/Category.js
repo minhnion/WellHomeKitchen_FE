@@ -109,7 +109,7 @@ export default function CategoryMenu({ categories = [], isMobile = false }) {
   };
 
   const handleCategoryClick = (category, e) => {
-    e.preventDefault();
+
     handleCategorySelect(category, e);
   };
 
@@ -157,31 +157,43 @@ export default function CategoryMenu({ categories = [], isMobile = false }) {
             >
               <div className="bg-white text-xs md:text-sm">
                 {displayedCategories.map((category) => (
-                  <div
+                  <Link
                     key={category._id}
-                    onMouseEnter={
-                      isHoverSupported
-                        ? (e) => handleCategorySelect(category, e)
-                        : undefined
-                    }
-                    onClick={(e) => handleCategoryClick(category, e)}
+                    href={`/${category.slug}`}
+                    prefetch
                   >
-                    <div className={`flex items-center justify-between py-2 px-2 cursor-pointer transition-all duration-200 relative ${activeCategory && activeCategory._id === category._id
-                      ? "bg-blue-50 text-[#C94669] border-l-4 border-[#263B96]"
-                      : "hover:bg-gray-50"
-                      }`}>
-                      <span className="font-semibold">
-                        {category.name}
-                      </span>
-                      <ChevronRight
-                        className={`w-4 h-4 ${activeCategory && activeCategory._id === category._id
-                          ? "text-blue-600"
-                          : "text-gray-400"
-                          }`}
-                      />
+                    <div
+                      onMouseEnter={
+                        isHoverSupported
+                          ? (e) => handleCategorySelect(category, e)
+                          : undefined
+                      }
+                      onClick={(e) => handleCategoryClick(category, e)}
+                    >
+                      <div
+                        className={`flex items-center justify-between py-2 px-2 cursor-pointer transition-all duration-200 relative
+          ${activeCategory && activeCategory._id === category._id
+                            ? "bg-blue-50 text-[#C94669] border-l-4 border-[#263B96]"
+                            : "hover:bg-gray-50"
+                          }
+        `}
+                      >
+                        <span className="font-semibold">
+                          {category.name}
+                        </span>
+
+                        <ChevronRight
+                          className={`w-4 h-4 ${activeCategory && activeCategory._id === category._id
+                            ? "text-blue-600"
+                            : "text-gray-400"
+                            }`}
+                        />
+                      </div>
                     </div>
-                  </div>
+                  </Link>
                 ))}
+
+
 
                 {showAllCategories && (
                   <div>
@@ -303,8 +315,10 @@ export default function CategoryMenu({ categories = [], isMobile = false }) {
                       )}
                     </div>
                   ) : (
+
                     /* Hiển thị subcategories trên mobile */
                     <div className="p-4">
+
                       {/* Nút back */}
                       <button
                         onClick={() => setActiveCategory(null)}
@@ -316,10 +330,20 @@ export default function CategoryMenu({ categories = [], isMobile = false }) {
 
                       <h3 className="font-bold text-[#263B96] text-lg mb-4 pb-3 border-b">
                         {activeCategory.name}
+                        <Link
+                          href={`/${activeCategory.slug}`}
+                          onClick={closeMobileMenu}
+                          className="block mb-2 text-sm font-bold text-black"
+                        >
+                          Xem tất cả {activeCategory.name}
+                        </Link>
                       </h3>
+
 
                       {activeCategory.brands && activeCategory.brands.length > 0 && (
                         <div className="mb-6">
+
+
                           <h4 className="font-semibold text-gray-700 mb-3 text-sm">
                             THƯƠNG HIỆU NỔI BẬT
                           </h4>
@@ -365,6 +389,7 @@ export default function CategoryMenu({ categories = [], isMobile = false }) {
                           </p>
                         )}
                     </div>
+
                   )}
                 </div>
               </div>

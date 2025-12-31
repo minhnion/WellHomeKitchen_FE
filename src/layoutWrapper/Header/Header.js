@@ -40,9 +40,24 @@ export default function Header({ phoneNumber, categories }) {
   const [isLoginSubmitting, setIsLoginSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [recaptchaToken, setRecaptchaToken] = useState("");
-  const topCategories = categories ? categories.slice(0, 10) : [];
+  const [isDesktopSticky, setIsDesktopSticky] = useState(false);
   const recaptchaRef = useRef(null);
   const router = useRouter();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // chỉ desktop
+      if (window.innerWidth < 768) return;
+
+      const trigger = window.innerHeight;
+      setIsDesktopSticky(window.scrollY > trigger);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+
   useEffect(() => {
     setIsMounted(true);
 
@@ -370,108 +385,122 @@ export default function Header({ phoneNumber, categories }) {
   };
 
   return (
-    <header className="bg-[#263B96] shadow top-0 z-50 relative">
-      {/* hotline-only desktop */}
-      <div className="hidden md:block w-full bg-black">
-        <div className="max-w-7xl mx-auto py-1 px-4 flex items-center justify-start">
-          <div className="hidden md:flex items-center text-sm space-x-1 -ml-14">
-            <span className="font-semibold text-gray-300">Hotline:</span>
-            <span className="text-white font-medium">
-              {phoneNumber}
-            </span>
-            <span className="text-white font-medium">
-              (9h-12h,13h00-18h,T2-T6)
-            </span>
+    <>
+      <header
+
+        className={`bg-[#263B96] shadow z-50 transition-all duration-300
+    
+  `}
+      >
+
+
+        {/* hotline-only desktop */}
+        <div className="hidden md:block w-full bg-black">
+          <div className="max-w-7xl mx-auto py-1 px-4 flex items-center justify-start">
+            <div className="hidden md:flex items-center text-sm space-x-1 -ml-14">
+              <span className="font-semibold text-gray-300">Hotline:</span>
+              <span className="text-white font-medium">
+                {phoneNumber}
+              </span>
+              <span className="text-white font-medium">
+                (9h-12h,13h00-18h,T2-T6)
+              </span>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Main header with padding for mobile */}
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between py-3 px-4 md:px-0">
-        {/* Top section for mobile (logo + category menu + cart) */}
-        <div className="w-full md:w-auto flex items-center justify-between mb-0">
-          <Link href="/" className="flex-shrink-0 md:-ml-10">
-            <Image
-              src="/images/wellhome-logo-white.png"
-              alt="WellHome Logo"
-              width={220}
-              height={37.69}
-              className="h-auto"
-              priority
-            />
-          </Link>
+        {/* Main header with padding for mobile */}
+        <div
+          className={`hidden md:block transition-all duration-300
+    ${isDesktopSticky
+              ? "fixed top-0 left-0 w-full z-50 bg-[#263B96] shadow"
+              : "relative"}
+  `}
+        >
 
-          {/* Mobile actions - Category menu icon, cart and user icon */}
-          <div className="md:hidden flex items-center space-x-3">
-            {/* Category Menu on mobile - chỉ hiển thị icon */}
-            <CategoryMenu categories={categories} isMobile={true} />
-
-            <Link href="/gio-hang" className="text-white">
-              <ShoppingCart className="w-6 h-6" />
-            </Link>
-            {!isMounted ? (
-              <div className="text-white">
-                <User className="w-6 h-6" />
-              </div>
-            ) : user ? (
-              <div onClick={toggleDropdown} className="text-white">
-                <UserCircle className="w-6 h-6" />
-              </div>
-            ) : (
-              <Link href="/dang-nhap" className="text-white">
-                <User className="w-6 h-6" />
+          <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between py-3 px-4 md:px-0">
+            {/* Top section for mobile (logo + category menu + cart) */}
+            <div className="w-full md:w-auto flex items-center justify-between mb-0">
+              <Link href="/" className="flex-shrink-0 md:-ml-10">
+                <Image
+                  src="/images/wellhome-logo-white.png"
+                  alt="WellHome Logo"
+                  width={220}
+                  height={37.69}
+                  className="h-auto"
+                  priority
+                />
               </Link>
-            )}
+
+              {/* Mobile actions - Category menu icon, cart and user icon */}
+              <div className="md:hidden flex items-center space-x-3">
+                {/* Category Menu on mobile - chỉ hiển thị icon */}
+                <CategoryMenu categories={categories} isMobile={true} />
+
+                <Link href="/gio-hang" className="text-white">
+                  <ShoppingCart className="w-6 h-6" />
+                </Link>
+                {!isMounted ? (
+                  <div className="text-white">
+                    <User className="w-6 h-6" />
+                  </div>
+                ) : user ? (
+                  <div onClick={toggleDropdown} className="text-white">
+                    <UserCircle className="w-6 h-6" />
+                  </div>
+                ) : (
+                  <Link href="/dang-nhap" className="text-white">
+                    <User className="w-6 h-6" />
+                  </Link>
+                )}
+              </div>
+            </div>
+
+            <div className="w-full flex flex-col md:flex-row md:items-center md:space-x-6 md:ml-10">
+              {/* Search bar - full width on mobile with proper spacing */}
+              <div className="flex-1 mx-0 md:mx-20 mt-3 md:mt-0">
+                <SearchComponent />
+              </div>
+
+              {/* Right action items - desktop only */}
+              <div className="hidden md:flex items-center space-x-1">
+                {/* Dynamic user section based on login status */}
+                <div className="w-px h-6 bg-gray-400 "></div>
+                {renderUserSection()}
+                <div className="w-px h-6 bg-gray-400"></div>
+                <CartHeader />
+              </div>
+            </div>
           </div>
         </div>
-
-        <div className="w-full flex flex-col md:flex-row md:items-center md:space-x-6 md:ml-10">
-          {/* Search bar - full width on mobile with proper spacing */}
-          <div className="flex-1 mx-0 md:mx-20 mt-3 md:mt-0">
-            <SearchComponent />
+        {/* Mobile dropdown menu - shown when user is logged in and clicks profile icon */}
+        {isMounted && user && isDropdownOpen && (
+          <div className="md:hidden absolute w-full bg-white shadow-lg z-50">
+            <Link
+              href="/tai-khoan"
+              className="block px-4 py-3 text-gray-700 hover:bg-gray-100"
+              onClick={() => setIsDropdownOpen(false)}
+            >
+              <UserCircle className="inline-block w-4 h-4 mr-2" />
+              Tài khoản
+            </Link>
+            <button
+              onClick={handleLogout}
+              className="w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-100"
+            >
+              <LogOut className="inline-block w-4 h-4 mr-2" />
+              Đăng xuất
+            </button>
           </div>
-
-          {/* Right action items - desktop only */}
-          <div className="hidden md:flex items-center space-x-1">
-            {/* Dynamic user section based on login status */}
-            <div className="w-px h-6 bg-gray-400 "></div>
-            {renderUserSection()}
-            <div className="w-px h-6 bg-gray-400"></div>
-            <CartHeader />
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile dropdown menu - shown when user is logged in and clicks profile icon */}
-      {isMounted && user && isDropdownOpen && (
-        <div className="md:hidden absolute w-full bg-white shadow-lg z-50">
-          <Link
-            href="/tai-khoan"
-            className="block px-4 py-3 text-gray-700 hover:bg-gray-100"
-            onClick={() => setIsDropdownOpen(false)}
-          >
-            <UserCircle className="inline-block w-4 h-4 mr-2" />
-            Tài khoản
-          </Link>
-          <button
-            onClick={handleLogout}
-            className="w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-100"
-          >
-            <LogOut className="inline-block w-4 h-4 mr-2" />
-            Đăng xuất
-          </button>
-        </div>
-      )}
-
+        )}
+      </header>
+      {isDesktopSticky && <div className="hidden md:block h-[96px]" />}
       {/* Category menu - desktop only */}
       <div className="hidden md:block bg-white shadow">
         <div className="max-w-[250px] mr-auto  border border-gray-300 bg-white p-0">
           <CategoryMenu categories={categories} isMobile={false} />
         </div>
       </div>
-
-
-
-    </header>
+    </>
   );
 }
