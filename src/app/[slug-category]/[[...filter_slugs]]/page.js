@@ -9,46 +9,43 @@ import Link from "next/link";
 import { getSubCategories } from "@/apiServices/subCategory";
 import { getFilterAttriButes } from "@/apiServices/filterAttribute";
 import { AllProducts } from "../components/AllProducts/AllProducts";
-import { HighlightProducts } from "../components/HighlightProducts/HighlightProducts";
-import FamousBrands from "../components/FamousBrands/FamousBrands";
-import ProductViewHistory from "@/components/ProductViewHistory/ProductViewHistory";
 
+/* ================= PARSE FILTERS ================= */
 const parseFiltersFromParams = (
   params,
   searchParams,
   brandsData,
   subCategoriesData
 ) => {
-  const { "slug-category": categorySlugParam, filter_slugs } = params;
+  const { filter_slugs } = params;
+
   let brandId = null;
   let subCategoryId = null;
-  let brandSlugFromUrl = null;
-  let subCategorySlugFromUrl = null;
+  let brandSlug = null;
+  let subCategorySlug = null;
 
-  if (filter_slugs && filter_slugs.length > 0) {
-    const potentialBrandSlug = filter_slugs[0];
-    const foundBrand = brandsData.find((b) => b.slug === potentialBrandSlug);
-    if (foundBrand) {
-      brandSlugFromUrl = potentialBrandSlug;
-      brandId = foundBrand._id;
-      if (filter_slugs.length > 1) {
-        const potentialSubCategorySlug = filter_slugs[1];
-        const foundSub = subCategoriesData.find(
-          (s) => s.slug === potentialSubCategorySlug
+  if (filter_slugs?.length) {
+    const first = filter_slugs[0];
+    const brand = brandsData.find((b) => b.slug === first);
+
+    if (brand) {
+      brandId = brand._id;
+      brandSlug = brand.slug;
+
+      if (filter_slugs[1]) {
+        const sub = subCategoriesData.find(
+          (s) => s.slug === filter_slugs[1]
         );
-        if (foundSub) {
-          subCategorySlugFromUrl = potentialSubCategorySlug;
-          subCategoryId = foundSub._id;
+        if (sub) {
+          subCategoryId = sub._id;
+          subCategorySlug = sub.slug;
         }
       }
     } else {
-      const potentialSubCategorySlug = filter_slugs[0];
-      const foundSub = subCategoriesData.find(
-        (s) => s.slug === potentialSubCategorySlug
-      );
-      if (foundSub) {
-        subCategorySlugFromUrl = potentialSubCategorySlug;
-        subCategoryId = foundSub._id;
+      const sub = subCategoriesData.find((s) => s.slug === first);
+      if (sub) {
+        subCategoryId = sub._id;
+        subCategorySlug = sub.slug;
       }
     }
   }
@@ -56,8 +53,8 @@ const parseFiltersFromParams = (
   const initialFilters = {
     brandId,
     subCategoryId,
-    brandSlug: brandSlugFromUrl,
-    subCategorySlug: subCategorySlugFromUrl,
+    brandSlug,
+    subCategorySlug,
     minPrice: searchParams.minPrice
       ? parseInt(searchParams.minPrice)
       : undefined,
@@ -73,8 +70,6 @@ const parseFiltersFromParams = (
   Object.keys(searchParams).forEach((key) => {
     if (
       ![
-        "brandId",
-        "subCategoryId",
         "minPrice",
         "maxPrice",
         "sort",
@@ -89,98 +84,64 @@ const parseFiltersFromParams = (
   return initialFilters;
 };
 
-export async function generateMetadata({ params, searchParams }) {
-  const { "slug-category": slugCategory } = params;
-  const category = await getCategoryBySlug(slugCategory);
-  if (!category) {
-    return { title: "Danh mục không tồn tại" };
-  }
-
-  let title = `${category.name} - Kitchencare`;
+/* ================= META ================= */
+export async function generateMetadata({ params }) {
+  const category = await getCategoryBySlug(params["slug-category"]);
   return {
-    title: title,
-    openGraph: { title: title },
-    twitter: { title: title },
+    title: category ? `${category.name} - Kitchencare` : "Danh mục",
   };
 }
 
+/* ================= PAGE ================= */
 export default async function CategoryProductsDetailPage({
   params,
   searchParams,
 }) {
-  const { "slug-category": slugCategoryFromParams } = params;
+  const slugCategory = params["slug-category"];
+  const category = await getCategoryBySlug(slugCategory);
 
-  const category = await getCategoryBySlug(slugCategoryFromParams);
-  if (!category) {
-    notFound();
-  }
+  if (!category) notFound();
 
-  const brandsWithCategory = await getAllBrands(category._id);
+  const brands = await getAllBrands(category._id);
   const subCategories = await getSubCategories(category._id);
 
   const initialFilters = parseFiltersFromParams(
     params,
     searchParams,
-    brandsWithCategory,
+    brands,
     subCategories
   );
 
-  const breadcrumbItems = [];
+  /* ================= BREADCRUMB ================= */
+  const breadcrumbItems = [{ href: "/", label: "Trang chủ" }];
 
-  breadcrumbItems.push({ href: "/", label: "Trang chủ" });
-
-  breadcrumbItems.push({
-    href: `/${category.slug || slugCategoryFromParams}`,
-    label: category?.name || "Danh mục",
-  });
-
-  if (
-    initialFilters.brandSlug &&
-    brandsWithCategory.find((b) => b.slug === initialFilters.brandSlug)
-  ) {
-    const brand = brandsWithCategory.find(
-      (b) => b.slug === initialFilters.brandSlug
-    );
-    breadcrumbItems.push({
-      href: `/${category.slug || slugCategoryFromParams}/${
-        initialFilters.brandSlug
-      }`,
-      label: brand.name,
-    });
-  }
 
   if (
     initialFilters.subCategorySlug &&
-    subCategories.find((s) => s.slug === initialFilters.subCategorySlug)
+    subCategories.some((s) => s.slug === initialFilters.subCategorySlug)
   ) {
-    const subCategory = subCategories.find(
+    const sub = subCategories.find(
       (s) => s.slug === initialFilters.subCategorySlug
     );
-    const brandPath = initialFilters.brandSlug
-      ? `${initialFilters.brandSlug}/`
-      : "";
+
     breadcrumbItems.push({
-      href: `/${category.slug || slugCategoryFromParams}/${brandPath}${
-        initialFilters.subCategorySlug
-      }`,
-      label: subCategory.name,
+      href: `/${category.slug}/${initialFilters.subCategorySlug}`,
+      label: sub.name,
     });
   }
 
-  const bannerUrl = category.bannerUrl;
-  const highlightResponse = await getTopSellingProducts(
-    1,
-    10,
-    category._id,
-    initialFilters.subCategoryId,
-    initialFilters.brandId
-  );
-  const highlightProducts = highlightResponse?.data || [];
+  else {
+    breadcrumbItems.push({
+      href: `/${category.slug}`,
+      label: category.name,
+    });
+  }
 
+  /* ================= DATA ================= */
   const filterAttributeData = await getFilterAttriButes(category._id);
-  const limit = 20;
+  const limit = 1000;
 
-  const allProductsResponse = await getProductWithFilter(
+  const productsRes = await getProductWithFilter(
     initialFilters.page,
     limit,
     category._id,
@@ -195,20 +156,18 @@ export default async function CategoryProductsDetailPage({
     initialFilters.attributes
   );
 
-  const products = allProductsResponse?.data || [];
-  const totalPages = allProductsResponse?.pagination?.totalPages || 0;
-  const totalProducts = allProductsResponse?.pagination?.totalProducts || 0;
-
   return (
-    <div className="bg-secondary px-4 sm:px-6 md:px-10 lg:px-20 py-4 sm:py-6 md:py-8 lg:py-10">
-      <nav className="flex items-center flex-wrap mb-6 text-sm">
+    <div className="bg-secondary px-4 sm:px-6 md:px-10 lg:px-20 py-6">
+      {/* ================= BREADCRUMB UI ================= */}
+      <nav className="flex flex-wrap items-center mb-6 text-sm">
         {breadcrumbItems.map((item, index) => {
           const isLast = index === breadcrumbItems.length - 1;
-
           return (
             <div key={item.href} className="flex items-center">
               {isLast ? (
-                <span className="text-gray-800 font-medium">{item.label}</span>
+                <span className="font-medium text-gray-800">
+                  {item.label}
+                </span>
               ) : (
                 <Link
                   href={item.href}
@@ -217,28 +176,23 @@ export default async function CategoryProductsDetailPage({
                   {item.label}
                 </Link>
               )}
-
               {!isLast && (
-                <span className="mx-2 text-gray-500" aria-hidden="true">
-                  /
-                </span>
+                <span className="mx-2 text-gray-400">/</span>
               )}
             </div>
           );
         })}
       </nav>
 
-      <HighlightProducts products={highlightProducts} banner={bannerUrl} />
-      <ProductViewHistory />
+      {/* ================= PRODUCTS ================= */}
       <AllProducts
-        categorySlug={category.slug || slugCategoryFromParams}
-        brands={brandsWithCategory}
+        category={category}
+        categorySlug={category.slug}
+        brands={brands}
         subCategories={subCategories}
-        initialProducts={products}
-        totalPages={totalPages}
-        totalProducts={totalProducts}
-        categoryId={category._id}
-        limit={limit}
+        initialProducts={productsRes?.data || []}
+        totalPages={productsRes?.pagination?.totalPages || 0}
+        totalProducts={productsRes?.pagination?.totalProducts || 0}
         filterAttributesRaw={filterAttributeData?.attributes || []}
         initialFiltersFromUrl={initialFilters}
       />
