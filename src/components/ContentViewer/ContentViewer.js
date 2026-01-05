@@ -2,10 +2,9 @@
 
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { ChevronDown, ChevronUp } from "lucide-react";
+
 
 export default function ContentViewer({ content }) {
-  const [isExpanded, setIsExpanded] = useState(false);
   const [isContentTaller, setIsContentTaller] = useState(false);
   const contentRef = useRef(null);
   const wrapperRef = useRef(null);
@@ -22,13 +21,6 @@ export default function ContentViewer({ content }) {
     }
   }, [content]);
 
-  const toggleExpand = () => {
-    if (isExpanded && wrapperRef.current) {
-      wrapperRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-    setIsExpanded(!isExpanded);
-  };
-
   if (!content || !Array.isArray(content) || content.length === 0) {
     return (
       <p className="text-gray-500 italic">Nội dung đang được cập nhật...</p>
@@ -37,18 +29,10 @@ export default function ContentViewer({ content }) {
 
   return (
     <div ref={wrapperRef} className="relative">
-      {!isExpanded && isContentTaller && (
-        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-white to-transparent pointer-events-none" />
-      )}
 
       <div
         ref={contentRef}
-        style={{
-          maxHeight: isExpanded
-            ? `${contentRef.current.scrollHeight}px`
-            : `${collapsedMaxHeight}px`,
-        }}
-        className="prose lg:prose-xl max-w-none overflow-hidden transition-all duration-700 ease-in-out"
+        className="prose lg:prose-xl max-w-none"
       >
         {content.map((block, index) => {
           const key = block._id || `block-${index}`;
@@ -145,26 +129,7 @@ export default function ContentViewer({ content }) {
         })}
       </div>
 
-      {isContentTaller && (
-        <div className="relative text-center mt-4 z-20">
-          <button
-            onClick={toggleExpand}
-            className="inline-flex items-center justify-center px-6 py-2 font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-full transition-colors duration-200"
-          >
-            {isExpanded ? (
-              <>
-                <span>Thu gọn</span>
-                <ChevronUp className="w-5 h-5 ml-2" />
-              </>
-            ) : (
-              <>
-                <span>Xem thêm</span>
-                <ChevronDown className="w-5 h-5 ml-2" />
-              </>
-            )}
-          </button>
-        </div>
-      )}
+
     </div>
   );
 }
