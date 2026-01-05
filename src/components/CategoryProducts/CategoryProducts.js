@@ -29,7 +29,7 @@ export default function CategoryProducts({
   const [isTouched, setIsTouched] = useState(false);
 
   return (
-    <div className="w-full border-b border-gray-200 px-2">
+    <div className="w-full border-b border-gray-200">
       {/* Category Navigation */}
       <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-1 py-3">
         {categories.map((category) => (
@@ -50,10 +50,10 @@ export default function CategoryProducts({
       {/* Products + Banner */}
       <div className="mt-4 ">
         {products.length > 0 ? (
-          <div className="flex flex-col lg:flex-row gap-6 items-stretch">
+          <div className="flex flex-col lg:flex-row gap-2 items-stretch">
             {/* Banner LEFT */}
             {banner && (
-              <div className="hidden lg:block lg:w-1/6 self-stretch">
+              <div className="hidden lg:block lg:w-1/5 self-stretch">
                 <div className="relative w-full h-full rounded-lg overflow-hidden border border-gray-200 bg-white">
                   <Image
                     src={new URL(banner.url, API_BASE_URL).href}
@@ -71,7 +71,7 @@ export default function CategoryProducts({
               <div
                 className="
                   grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5
-                  gap-4
+                  gap-2
                   items-stretch
                 "
               >

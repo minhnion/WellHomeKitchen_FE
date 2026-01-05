@@ -30,37 +30,37 @@ export default function VerticalBanners({ banners }) {
     const displayBanners = banners;
 
     return (
-        <div className="mt-6 mb-0 w-full max-w-[410px] mx-auto">
+        // Sửa: bỏ max-w, set width full, height full
+        <div className="mt-4 mb-0 w-full h-full mx-auto">
             {/* Desktop: Hiển thị cố định */}
-            <div className="hidden md:block">
-                <div className="flex flex-col gap-4">
-                    {displayBanners.map((banner, index) => (
-                        <div key={index} className="w-full">
-                            <Link href={banner.link || "#"}>
-                                <div className="relative w-full">
-                                    <div className="w-full h-[161px] relative">
-                                        <Image
-                                            src={new URL(banner.url, API_BASE_URL).href}
-                                            alt={banner.title || `Banner ${index + 1}`}
-                                            fill
-                                            priority={index === 0}
-                                            quality={95}
-                                            className="p-1"
-                                            style={{
-                                                objectFit: 'fill', // <-- KÉO GIÃN để fill container
-                                                objectPosition: 'center',
-                                            }}
-                                            sizes="410px"
-                                        />
-                                    </div>
+            <div className="hidden md:flex flex-col justify-between h-[510px]">
+                {displayBanners.map((banner, index) => (
+                    // Chia đều chiều cao
+                    <div key={index} className="w-full flex-1 relative mb-4 last:mb-0">
+                        <Link href={banner.link || "#"} className="block w-full h-full">
+                            <div className="relative w-full h-full">
+                                <div className="w-full h-full relative rounded-lg overflow-hidden">
+                                    <Image
+                                        src={new URL(banner.url, API_BASE_URL).href}
+                                        alt={banner.title || `Banner ${index + 1}`}
+                                        fill
+                                        priority={index === 0}
+                                        quality={95}
+                                        className="p-0"
+                                        style={{
+                                            objectFit: 'cover', // Dùng cover để ảnh không bị méo
+                                            objectPosition: 'center',
+                                        }}
+                                        sizes="(max-width: 1200px) 30vw, 400px"
+                                    />
                                 </div>
-                            </Link>
-                        </div>
-                    ))}
-                </div>
+                            </div>
+                        </Link>
+                    </div>
+                ))}
             </div>
 
-            {/* Mobile: Hiển thị slider */}
+            {/* Mobile: Hiển thị slider - Giữ nguyên */}
             <div className="block md:hidden">
                 <Swiper
                     spaceBetween={15}

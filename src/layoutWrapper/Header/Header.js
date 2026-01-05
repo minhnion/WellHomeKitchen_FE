@@ -497,7 +497,7 @@ export default function Header({ phoneNumber, categories }) {
       {isDesktopSticky && <div className="hidden md:block h-[96px]" />}
       {/* Category menu - desktop only */}
       <div className="hidden md:block bg-white shadow">
-        <div className="max-w-[250px] mr-auto  border border-gray-300 bg-white p-0">
+        <div className="max-w-[250px] mr-auto  border border-gray-300 bg-white p-0 ml-20">
           <CategoryMenu categories={categories} isMobile={false} />
         </div>
       </div>

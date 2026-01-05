@@ -24,7 +24,7 @@ export default function HorizontalBanners({ banners, className = "" }) {
 
     return (
         // desktop
-        <div className={`w-full max-w-6xl mx-auto py-4 ${className}`}>
+        <div className={`w-full mx-auto py-4 ${className}`}>
             <div className="hidden md:block">
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                     {displayBanners.map((banner, index) => (

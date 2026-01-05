@@ -47,7 +47,7 @@ export default function SpecialProductsFrame({
               rows: 1,
               fill: "row",
             }}
-            spaceBetween={16}
+            spaceBetween={40}
             breakpoints={{
               320: { slidesPerView: 2, slidesPerGroup: 2 },
               640: { slidesPerView: 3, slidesPerGroup: 3 },

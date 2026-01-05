@@ -22,11 +22,11 @@ export default function BannerSlider({ banners }) {
     return null;
   }
 
-
   const displayBanners = banners;
 
   return (
-    <div className="mt-6 mb-0 w-full max-w-full md:max-w-[747px] mx-auto ">
+    // Sửa: width full, height full
+    <div className="mt-4 mb-0 w-full h-full mx-auto">
       <Swiper
         spaceBetween={10}
         slidesPerView={1}
@@ -44,30 +44,30 @@ export default function BannerSlider({ banners }) {
           prevEl: ".custom-prev",
         }}
         modules={[Autoplay, Pagination, Navigation]}
-        className="grid-banner-slider"
-        style={{ height: "auto" }}
+        className="grid-banner-slider h-full"
+        style={{ height: "100%" }} // Ép chiều cao full theo cha
       >
         {displayBanners.map((banner, index) => (
-          <SwiperSlide key={index}>
-            <div className="w-full">
-              <Link href={banner.link || "#"}>
-                <div className="relative w-full">
-                  {/* Ảnh cho desktop - kích thước cố định 747x510 */}
-                  <div className="hidden md:block mx-auto">
-                    <div className="w-[747px] h-[510px] relative overflow-hidden rounded-lg shadow-md">
+          <SwiperSlide key={index} className="h-full">
+            <div className="w-full h-full">
+              <Link href={banner.link || "#"} className="block w-full h-full">
+                <div className="relative w-full h-full">
+                  {/* Ảnh cho desktop */}
+                  <div className="hidden md:block w-full h-full">
+                    <div className="w-full h-[300px] lg:h-[510px] relative overflow-hidden rounded-lg shadow-md">
                       <Image
                         src={new URL(banner.url, API_BASE_URL).href}
                         alt={banner.title || `Banner ${index + 1}`}
                         fill
                         priority={index === 0}
                         quality={95}
-                        className="object-cover object-top" // Hiển thị phần TOP của ảnh
-                        sizes="747px"
+                        className="object-cover object-center" // Cover để ảnh tự cắt vừa khung
+                        sizes="(max-width: 1200px) 100vw, 70vw"
                       />
                     </div>
                   </div>
 
-                  {/* Ảnh cho mobile - full width, hiển thị toàn bộ */}
+                  {/* Ảnh cho mobile */}
                   <div className="block md:hidden">
                     <Image
                       src={
@@ -80,7 +80,7 @@ export default function BannerSlider({ banners }) {
                       height={400}
                       priority={index === 0}
                       quality={95}
-                      className="w-full h-auto object-contain"
+                      className="w-full h-auto object-contain rounded-lg"
                       sizes="100vw"
                     />
                   </div>
