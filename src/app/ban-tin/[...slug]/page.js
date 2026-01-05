@@ -11,7 +11,8 @@ import { API_BASE_URL } from "@/apiServices/constants";
 import PostContentRenderer from "@/app/ban-tin/PostContentRenderer/PostContentRenderer";
 import PostCategoryClient from "../PostCategoryClient/PostCategoryClient";
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata({ params: paramsPromise }) {
+  const params = await paramsPromise;
   const lastSlug = params.slug[params.slug.length - 1];
 
   const post = await getPostBySlug(lastSlug);
@@ -49,7 +50,9 @@ export async function generateMetadata({ params }) {
 
 export const dynamic = "force-dynamic";
 
-export default async function SlugPage({ params, searchParams }) {
+export default async function SlugPage({ params: paramsPromise, searchParams: searchParamsPromise }) {
+  const params = await paramsPromise;
+  const searchParams = await searchParamsPromise;
   const lastSlug = params.slug[params.slug.length - 1];
 
   const post = await getPostBySlug(lastSlug);

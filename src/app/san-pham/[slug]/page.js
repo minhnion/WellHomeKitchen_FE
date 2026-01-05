@@ -11,7 +11,8 @@ import { API_BASE_URL } from "@/apiServices/constants";
 import { getAllPosts } from "@/apiServices/posts";
 import { getReviewsByProduct } from "@/apiServices/review";
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata({ params: paramsPromise }) {
+  const params = await paramsPromise;
   const { slug } = params;
   const product = await getProductsBySlug(slug);
   if (!product) {
@@ -50,7 +51,8 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function ProductDetailPage(props) {
-  const { slug } = props.params;
+  const params = await props.params;
+  const { slug } = params;
 
   const product = await getProductsBySlug(slug);
 

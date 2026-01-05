@@ -85,8 +85,9 @@ const parseFiltersFromParams = (
 };
 
 /* ================= META ================= */
-export async function generateMetadata({ params }) {
-  const category = await getCategoryBySlug(params["slug-category"]);
+export async function generateMetadata({ params: paramsPromise }) {
+  const params = await paramsPromise;
+  const category = await getCategoryBySlug(params.slugCategory);
   return {
     title: category ? `${category.name} - Kitchencare` : "Danh mục",
   };
@@ -94,10 +95,12 @@ export async function generateMetadata({ params }) {
 
 /* ================= PAGE ================= */
 export default async function CategoryProductsDetailPage({
-  params,
-  searchParams,
+  params: paramsPromise,
+  searchParams: searchParamsPromise,
 }) {
-  const slugCategory = params["slug-category"];
+  const params = await paramsPromise;
+  const searchParams = await searchParamsPromise;
+  const slugCategory = params.slugCategory;
   const category = await getCategoryBySlug(slugCategory);
 
   if (!category) notFound();

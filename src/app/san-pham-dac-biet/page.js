@@ -5,7 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import SpecialProductsClient from "./SpecialProductsClient/SpecialProductsClient";
 
-export async function generateMetadata({ searchParams }) {
+export async function generateMetadata({ searchParams: searchParamsPromise }) {
+  const searchParams = await searchParamsPromise;
   const currentPage = parseInt(searchParams?.page) || 1;
   const limit = 10;
 
@@ -50,7 +51,8 @@ export async function generateMetadata({ searchParams }) {
   }
 }
 
-export default async function SpecialProductPage({ searchParams }) {
+export default async function SpecialProductPage({ searchParams: searchParamsPromise }) {
+  const searchParams = await searchParamsPromise;
   const limit = 10;
   const currentPage = parseInt(searchParams?.page) || 1;
 
