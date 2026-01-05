@@ -6,7 +6,7 @@ const addProductViewHistory = (productId) => {
 
   if (!productViewHistory.includes(productId)) {
     productViewHistory.unshift(productId);
-    if (productViewHistory.length > 4) {
+    if (productViewHistory.length > 5) {
       productViewHistory.pop();
     }
 

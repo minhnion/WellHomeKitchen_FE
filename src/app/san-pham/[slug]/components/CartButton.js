@@ -17,7 +17,7 @@ export default function CartButtons({ product }) {
   const [isAdding, setIsAdding] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [zaloLink, setZaloLink] = useState("");
-  
+
 
   useEffect(() => {
     const getConfig = async () => {
@@ -72,39 +72,42 @@ export default function CartButtons({ product }) {
         <button
           onClick={handleAddToCart}
           disabled={isAdding}
-          className="bg-white border-2 border-blue-600 text-blue-600 hover:bg-blue-50 px-3 py-2 sm:px-4 sm:py-3 rounded-lg font-medium flex items-center justify-center gap-1 sm:gap-2 transition-colors duration-300 text-sm sm:text-base"
+          className="relative overflow-hidden border-2 border-red-600 rounded-lg font-medium 
+             flex items-center justify-center gap-2 px-3 py-2 sm:px-4 sm:py-3
+             text-red-600 text-sm sm:text-base
+             transition-colors duration-300
+             group"
         >
-          <FiShoppingCart size={18} className="flex-shrink-0" />
-          <span className="whitespace-nowrap">
-            {isAdding ? "Đang thêm..." : "Thêm vào giỏ hàng"}
+          <span
+            className="absolute inset-0 bg-red-600 transform scale-x-0 origin-left
+               transition-transform duration-300 ease-out
+               group-hover:scale-x-100"
+          ></span>
+          <span className="relative z-10 flex items-center gap-2 group-hover:text-white">
+            <FiShoppingCart size={18} className="flex-shrink-0" />
+            {isAdding ? "Đang thêm..." : "THÊM VÀO GIỎ"}
           </span>
         </button>
+
         <button
           onClick={handleBuyNow}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 sm:px-4 sm:py-3 rounded-lg font-medium flex items-center justify-center gap-1 sm:gap-2 transition-colors duration-300 text-sm sm:text-base"
+          className="
+    bg-red-600 text-white
+    hover:bg-red-500
+    px-3 py-2 sm:px-4 sm:py-3
+    rounded-lg font-medium
+    flex items-center justify-center gap-2
+    transition-colors duration-300
+    text-sm sm:text-base
+  "
         >
           <FiCreditCard size={18} className="flex-shrink-0" />
-          <span>Mua ngay</span>
+          <span>MUA NGAY</span>
         </button>
+
+
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
-        <button
-          onClick={handleCallMe}
-          className="bg-green-600 hover:bg-green-700 text-white px-3 py-2 sm:px-4 sm:py-3 rounded-lg font-medium flex items-center justify-center gap-1 sm:gap-2 transition-colors duration-300 text-sm sm:text-base"
-        >
-          <FiPhone size={18} className="flex-shrink-0" />
-          <span>Gọi cho tôi</span>
-        </button>
-        <a
-          href={zaloLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="bg-blue-400 hover:bg-blue-500 text-white px-3 py-2 sm:px-4 sm:py-3 rounded-lg font-medium flex items-center justify-center gap-1 sm:gap-2 transition-colors duration-300 text-sm sm:text-base"
-        >
-          <FiMessageSquare size={18} className="flex-shrink-0" />
-          <span>Tư vấn qua Zalo</span>
-        </a>
-      </div>
+
     </div>
   );
 }

@@ -1,19 +1,17 @@
-import { getProductsBySlug } from "@/apiServices/products";
+
+import { getProductsBySlug, getAllProducts } from "@/apiServices/products";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import ProductImages from "./components/ProductImages";
 import ProductInfo from "./components/ProductInfo";
 import SellingPoints from "./components/SellingPoint";
 import DetailsSection from "./components/DeatilsSection";
-import CommentSection from "./components/CommentSection";
+import RelatedProducts from "./components/RelatedProducts";
 import { API_BASE_URL } from "@/apiServices/constants";
-import { addProductViewHistory } from "@/utils/productViewHistoryUtils";
 import { getAllPosts } from "@/apiServices/posts";
 import { getReviewsByProduct } from "@/apiServices/review";
-import { Star } from "lucide-react";
 
 export async function generateMetadata({ params }) {
-  //
   const { slug } = params;
   const product = await getProductsBySlug(slug);
   if (!product) {
@@ -79,14 +77,12 @@ export default async function ProductDetailPage(props) {
   } = product;
 
   const posts = await getAllPosts(1, 6, null, null, category.slug);
-
   const reviews = await getReviewsByProduct(_id, 1, 5);
 
   return (
     <main className="bg-secondary px-4 sm:px-6 md:px-10 lg:px-20 py-4 sm:py-6 md:py-8 lg:py-10">
       <div className="container">
         {/* Breadcrumb navigation */}
-        {/* Responsive Breadcrumb navigation */}
         <nav className="flex flex-wrap items-center mb-6 text-sm text-gray-500 overflow-hidden">
           <Link href="/" className="hover:text-primary whitespace-nowrap">
             Trang chủ
@@ -140,37 +136,20 @@ export default async function ProductDetailPage(props) {
           </span>
         </nav>
 
-        <h1 className="text-3xl font-bold text-gray-800 mb-4 max-sm:text-xl">
-          {name}
-        </h1>
-
         {/* Product container */}
-        <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+        <div className="bg-white shadow-sm overflow-hidden">
           <div className="md:flex">
-            <div className="md:w-3/5 p-4">
+            <div className="md:w-2/5">
               <ProductImages
                 mainImage={mainImage}
                 galleryImages={galleryImages}
               />
-              {/* <SellingPoints /> */}
-              <div className="mt-3 bg-gray-50 p-4 rounded-lg border border-gray-200">
-                <p className="font-bold mb-2">
-                  SHOWROOM HÀ NỘI:
-                </p>
-                <p className="text-md">
-                  <span className="text-lg font-bold">Cơ sở 1:</span> 106 Nguyễn Khánh
-                  Toàn – Cầu Giấy – Hà Nội
-                </p>
-                <p className="text-md">
-                  <span className="text-lg font-bold">Cơ sở 2:</span> 94 Đường Láng -
-                  Thịnh Quang - Đống Đa - Hà Nội
-                </p>
-              </div>
-
               <SellingPoints />
-              
             </div>
-            <div className="md:w-2/5 p-6 border-t md:border-t-0 md:border-l border-gray-200">
+            <div className="md:w-3/5 p-6 border-t md:border-t-0 md:border-l border-gray-200">
+              <h1 className="text-3xl font-semibold text-blue-800 mb-1 max-sm:text-xl">
+                {name}
+              </h1>
               <ProductInfo
                 product={{
                   id: _id,
@@ -190,6 +169,7 @@ export default async function ProductDetailPage(props) {
             </div>
           </div>
         </div>
+
         {/* Product details section */}
         <DetailsSection
           productId={_id}
@@ -197,10 +177,15 @@ export default async function ProductDetailPage(props) {
           introductionContent={introductionContent}
           posts={posts?.data}
           reviews={reviews?.data}
+
         />
-        {/* Related products section */}
-        <div className="bg-white rounded-lg shadow-sm overflow-hidden mt-6"></div>
-        {/* Comment section */}
+
+        {/* Product relations */}
+        <RelatedProducts
+          currentProductId={_id}
+          categoryId={category._id}
+          brand={brand}
+        />
       </div>
     </main>
   );
