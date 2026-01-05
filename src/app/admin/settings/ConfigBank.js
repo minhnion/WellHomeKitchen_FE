@@ -41,7 +41,7 @@ export default function ConfigBank({ data, setData, onSave }) {
       const mockConfig = {
         _id: "687f645692cbbbc23fc36378",
         key: "bank",
-        value: "113366668888-Test Kitchen Care",
+        value: "113366668888-Test Bepanphu",
         type: 6,
         other: "970415",
         isView: true,

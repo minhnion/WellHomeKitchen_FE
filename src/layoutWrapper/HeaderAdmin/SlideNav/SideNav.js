@@ -35,7 +35,7 @@ const SideNav = ({ isOpen, menuItems, isMobile, closeMenu, userData }) => {
             </div>
             <div className="min-w-0 flex-1">
               <h2 className="text-lg sm:text-xl font-bold text-gray-800 truncate">
-                KitchenCare
+                Bepanphu
               </h2>
               <p className="text-xs sm:text-sm text-blue-600 truncate">
                 Admin Panel
@@ -166,7 +166,7 @@ const SideNav = ({ isOpen, menuItems, isMobile, closeMenu, userData }) => {
                 {userData?.userName || "Admin User"}
               </p>
               <p className="text-blue-600 text-xs truncate">
-                {userData?.email || "admin@kitchencare.com"}
+                {userData?.email || "admin@Bepanphu.com"}
               </p>
             </div>
           </div>

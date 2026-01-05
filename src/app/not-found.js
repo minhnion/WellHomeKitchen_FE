@@ -39,7 +39,7 @@ export default function NotFound() {
           <h2 className="text-xl font-semibold text-gray-700 mb-4">Không tìm thấy trang</h2>
           <p className="text-gray-500 mb-6">
             Trang bạn đang tìm kiếm không tồn tại hoặc đã bị di chuyển.<br/>
-            Hãy quay về trang chủ Kitchen Care để tiếp tục mua sắm.
+            Hãy quay về trang chủ Bepanphu để tiếp tục mua sắm.
           </p>
         </div>
 
@@ -51,7 +51,7 @@ export default function NotFound() {
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
             </svg>
-            Về trang chủ Kitchen Care
+            Về trang chủ Bepanphu
           </button>
           
           <p className="text-sm text-gray-500">
@@ -61,7 +61,7 @@ export default function NotFound() {
 
         <div className="mt-6 pt-6 border-t border-gray-200">
           <p className="text-xs text-gray-400">
-            Kitchen Care - Thiết bị nhà bếp cao cấp
+            Bepanphu - Thiết bị nhà bếp cao cấp
           </p>
         </div>
       </div>

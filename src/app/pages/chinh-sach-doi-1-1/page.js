@@ -75,7 +75,7 @@ export default function ChinhSachDoi1Page() {
                             <li className="ml-4">Sản phẩm chỉ dùng cho mục đích sử dụng cá nhân, không áp dụng việc sử dụng sản phẩm cho mục đích thương mại.</li>
                             <li className="ml-4">Sản phẩm phải còn đầy đủ thùng, sách hướng dẫn, phụ kiện.</li>
                             <li className="ml-4">Số seri/ imei của sản phẩm phải trùng khớp với thông tin ghi trên phiếu bảo hành.</li>
-                            <li className="ml-4">Sản phẩm được lắp đặt, sử dụng đúng theo hướng dẫn của Nhà sản xuất và không bị thay đổi, can thiệp sửa chữa bởi Kỹ thuật viên không phải của WellHome hoặc của hãng.</li>
+                            <li className="ml-4">Sản phẩm được lắp đặt, sử dụng đúng theo hướng dẫn của Nhà sản xuất và không bị thay đổi, can thiệp sửa chữa bởi Kỹ thuật viên không phải của Bepanphu hoặc của hãng.</li>
                         </ul>
                     </section>
 

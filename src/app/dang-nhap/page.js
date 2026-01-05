@@ -74,7 +74,7 @@ export default function LoginPage() {
   return (
     <>
       <Head>
-        <title>Kitchen Care - Đăng nhập</title>
+        <title>Bepanphu - Đăng nhập</title>
       </Head>
 
       {/* Load reCAPTCHA script */}
@@ -102,7 +102,7 @@ export default function LoginPage() {
               {/* <div className="flex justify-end mb-6">
                 <div className="flex items-center">
                   <BsCart4 size={24} className="text-blue-600 mr-2" />
-                  <span className="font-bold">Kitchen Care</span>
+                  <span className="font-bold">Bepanphu</span>
                 </div>
               </div> */}
 

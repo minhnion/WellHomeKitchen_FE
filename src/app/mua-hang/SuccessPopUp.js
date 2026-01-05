@@ -175,7 +175,7 @@ const SuccessPopUp = ({
                         Đặt hàng thành công!
                       </h1>
                       <p className="mb-6 text-base text-gray-600">
-                        Cảm ơn bạn đã đặt hàng tại Kitchen Care. Chúng tôi sẽ
+                        Cảm ơn bạn đã đặt hàng tại Bepanphu. Chúng tôi sẽ
                         liên hệ với bạn trong thời gian sớm nhất.
                       </p>
                     </>

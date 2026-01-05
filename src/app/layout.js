@@ -8,7 +8,7 @@ import { ToastContainer } from "react-toastify";
 import ModalConfig from "@/components/ModalConfig/ModalConfig";
 
 export const metadata = {
-  title: "Kitchen Care - Thiết bị nhà bếp cao cấp",
+  title: "Bepanphu - Thiết bị nhà bếp cao cấp",
   description:
     "Cung cấp các sản phẩm thiết bị nhà bếp chất lượng cao với giá cả hợp lý",
   keywords: "thiết bị nhà bếp, bếp từ, lò nướng, máy rửa bát, tủ lạnh",

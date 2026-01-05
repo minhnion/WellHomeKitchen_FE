@@ -32,7 +32,7 @@ export default function ChinhSachVanChuyenLapDat() {
                         </h2>
                         <ul className="space-y-3 ml-4 list-disc text-gray-700">
                             <li>
-                                WellHome áp dụng miễn phí vận chuyển cho tất cả các mặt hàng (giao tận nhà, đặt sản phẩm đến đúng vị trí khách hàng mong muốn)
+                                Bepanphu áp dụng miễn phí vận chuyển cho tất cả các mặt hàng (giao tận nhà, đặt sản phẩm đến đúng vị trí khách hàng mong muốn)
                             </li>
                         </ul>
                         <h3 className="my-3">
@@ -130,8 +130,8 @@ export default function ChinhSachVanChuyenLapDat() {
                             Chính sách lắp đặt
                         </h2>
                         <ul className="space-y-3 ml-4 list-disc text-gray-700">
-                            <li>WellHome áp dụng miễn phí công lắp đặt cơ bản (đặt sản phẩm đến vị trí khách hàng mong muốn, khởi động thiết bị).</li>
-                            <li>Nếu khách hàng ở các lầu cao thuộc chung cư, vui lòng thông báo cho WellHome để chuẩn bị trước cho việc lắp đặt.</li>
+                            <li>Bepanphu áp dụng miễn phí công lắp đặt cơ bản (đặt sản phẩm đến vị trí khách hàng mong muốn, khởi động thiết bị).</li>
+                            <li>Nếu khách hàng ở các lầu cao thuộc chung cư, vui lòng thông báo cho Bepanphu để chuẩn bị trước cho việc lắp đặt.</li>
                             <li>Tuy nhiên trong một vài trường hợp cần thi công phức tạp, theo thực trạng thi công sẽ được thông báo và thỏa thuận trực tiếp giữa khách hàng và kỹ thuật viên. Khách hàng sẽ thanh toán trực tiếp chi phí phát sinh cho kỹ thuật viên sau khi việc lắp đặt hoàn thành.</li>
                             <li>Đối với tủ lạnh: Khách hàng khi nhận chỉ cần để tủ lạnh trong 4 tiếng, sau đó cắm điện dùng bình thường mà không cần lắp đặt.</li>
                             <li>Thời gian bộ phận lắp đặt liên hệ (không bao gồm thời gian lắp đặt): Trong vòng 24H kể từ khi nhận hàng (trừ cuối tuần và các ngày lễ).</li>

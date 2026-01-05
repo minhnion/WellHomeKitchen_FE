@@ -18,7 +18,7 @@ export async function generateMetadata({ params: paramsPromise }) {
   const post = await getPostBySlug(lastSlug);
 
   if (post) {
-    const title = `${post.title} - Kitchen care`;
+    const title = `${post.title} - Bepanphu`;
     const description = post.excerpt;
     return {
       title,
@@ -34,7 +34,7 @@ export async function generateMetadata({ params: paramsPromise }) {
 
   const category = await getPostCategoryBySlug(lastSlug);
   if (category) {
-    const title = `Các bài viết trong danh mục ${category.name} - Kitchen care`;
+    const title = `Các bài viết trong danh mục ${category.name} - Bepanphu`;
     const description = `Danh sách các bài viết, tin tức thuộc danh mục ${category.name}.`;
     return {
       title,

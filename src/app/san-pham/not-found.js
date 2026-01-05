@@ -43,7 +43,7 @@ export default function ProductNotFound() {
           <h2 className="text-xl text-gray-700 mb-4">Rất tiếc, chúng tôi không thể tìm thấy sản phẩm này</h2>
           <p className="text-gray-500 mb-8 leading-relaxed">
             Sản phẩm bạn đang tìm kiếm có thể đã hết hàng, ngừng kinh doanh hoặc đường link không chính xác.<br/>
-            Hãy khám phá các sản phẩm khác tại Kitchen Care hoặc quay về trang chủ.
+            Hãy khám phá các sản phẩm khác tại Bepanphu hoặc quay về trang chủ.
           </p>
         </div>
 

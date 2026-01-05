@@ -12,7 +12,6 @@ import {
   UserCircle,
   ChevronDown,
   Package,
-
 } from "lucide-react";
 import CategoryMenu from "./CategoryHeader/Category";
 import CartHeader from "./CartHeader";
@@ -23,10 +22,9 @@ import { FaAngleDown } from "react-icons/fa";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { login } from "@/apiServices/auth";
 import ReCAPTCHA from "react-google-recaptcha";
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
-
 
 export default function Header({ phoneNumber, categories }) {
   const [user, setUser] = useState(null);
@@ -56,7 +54,6 @@ export default function Header({ phoneNumber, categories }) {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
 
   useEffect(() => {
     setIsMounted(true);
@@ -104,8 +101,6 @@ export default function Header({ phoneNumber, categories }) {
   };
 
   const renderUserSection = () => {
-
-
     // Sitekey cứng
     const siteKey =
       process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ||
@@ -158,7 +153,7 @@ export default function Header({ phoneNumber, categories }) {
         // SỬ DỤNG HÀM login CÓ SẴN
         const response = await login(loginEmail, loginPassword, recaptchaToken);
 
-        console.log('Login response:', response);
+        console.log("Login response:", response);
 
         if (response.success) {
           // LƯU THÔNG TIN USER
@@ -177,7 +172,6 @@ export default function Header({ phoneNumber, categories }) {
 
           const userRole = response.data.user?.role;
 
-
           if (userRole === "admin" || userRole === "superadmin") {
             // Nếu là admin, chuyển sang trang admin
             router.push("/admin");
@@ -189,10 +183,13 @@ export default function Header({ phoneNumber, categories }) {
           throw new Error(response.message || "Đăng nhập thất bại");
         }
       } catch (error) {
-        console.error('Login error:', error);
+        console.error("Login error:", error);
 
         // XỬ LÝ LỖI TỪ HÀM login
-        const errorMessage = error.response?.data?.message || error.message || "Đăng nhập thất bại!";
+        const errorMessage =
+          error.response?.data?.message ||
+          error.message ||
+          "Đăng nhập thất bại!";
         toast.error(errorMessage);
 
         resetRecaptcha();
@@ -201,35 +198,35 @@ export default function Header({ phoneNumber, categories }) {
       setIsLoginSubmitting(false);
     };
 
-
     // Clear error khi user typing
     const handleLoginEmailChange = (e) => {
       setLoginEmail(e.target.value);
-      if (loginErrors.email) setLoginErrors(prev => ({ ...prev, email: "" }));
+      if (loginErrors.email) setLoginErrors((prev) => ({ ...prev, email: "" }));
     };
 
     const handleLoginPasswordChange = (e) => {
       setLoginPassword(e.target.value);
-      if (loginErrors.password) setLoginErrors(prev => ({ ...prev, password: "" }));
+      if (loginErrors.password)
+        setLoginErrors((prev) => ({ ...prev, password: "" }));
     };
 
     // Clear recaptcha error
     const handleRecaptchaChange = (token) => {
       setRecaptchaToken(token || "");
       if (loginErrors.recaptcha) {
-        setLoginErrors(prev => ({ ...prev, recaptcha: "" }));
+        setLoginErrors((prev) => ({ ...prev, recaptcha: "" }));
       }
     };
 
     // Thêm: Load user từ localStorage khi component mount
     useEffect(() => {
-      const savedUser = localStorage.getItem('user');
+      const savedUser = localStorage.getItem("user");
       if (savedUser) {
         try {
           const userData = JSON.parse(savedUser);
           setUser(userData);
         } catch (error) {
-          console.error('Error parsing user from localStorage:', error);
+          console.error("Error parsing user from localStorage:", error);
         }
       }
     }, []);
@@ -271,9 +268,9 @@ export default function Header({ phoneNumber, categories }) {
               <button
                 onClick={() => {
                   // Xóa thông tin user khi logout
-                  localStorage.removeItem('accessToken');
-                  localStorage.removeItem('refreshToken');
-                  localStorage.removeItem('user');
+                  localStorage.removeItem("accessToken");
+                  localStorage.removeItem("refreshToken");
+                  localStorage.removeItem("user");
                   setUser(null);
                   setIsDropdownOpen(false);
                 }}
@@ -321,9 +318,15 @@ export default function Header({ phoneNumber, categories }) {
                     placeholder="Email"
                     value={loginEmail}
                     onChange={handleLoginEmailChange}
-                    className={`w-full max-w-[350px] border px-3 py-2 rounded-none ${loginErrors.email ? 'border-red-500' : 'border-gray-300'}`}
+                    className={`w-full max-w-[350px] border px-3 py-2 rounded-none ${
+                      loginErrors.email ? "border-red-500" : "border-gray-300"
+                    }`}
                   />
-                  {loginErrors.email && <p className="text-red-500 text-xs mt-1">{loginErrors.email}</p>}
+                  {loginErrors.email && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {loginErrors.email}
+                    </p>
+                  )}
                 </div>
 
                 <div className="mb-3 relative">
@@ -332,16 +335,28 @@ export default function Header({ phoneNumber, categories }) {
                     placeholder="Mật khẩu"
                     value={loginPassword}
                     onChange={handleLoginPasswordChange}
-                    className={`w-full border px-3 py-2 rounded-none pr-10 appearance-none ${loginErrors.password ? 'border-red-500' : 'border-gray-300'}`}
+                    className={`w-full border px-3 py-2 rounded-none pr-10 appearance-none ${
+                      loginErrors.password
+                        ? "border-red-500"
+                        : "border-gray-300"
+                    }`}
                   />
                   <button
                     type="button"
                     onClick={toggleShowPassword}
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
                   >
-                    {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
+                    {showPassword ? (
+                      <FiEyeOff size={16} />
+                    ) : (
+                      <FiEye size={16} />
+                    )}
                   </button>
-                  {loginErrors.password && <p className="text-red-500 text-xs mt-1">{loginErrors.password}</p>}
+                  {loginErrors.password && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {loginErrors.password}
+                    </p>
+                  )}
                 </div>
 
                 {/* ReCAPTCHA */}
@@ -374,7 +389,10 @@ export default function Header({ phoneNumber, categories }) {
 
               <div className="flex flex-col space-y-0.5 mt-4 text-sm">
                 <p className="text-gray-500">
-                  Khách hàng mới? <a href="/dang-ky" className="text-[#263B96] hover:underline">Tạo tài khoản</a>
+                  Khách hàng mới?{" "}
+                  <a href="/dang-ky" className="text-[#263B96] hover:underline">
+                    Tạo tài khoản
+                  </a>
                 </p>
               </div>
             </div>
@@ -387,21 +405,16 @@ export default function Header({ phoneNumber, categories }) {
   return (
     <>
       <header
-
         className={`bg-[#263B96] shadow z-50 transition-all duration-300
     
   `}
       >
-
-
         {/* hotline-only desktop */}
         <div className="hidden md:block w-full bg-black">
           <div className="max-w-7xl mx-auto py-1 px-4 flex items-center justify-start">
             <div className="hidden md:flex items-center text-sm space-x-1 -ml-14">
               <span className="font-semibold text-gray-300">Hotline:</span>
-              <span className="text-white font-medium">
-                {phoneNumber}
-              </span>
+              <span className="text-white font-medium">{phoneNumber}</span>
               <span className="text-white font-medium">
                 (9h-12h,13h00-18h,T2-T6)
               </span>
@@ -412,24 +425,26 @@ export default function Header({ phoneNumber, categories }) {
         {/* Main header with padding for mobile */}
         <div
           className={`hidden md:block transition-all duration-300
-    ${isDesktopSticky
-              ? "fixed top-0 left-0 w-full z-50 bg-[#263B96] shadow"
-              : "relative"}
+    ${
+      isDesktopSticky
+        ? "fixed top-0 left-0 w-full z-50 bg-[#263B96] shadow"
+        : "relative"
+    }
   `}
         >
-
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between py-3 px-4 md:px-0">
             {/* Top section for mobile (logo + category menu + cart) */}
             <div className="w-full md:w-auto flex items-center justify-between mb-0">
               <Link href="/" className="flex-shrink-0 md:-ml-10">
-                <Image
+                {/* <Image
                   src="/images/wellhome-logo-white.png"
                   alt="WellHome Logo"
                   width={220}
                   height={37.69}
                   className="h-auto"
                   priority
-                />
+                /> */}
+                <span className="text-white font-bold text-4xl">Bepanphu</span>
               </Link>
 
               {/* Mobile actions - Category menu icon, cart and user icon */}

@@ -5,13 +5,13 @@ import ShowroomsClient from "./component/ShowroomsClient";
 
 export async function generateMetadata() {
   return {
-    title: "Hệ Thống Showroom - Kitchen Care",
+    title: "Hệ Thống Showroom - Bepanphu",
     description:
-      "Khám phá hệ thống showroom Kitchen Care tại Hà Nội. Địa chỉ, bản đồ, số điện thoại và thời gian hoạt động cập nhật nhất.",
+      "Khám phá hệ thống showroom Bepanphu tại Hà Nội. Địa chỉ, bản đồ, số điện thoại và thời gian hoạt động cập nhật nhất.",
     openGraph: {
-      title: "Hệ Thống Showroom - Kitchen Care",
+      title: "Hệ Thống Showroom - Bepanphu",
       description:
-        "Đến thăm showroom Kitchen Care để trải nghiệm sản phẩm và nhận tư vấn từ chuyên gia. Xem bản đồ và thông tin chi tiết tại đây.",
+        "Đến thăm showroom Bepanphu để trải nghiệm sản phẩm và nhận tư vấn từ chuyên gia. Xem bản đồ và thông tin chi tiết tại đây.",
     },
   };
 }

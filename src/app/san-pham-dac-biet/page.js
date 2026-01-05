@@ -24,8 +24,8 @@ export async function generateMetadata({ searchParams: searchParamsPromise }) {
 
     const title =
       currentPage > 1
-        ? `Sản phẩm đặc biệt - Trang ${currentPage} | Kitchencare`
-        : `Sản phẩm đặc biệt | Kitchencare`;
+        ? `Sản phẩm đặc biệt - Trang ${currentPage} | Bepanphu`
+        : `Sản phẩm đặc biệt | Bepanphu`;
 
     const description = `Khám phá ${pagination.totalProducts} sản phẩm đặc biệt với giá ưu đãi. Trang ${currentPage}/${pagination.totalPages}. Mua ngay với chất lượng tốt nhất.`;
 
@@ -44,7 +44,7 @@ export async function generateMetadata({ searchParams: searchParamsPromise }) {
     };
   } catch (error) {
     return {
-      title: "Sản phẩm đặc biệt | Kitchencare",
+      title: "Sản phẩm đặc biệt | Bepanphu",
       description:
         "Khám phá các sản phẩm đặc biệt với giá ưu đãi tại website của chúng tôi.",
     };

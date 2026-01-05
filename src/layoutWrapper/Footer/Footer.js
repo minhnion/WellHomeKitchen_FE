@@ -58,7 +58,7 @@ export default function Footer({ config }) {
   };
 
   const companyInfo = [
-    { title: "Giới thiệu về Kitchen Care", linkTo: "/gioi-thieu-kitchen-care" },
+    { title: "Giới thiệu về Bepanphu", linkTo: "/gioi-thieu-kitchen-care" },
     { title: "Quy định chung", linkTo: "/gioi-thieu-kitchen-care" },
     { title: "Kinh nghiệm hay", linkTo: "/gioi-thieu-kitchen-care" },
     { title: "Khuyến mại", linkTo: "/gioi-thieu-kitchen-care" },
@@ -90,7 +90,7 @@ export default function Footer({ config }) {
         {/* Logo and Brand section */}
         <div className="flex flex-col items-center mb-10">
           <div className="text-3xl font-bold text-blue-600 tracking-tight mb-3">
-            Kitchen Care
+            Bepanphu
           </div>
           <p className="text-center text-gray-600 max-w-md">
             Chuyên cung cấp các giải pháp nhà bếp hiện đại, tiện nghi và đẳng
@@ -286,11 +286,11 @@ export default function Footer({ config }) {
         {/* Copyright */}
         <div className="border-t border-gray-200 mt-10 pt-6 text-center text-gray-600">
           <p>
-            © {new Date().getFullYear()} Kitchen Care. Tất cả các quyền được bảo
+            © {new Date().getFullYear()} Bepanphu. Tất cả các quyền được bảo
             lưu.
           </p>
           <p className="text-sm mt-1">
-            Thiết kế và phát triển bởi Kitchen Care Team
+            Thiết kế và phát triển bởi Bepanphu Team
           </p>
         </div>
       </div>

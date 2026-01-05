@@ -36,7 +36,7 @@ export default function PartnerBanners({ banners, className = "" }) {
                                 style={{ width }}
                                 className="flex items-center justify-center h-40 bg-white text-black border border-gray-100"
                             >
-                                <span className="font-bold text-center">Đối tác của WellHome</span>
+                                <span className="font-bold text-center">Đối tác của Bepanphu</span>
                             </div>
                         );
                     }

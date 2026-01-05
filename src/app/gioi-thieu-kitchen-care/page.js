@@ -4,13 +4,13 @@ import Image from "next/image";
 
 export async function generateMetadata() {
   return {
-    title: "Giới Thiệu Về Kitchen Care | Thông Tin Công Ty",
+    title: "Giới Thiệu Về Bepanphu | Thông Tin Công Ty",
     description:
-      "Tìm hiểu về Kitchen Care – đơn vị cung cấp giải pháp nhà bếp thông minh, chất lượng và uy tín hàng đầu. Xem thông tin công ty, sứ mệnh và tầm nhìn.",
+      "Tìm hiểu về Bepanphu – đơn vị cung cấp giải pháp nhà bếp thông minh, chất lượng và uy tín hàng đầu. Xem thông tin công ty, sứ mệnh và tầm nhìn.",
     openGraph: {
-      title: "Giới Thiệu Về Kitchen Care | Thông Tin Công Ty",
+      title: "Giới Thiệu Về Bepanphu | Thông Tin Công Ty",
       description:
-        "Kitchen Care – Giải pháp bếp thông minh cho gia đình hiện đại. Khám phá sứ mệnh và giá trị cốt lõi của chúng tôi.",
+        "Bepanphu – Giải pháp bếp thông minh cho gia đình hiện đại. Khám phá sứ mệnh và giá trị cốt lõi của chúng tôi.",
     },
   };
 }

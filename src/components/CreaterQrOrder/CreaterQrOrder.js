@@ -16,7 +16,7 @@ const CreateQrOrder = ({ amount, orderInfo, orderId, onSuccess, onError }) => {
   const defaultBankConfig = useMemo(
     () => ({
       accountNo: process.env.NEXT_PUBLIC_BANK_ACCOUNT_NO || "113366668888",
-      accountName: process.env.NEXT_PUBLIC_BANK_ACCOUNT_NAME || "Kitchen Care",
+      accountName: process.env.NEXT_PUBLIC_BANK_ACCOUNT_NAME || "Bepanphu",
       acqId: process.env.NEXT_PUBLIC_BANK_ACQ_ID || "970415",
       clientId: process.env.NEXT_PUBLIC_VIETQR_CLIENT_ID,
       apiKey: process.env.NEXT_PUBLIC_VIETQR_API_KEY,

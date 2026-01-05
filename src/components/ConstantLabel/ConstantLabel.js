@@ -229,7 +229,7 @@ export const createQuickLabel = (iconType, name) => {
   };
 };
 
-// Common label presets cho kitchen care
+// Common label presets cho Bepanphu
 export const KITCHEN_CARE_PRESETS = [
   createQuickLabel(LABEL_ICONS.HOT, "Sản phẩm hot"),
   createQuickLabel(LABEL_ICONS.NEW, "Hàng mới về"),

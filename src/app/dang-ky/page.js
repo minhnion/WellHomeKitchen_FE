@@ -71,7 +71,7 @@ export default function RegisterPage() {
   return (
     <>
       <Head>
-        <title>Kitchen Care - Đăng ký</title>
+        <title>Bepanphu - Đăng ký</title>
       </Head>
 
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
@@ -93,7 +93,7 @@ export default function RegisterPage() {
               {/* <div className="flex justify-end mb-6">
                 <div className="flex items-center">
                   <BsCart4 size={24} className="text-blue-600 mr-2" />
-                  <span className="font-bold">Kitchen Care</span>
+                  <span className="font-bold">Bepanphu</span>
                 </div>
               </div> */}
 

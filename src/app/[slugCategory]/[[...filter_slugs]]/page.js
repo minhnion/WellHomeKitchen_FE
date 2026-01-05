@@ -89,7 +89,7 @@ export async function generateMetadata({ params: paramsPromise }) {
   const params = await paramsPromise;
   const category = await getCategoryBySlug(params.slugCategory);
   return {
-    title: category ? `${category.name} - Kitchencare` : "Danh mục",
+    title: category ? `${category.name} - Bepanphu` : "Danh mục",
   };
 }
 
