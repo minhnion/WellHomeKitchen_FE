@@ -286,10 +286,10 @@ export const AllProducts = ({
 
         {/* Sub Categories */}
         {subCategories?.length > 0 && (
-          <div className="border my-2 bg-white">
+          <div className=" my-2 bg-white shadow-md">
             <div
               onClick={() => toggleSection("subCategory")}
-              className="flex justify-between items-center p-4 cursor-pointer font-semibold"
+              className="flex justify-between items-center p-4 cursor-pointer font-semibold border-b border-gray-200"
             >
               <span>Phân loại</span>
               {openSections.subCategory ? (
@@ -300,7 +300,7 @@ export const AllProducts = ({
             </div>
 
             {openSections.subCategory && (
-              <div className="px-4 pb-4 space-y-2">
+              <div className="px-4 pb-4 space-y-2 ">
                 {subCategories.map((sub) => {
                   const checked = filtered.subCategory === sub._id;
                   return (
@@ -329,10 +329,10 @@ export const AllProducts = ({
 
         {/* Brands */}
         {brands?.length > 0 && (
-          <div className="border my-2 bg-white">
+          <div className=" my-2 bg-white shadow-md">
             <div
               onClick={() => toggleSection("brand")}
-              className="flex justify-between items-center p-4 cursor-pointer font-semibold"
+              className="flex justify-between items-center p-4 cursor-pointer font-semibold border-b border-gray-200"
             >
               <span>Thương hiệu</span>
               {openSections.brand ? (
@@ -343,13 +343,13 @@ export const AllProducts = ({
             </div>
 
             {openSections.brand && (
-              <div className="px-4 pb-4 space-y-2">
+              <div className="px-4 pb-4 space-y-2 ">
                 {brands.map((b) => {
                   const checked = filtered.brand === b._id;
                   return (
                     <label
                       key={b._id}
-                      className={`flex items-center gap-2 px-3 py-2 rounded cursor-pointer ${checked
+                      className={`flex items-center gap-2 px-3 py-2 rounded  cursor-pointer ${checked
                         ? "bg-blue-100 text-blue-600"
                         : "hover:bg-gray-100"
                         }`}
@@ -371,10 +371,10 @@ export const AllProducts = ({
 
 
         {/* Price */}
-        <div className="border my-2 bg-white">
+        <div className=" my-2 bg-white shadow-md">
           <div
             onClick={() => toggleSection("price")}
-            className="flex justify-between items-center p-4 cursor-pointer font-semibold"
+            className="flex justify-between items-center p-4 cursor-pointer font-semibold border-b border-gray-200"
           >
             <span>Khoảng giá</span>
             {openSections.price ? <ChevronDown size={18} /> : <ChevronUp size={18} />}
@@ -450,11 +450,11 @@ export const AllProducts = ({
 
             <div
               ref={sortDropdownRef}
-              className="ml-auto relative w-48 lg:mr-[-80px]"
+              className="ml-auto relative w-48 shadow-md"
             >
               <div
                 onClick={() => setIsSortDropdownOpen((prev) => !prev)}
-                className="border px-4 py-2 flex justify-between items-center cursor-pointer bg-white"
+                className=" px-4 py-2 flex justify-between items-center cursor-pointer bg-white"
               >
                 <span>Sắp xếp</span>
                 <ChevronDown size={16} />
@@ -523,13 +523,12 @@ export const AllProducts = ({
         {/* PRODUCTS GRID - CHỈ SỬA PHẦN NÀY */}
         <div className="mt-4">
           {displayedProducts.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-y-4 gap-x-3 md:gap-x-22">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-y-3 gap-x-3">
               {displayedProducts.map((p) => (
-                <div key={p._id} className="min-w-[180px] min-h-[360px] flex md:min-h-[420px] flex">
-                  <ProductCard id={p._id} {...p} />
-                </div>
+                <ProductCard key={p._id} id={p._id} {...p} fluid />
               ))}
             </div>
+
           ) : (
             <p className="text-center text-gray-500 py-8">
               Không tìm thấy sản phẩm nào.

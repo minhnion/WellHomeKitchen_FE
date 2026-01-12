@@ -13,7 +13,7 @@ const CategoriesGrid = ({ categories }) => {
       </Link>
 
       {/* danh sách sản phẩm */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-0">
+      <div className="grid grid-cols-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-0">
         {categories?.map((category) => (
           <div
             key={category._id}
@@ -28,9 +28,9 @@ const CategoriesGrid = ({ categories }) => {
             <Link
               href={`/${category.slug}`}
               title={category.name}
-              className="flex flex-col items-center p-4"
+              className="flex flex-col items-center p-2 sm:p-4"
             >
-              <div className="w-16 h-16 flex items-center justify-center mb-3">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 mb-2 sm:mb-3">
                 <Image
                   src={new URL(category.imageUrl, API_BASE_URL).href}
                   alt={category.name}
@@ -39,7 +39,7 @@ const CategoriesGrid = ({ categories }) => {
                   className="object-contain max-w-full max-h-full"
                 />
               </div>
-              <p className="text-center text-sm font-medium text-gray-800 line-clamp-2">
+              <p className="text-center text-xs sm:text-sm font-medium ...">
                 {category.name}
               </p>
             </Link>

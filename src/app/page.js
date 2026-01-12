@@ -128,20 +128,20 @@ export default async function Home() {
       <div className="flex flex-col md:flex-row gap-4 mb-6">
         {/* 1. CỘT RỖNG GIỮ CHỖ CHO MENU (Desktop) */}
         {/* Width 250px khớp với width của Menu trong Header */}
-        <div className="hidden md:block w-[130px] flex-shrink-0"></div>
+        <div className="hidden md:block w-[250px] flex-shrink-0"></div>
 
         {/* 2. KHỐI BANNER CHÍNH (Tự động chiếm phần còn lại) */}
         <div className="flex-1 w-full min-w-0">
           <div className="flex flex-col lg:flex-row gap-4 h-full">
             {/* Banner Slider (Giữa) */}
-            <div className="w-full lg:w-3/4 h-full">
+            <div className="w-full lg:w-2/3 h-full">
               {sliderPartCenterBanners && (
                 <BannerSlider banners={sliderPartCenterBanners} />
               )}
             </div>
 
             {/* Banner Dọc (Phải) */}
-            <div className="w-full lg:w-1/4 h-full">
+            <div className="w-full lg:w-1/3 h-full">
               {sliderPartRightBanners && (
                 <VerticalBanners banners={sliderPartRightBanners} />
               )}
@@ -162,7 +162,7 @@ export default async function Home() {
             SẢN PHẨM BÁN CHẠY
           </h2>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-8">
             {top5Products.map((product) => (
               <ProductCard key={product._id} id={product._id} {...product} />
             ))}
@@ -204,11 +204,11 @@ export default async function Home() {
       {/* CookwareProducts */}
       {finalCookwareProducts.length > 0 && (
         <>
-          <h2 className="text-xl font-bold text-blue-900 mb-4 mt-14">
+          <h2 className="text-xl font-bold text-blue-900 mt-10 mb-3 max-sm:mt-8 max-sm:mb-2">
             NỒI CHẢO CHUẨN CHÂU ÂU
           </h2>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-8">
             {finalCookwareProducts.map((product) => (
               <ProductCard key={product._id} id={product._id} {...product} />
             ))}

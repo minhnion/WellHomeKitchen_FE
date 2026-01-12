@@ -231,7 +231,7 @@ export default function CategoryMenu({ categories = [], isMobile = false }) {
                 )}
 
                 {!showAllCategories && categories.length > 10 && !isMobile && (
-                  <div className="h-32 bg-white"></div>
+                  <div className="h-30 bg-white"></div>
                 )}
               </div>
             </div>

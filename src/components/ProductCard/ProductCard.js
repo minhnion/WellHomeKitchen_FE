@@ -86,15 +86,15 @@ const ProductCard = ({
     <>
       <div
         className={`
-    flex flex-col justify-between
-    bg-white shadow-md m-1 overflow-hidden
+    flex flex-col 
+    bg-white shadow-md  overflow-hidden
     border border-gray-200
     transition-shadow duration-300 hover:shadow-xl
     group relative
 
     ${fluid
             ? "w-full h-auto"
-            : "w-55 aspect-[9/17] max-sm:aspect-[9/19] max-xl:w-48 max-sm:w-44 max-[25rem]:w-40"}
+            : "w-63 aspect-[9/12] max-xl:w-48 max-sm:aspect-[9/14] max-sm:w-44 max-[25rem]:w-40  "}
   `}
         onMouseEnter={() => setShowEye(true)}
         onMouseLeave={() => setShowEye(false)}
@@ -120,11 +120,11 @@ const ProductCard = ({
             {/* Image wrapper  */}
             <div className="
   relative w-full
-  h-60            /* desktop */
+  h-50           /* desktop */
   max-xl:h-52
-  max-sm:h-48
-  max-[25rem]:h-44
-  px-4 max-sm:px-2 pt-5 pb-1
+  max-sm:h-32
+  max-[25rem]:h-28
+  px-4 max-sm:px-2 pt-3 pb-1
 ">
               {/* Nút mắt ở TRUNG TÂM ảnh */}
               {showEye && (
@@ -180,19 +180,19 @@ const ProductCard = ({
               title={name}
               className="
     text-base
-    mb-2
+    mb-1
     text-gray-800
     line-clamp-2
     leading-5
     min-h-[40px]
     max-sm:text-[13px]
-    max-sm:min-h-[28px]
+    max-sm:min-h-0
   "
             >
               {name}
             </h3>
 
-            <div className="flex flex-col items-start my-3">
+            <div className="flex flex-col items-start my-0.5">
               <span className="text-xl font-bold text-red-600 max-sm:text-lg">
                 {truncatedOldPrice}
                 <span className="underline">đ</span>
@@ -227,7 +227,7 @@ const ProductCard = ({
             </div>
           </div>
         </Link>
-        <div className="px-2 pb-3 mt-auto pt-2">
+        <div className="px-2 pb-2 mt-auto pt-0.5 max-sm:pb-0.5">
           <button
             onClick={handleAddToCart}
             disabled={isAdding}
@@ -235,7 +235,7 @@ const ProductCard = ({
       group
       relative
       w-full
-      h-11
+      h-9
       flex items-center
       overflow-hidden
       rounded-full
@@ -246,7 +246,6 @@ const ProductCard = ({
             <span
               className="
   absolute
-  left-2
   top-1/2
   -translate-y-1/2
   w-9 h-9
@@ -264,20 +263,22 @@ const ProductCard = ({
             {/* ICON */}
             <span
               className="
-        relative z-10
-        ml-2
-        w-9 h-9
-        flex items-center justify-center
-        rounded-full
-        bg-blue-800
-        text-white
-        transition-transform
-        duration-300
-        group-hover:scale-110
-      "
+    relative z-10
+    w-9 h-9
+    flex items-center justify-center
+    rounded-full
+    bg-blue-800
+    text-white
+    transition-transform
+    duration-300
+    group-hover:scale-110
+    
+  "
             >
               <ShoppingBag size={16} />
             </span>
+
+
 
             {/* TEXT */}
             <span

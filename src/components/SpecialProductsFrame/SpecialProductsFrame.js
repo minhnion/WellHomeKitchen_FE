@@ -35,7 +35,7 @@ export default function SpecialProductsFrame({
       )}
 
       {/* Product Slider */}
-      <div className="p-4 relative">
+      <div className="p-4 relative ">
         {products.length > 0 ? (
           <Swiper
             modules={[Grid, Navigation]}
@@ -43,11 +43,12 @@ export default function SpecialProductsFrame({
               nextEl: ".special-products-next",
               prevEl: ".special-products-prev",
             }}
+
             grid={{
               rows: 1,
               fill: "row",
             }}
-            spaceBetween={40}
+            spaceBetween={50}
             breakpoints={{
               320: { slidesPerView: 2, slidesPerGroup: 2 },
               640: { slidesPerView: 3, slidesPerGroup: 3 },
@@ -108,17 +109,19 @@ export default function SpecialProductsFrame({
       </div>
 
       {/* Extend link */}
-      {isExtend && products.length > 0 && (
-        <div className="mt-8 flex justify-center pb-8">
-          <Link
-            href={"/san-pham-dac-biet"}
-            className="inline-flex items-center px-5 py-2.5 border border-gray-300 text-blue-600 bg-white rounded-lg hover:bg-blue-50 hover:text-blue-700 transition-colors duration-200 font-medium text-xs sm:text-sm shadow-sm"
-          >
-            Xem thêm sản phẩm đặc biệt
-            <FaArrowRight className="ml-2 h-3.5 w-3.5" />
-          </Link>
-        </div>
-      )}
-    </div>
+      {
+        isExtend && products.length > 0 && (
+          <div className="mt-8 flex justify-center pb-8">
+            <Link
+              href={"/san-pham-dac-biet"}
+              className="inline-flex items-center px-5 py-2.5 border border-gray-300 text-blue-600 bg-white rounded-lg hover:bg-blue-50 hover:text-blue-700 transition-colors duration-200 font-medium text-xs sm:text-sm shadow-sm"
+            >
+              Xem thêm sản phẩm đặc biệt
+              <FaArrowRight className="ml-2 h-3.5 w-3.5" />
+            </Link>
+          </div>
+        )
+      }
+    </div >
   );
 }

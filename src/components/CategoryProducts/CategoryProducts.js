@@ -29,7 +29,7 @@ export default function CategoryProducts({
   const [isTouched, setIsTouched] = useState(false);
 
   return (
-    <div className="w-full border-b border-gray-200">
+    <div className="w-full ">
       {/* Category Navigation */}
       <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-1 py-3">
         {categories.map((category) => (
@@ -70,9 +70,7 @@ export default function CategoryProducts({
             <div className={banner ? "lg:w-5/6 w-full" : "w-full"}>
               <div
                 className="
-                  grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5
-                  gap-2
-                  items-stretch
+                  grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-2 gap-y-3 sm:gap-3 mb-6 max-sm:mb-4
                 "
               >
                 {products.map((product) => (

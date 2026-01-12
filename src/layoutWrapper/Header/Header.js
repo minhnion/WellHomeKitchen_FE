@@ -318,9 +318,8 @@ export default function Header({ phoneNumber, categories }) {
                     placeholder="Email"
                     value={loginEmail}
                     onChange={handleLoginEmailChange}
-                    className={`w-full max-w-[350px] border px-3 py-2 rounded-none ${
-                      loginErrors.email ? "border-red-500" : "border-gray-300"
-                    }`}
+                    className={`w-full max-w-[350px] border px-3 py-2 rounded-none ${loginErrors.email ? "border-red-500" : "border-gray-300"
+                      }`}
                   />
                   {loginErrors.email && (
                     <p className="text-red-500 text-xs mt-1">
@@ -335,11 +334,10 @@ export default function Header({ phoneNumber, categories }) {
                     placeholder="Mật khẩu"
                     value={loginPassword}
                     onChange={handleLoginPasswordChange}
-                    className={`w-full border px-3 py-2 rounded-none pr-10 appearance-none ${
-                      loginErrors.password
-                        ? "border-red-500"
-                        : "border-gray-300"
-                    }`}
+                    className={`w-full border px-3 py-2 rounded-none pr-10 appearance-none ${loginErrors.password
+                      ? "border-red-500"
+                      : "border-gray-300"
+                      }`}
                   />
                   <button
                     type="button"
@@ -423,13 +421,13 @@ export default function Header({ phoneNumber, categories }) {
         </div>
 
         {/* Main header with padding for mobile */}
+
         <div
-          className={`hidden md:block transition-all duration-300
-    ${
-      isDesktopSticky
-        ? "fixed top-0 left-0 w-full z-50 bg-[#263B96] shadow"
-        : "relative"
-    }
+          className={`block  transition-all duration-300
+    ${isDesktopSticky
+              ? "fixed top-0 left-0 w-full z-50 bg-[#263B96] shadow"
+              : "relative"
+            }
   `}
         >
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between py-3 px-4 md:px-0">
@@ -512,10 +510,13 @@ export default function Header({ phoneNumber, categories }) {
       {isDesktopSticky && <div className="hidden md:block h-[96px]" />}
       {/* Category menu - desktop only */}
       <div className="hidden md:block bg-white shadow">
-        <div className="max-w-[250px] mr-auto  border border-gray-300 bg-white p-0 ml-20">
-          <CategoryMenu categories={categories} isMobile={false} />
+        <div className="max-w-7xl mx-auto px-4 md:px-0">
+          <div className="w-[250px] border border-gray-300 bg-white md:-ml-10">
+            <CategoryMenu categories={categories} isMobile={false} />
+          </div>
         </div>
       </div>
+
     </>
   );
 }

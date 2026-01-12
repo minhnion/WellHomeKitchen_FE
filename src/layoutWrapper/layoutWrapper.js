@@ -14,7 +14,7 @@ export default function LayoutWrapper({ children, categories, config }) {
   return (
     <>
       <Header phoneNumber={config.company_phone} categories={categories} />
-      <div className="mx-auto max-w-7xl container">{children}</div>
+      <div className="mx-auto max-w-[1515px] container">{children}</div>
       <div className="fixed bottom-2 md:bottom-20 md:right-4 flex md:flex-col gap-4 justify-center md:justify-start z-50 w-full md:w-auto">
         <a
           href={`${config.facebook_link}`}
