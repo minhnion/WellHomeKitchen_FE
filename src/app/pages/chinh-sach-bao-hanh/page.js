@@ -8,7 +8,7 @@ export default function ChinhSachBaoHanh() {
     return (
         <div className="min-h-screen py-8">
             {/* Breadcrumb Navigation */}
-            <div className="container mx-auto px-4 mb-6">
+            <div className="container mx-auto px-4 md:px-20 mb-6">
                 <div className="flex items-center space-x-2 text-sm">
                     <Link
                         href="/"
@@ -22,7 +22,7 @@ export default function ChinhSachBaoHanh() {
             </div>
 
             {/* Main Content */}
-            <div className="container mx-auto px-4">
+            <div className="container mx-auto px-4 md:px-20">
                 <div className="bg-white rounded-lg shadow-md p-8">
                     <h1 className="text-3xl font-bold text-blue-800 mb-8 ">
                         Chính sách bảo hành

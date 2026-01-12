@@ -7,7 +7,7 @@ import React from 'react';
 export default function ChinhSachDoi1Page() {
     return (
 
-        <div className="max-w-4xl mx-auto px-4 my-6">
+        <div className="mx-auto px-4 md:px-20 my-8">
             {/* Breadcrumb */}
             <div className="my-6 text-sm text-gray-600">
                 <Link href="/" className="hover:text-blue-600">Trang chủ</Link>
