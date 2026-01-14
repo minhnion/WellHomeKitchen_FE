@@ -53,7 +53,7 @@ export default function ProductRowCard({
                                 {formatPrice(newPrice)}đ
                             </span>
                             <span className="text-xs bg-red-500 text-white px-2 py-0.5 rounded">
-                                -{discountPercent}%
+                                -{discountPercent.toFixed(2)}%
                             </span>
                         </div>
                     )}

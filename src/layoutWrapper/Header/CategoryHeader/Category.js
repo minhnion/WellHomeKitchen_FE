@@ -172,15 +172,18 @@ export default function CategoryMenu({ categories = [], isMobile = false }) {
                     >
                       <div
                         className={`flex items-center justify-between py-2 px-2 cursor-pointer transition-all duration-200 relative
-          ${activeCategory && activeCategory._id === category._id
+    border-b border-gray-200
+    ${activeCategory && activeCategory._id === category._id
                             ? "bg-blue-50 text-[#C94669] border-l-4 border-[#263B96]"
                             : "hover:bg-gray-50"
                           }
-        `}
+  `}
                       >
+
                         <span className="font-semibold">
                           {category.name}
                         </span>
+
 
                         <ChevronRight
                           className={`w-4 h-4 ${activeCategory && activeCategory._id === category._id
@@ -342,25 +345,37 @@ export default function CategoryMenu({ categories = [], isMobile = false }) {
 
                       {activeCategory.brands && activeCategory.brands.length > 0 && (
                         <div className="mb-6">
-
-
                           <h4 className="font-semibold text-gray-700 mb-3 text-sm">
                             THƯƠNG HIỆU NỔI BẬT
                           </h4>
+
                           <div className="flex flex-col gap-3">
                             {activeCategory.brands.map((brand) => (
                               <Link
                                 href={`/${activeCategory.slug}/${brand.slug}`}
                                 key={brand._id}
                                 onClick={closeMobileMenu}
-                                className="text-sm text-gray-600 hover:text-[#263B96] py-2 px-3 rounded hover:bg-gray-50"
+                                className="group flex items-center gap-3 text-sm text-gray-600 py-2 px-3 rounded hover:bg-gray-50 hover:text-[#263B96]"
                               >
-                                {brand.name}
+                                <div className="bg-gray-50 w-16 h-16 rounded-lg flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow">
+                                  <Image
+                                    src={new URL(brand.imageUrl, API_BASE_URL).href}
+                                    alt={brand.name}
+                                    width={64}
+                                    height={64}
+                                    className="object-contain"
+                                  />
+                                </div>
+
+                                <span className="font-medium text-sm">
+                                  {brand.name}
+                                </span>
                               </Link>
                             ))}
                           </div>
                         </div>
                       )}
+
 
                       {activeCategory.subcategories && activeCategory.subcategories.length > 0 && (
                         <div>

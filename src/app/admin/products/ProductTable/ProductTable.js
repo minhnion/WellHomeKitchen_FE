@@ -95,7 +95,7 @@ const ProductTable = ({ products, handleDelete, page, limit }) => {
                 </div>
                 {product.discountPercent != null && (
                   <div className="mt-1 inline-block px-2 py-0.5 text-[0.6rem] font-semibold text-green-700 bg-green-100 rounded-full">
-                    {product.discountPercent}%
+                    {product.discountPercent.toFixed(2)}%
                   </div>
                 )}
               </td>

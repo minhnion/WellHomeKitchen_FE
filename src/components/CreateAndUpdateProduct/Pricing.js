@@ -24,7 +24,7 @@ const Pricing = ({ formFields, onChangeFormFields }) => {
             value={formFields.price || ""}
             onChange={handleInputChange}
             className="w-full border border-gray-300 rounded-lg px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 placeholder-gray-400"
-            placeholder="Giá bán (*)"
+            placeholder="Giá niêm yết(VND)(*)"
             min="0"
             step="0.01"
           />
@@ -36,7 +36,7 @@ const Pricing = ({ formFields, onChangeFormFields }) => {
             value={formFields.discountPercent}
             onChange={handleInputChange}
             className="w-full border border-gray-300 rounded-lg px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 placeholder-gray-400"
-            placeholder="Giảm giá (%)"
+            placeholder="Giá bán thị trường(VND)"
             min="0"
             step="0.01"
           />

@@ -226,7 +226,7 @@ export default function LabelProducts() {
               </span>
               {product.discountPercent > 0 && (
                 <span className="text-xs bg-red-100 text-red-600 px-1.5 py-0.5 rounded">
-                  -{product.discountPercent}%
+                  -{product.discountPercent.toFixed(2)}%
                 </span>
               )}
             </div>

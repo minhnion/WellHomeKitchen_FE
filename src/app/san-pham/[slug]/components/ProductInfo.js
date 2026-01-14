@@ -69,7 +69,7 @@ export default async function ProductInfo({ product }) {
 
               {discountPercent > 0 && (
                 <span className="px-2 py-1 bg-white text-red-600 text-xs sm:text-sm font-medium rounded-md border border-red-300 max-sm:text-xs max-sm:px-1.5 max-sm:py-0.5 whitespace-nowrap">
-                  -{discountPercent}%
+                  -{discountPercent.toFixed(2)}%
                 </span>
               )}
             </div>
