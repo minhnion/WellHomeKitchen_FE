@@ -146,10 +146,10 @@ export default async function ProductDetailPage(props) {
                 mainImage={mainImage}
                 galleryImages={galleryImages}
               />
-              <SellingPoints />
+
             </div>
-            <div className="md:w-3/5 p-6 border-t md:border-t-0 md:border-l border-gray-200">
-              <h1 className="text-3xl font-semibold text-blue-800 mb-1 max-sm:text-xl">
+            <div className="md:w-3/5 py-6 pl-6 border-t md:border-t-0 md:border-l border-gray-200">
+              <h1 className=" text-3xl font-semibold text-blue-800 mb-1 max-sm:text-xl">
                 {name}
               </h1>
               <ProductInfo

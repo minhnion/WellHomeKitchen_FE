@@ -5,6 +5,7 @@ import { getConfigByKeyFull } from "@/apiServices/config";
 import { Star } from "lucide-react";
 import Image from "next/image";
 import { API_BASE_URL } from "@/apiServices/constants";
+import SellingPoint from "./SellingPoint";
 
 export default async function ProductInfo({ product }) {
   const phone1 = await getConfigByKeyFull("primary-takecare");
@@ -48,40 +49,46 @@ export default async function ProductInfo({ product }) {
           </div>
         </div>
       )}
+      <div className="flex flex-cols gap-5">
+        <div className="md:w-2/3">
+          {/* Price section */}
 
-      {/* Price section */}
-      <div className="mb-6 bg-gray-100 rounded-lg max-sm:mb-4 max-sm:rounded-md">
-        <div className="py-3 px-4 max-sm:py-2 max-sm:px-3">
+          <div className="mb-6 bg-gray-100 rounded-lg max-sm:mb-4 max-sm:rounded-md">
+            <div className="py-3 px-4 max-sm:py-2 max-sm:px-3">
 
-          <div className="flex items-center gap-3 max-sm:flex-col max-sm:items-start max-sm:gap-2">
+              <div className="flex items-center gap-3 max-sm:flex-col max-sm:items-start max-sm:gap-2">
 
-            <span className="font-semibold text-gray-700 max-sm:text-sm whitespace-nowrap">Giá:</span>
+                <span className="font-semibold text-gray-700 max-sm:text-sm whitespace-nowrap">Giá:</span>
 
 
-            <div className="flex items-center gap-3 max-sm:gap-2 max-sm:flex-wrap">
-              <span className="text-2xl sm:text-3xl font-bold text-red-600 max-sm:text-xl">
-                {formattedDiscountedPrice}₫
-              </span>
+                <div className="flex items-center gap-3 max-sm:gap-2 max-sm:flex-wrap">
+                  <span className="text-2xl sm:text-3xl font-bold text-red-600 max-sm:text-xl">
+                    {formattedDiscountedPrice}₫
+                  </span>
 
-              <span className="line-through text-gray-500 text-base sm:text-lg max-sm:text-sm">
-                {formattedOriginalPrice}₫
-              </span>
+                  <span className="line-through text-gray-500 text-base sm:text-lg max-sm:text-sm">
+                    {formattedOriginalPrice}₫
+                  </span>
 
-              {discountPercent > 0 && (
-                <span className="px-2 py-1 bg-white text-red-600 text-xs sm:text-sm font-medium rounded-md border border-red-300 max-sm:text-xs max-sm:px-1.5 max-sm:py-0.5 whitespace-nowrap">
-                  -{discountPercent.toFixed(2)}%
-                </span>
-              )}
+                  {discountPercent > 0 && (
+                    <span className="px-2 py-1 bg-white text-red-600 text-xs sm:text-sm font-medium rounded-md border border-red-300 max-sm:text-xs max-sm:px-1.5 max-sm:py-0.5 whitespace-nowrap">
+                      -{discountPercent.toFixed(2)}%
+                    </span>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* Short description */}
-      {description && (
-        <div className="mb-6 max-sm:mb-4">
-          <div
-            className="text-gray-700 prose prose-sm max-w-none
+
+
+          {/* Action buttons */}
+          <CartButtons product={product} />
+          {/* Short description */}
+          {description && (
+            <div className="mb-6 max-sm:mb-4">
+              <div
+                className="text-gray-700 prose prose-sm max-w-none
               prose-headings:text-gray-800 prose-headings:font-semibold
               prose-h1:text-lg sm:prose-h1:text-lg prose-h1:text-base
               prose-h2:text-base sm:prose-h2:text-base prose-h2:text-sm
@@ -104,13 +111,17 @@ export default async function ProductInfo({ product }) {
               [&_strong]:font-semibold [&_strong]:text-gray-800
               [&_em]:italic [&_em]:text-gray-700
               [&_img]:rounded-lg [&_img]:shadow-sm [&_img]:my-3 max-sm:[&_img]:my-2 [&_img]:max-w-full [&_img]:h-auto"
-            dangerouslySetInnerHTML={{ __html: description }}
-          />
-        </div>
-      )}
+                dangerouslySetInnerHTML={{ __html: description }}
+              />
+            </div>
+          )}
 
-      {/* Action buttons */}
-      <CartButtons product={product} />
+        </div>
+        <div className="md:w-1/3">
+          <SellingPoint />
+        </div>
+      </div>
     </div>
+
   );
 }

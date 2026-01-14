@@ -9,11 +9,7 @@ export default function ProductImages({ mainImage, galleryImages }) {
   const [currentImage, setCurrentImage] = useState(mainImage);
   const allImages = [mainImage, ...galleryImages];
   const currentIndex = allImages.indexOf(currentImage);
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
   const [zoomOpen, setZoomOpen] = useState(false);
-  const [hasDragged, setHasDragged] = useState(false);
-  const [isClickingArrow, setIsClickingArrow] = useState(false);
 
   const getFullImageUrl = (path) => {
     return `${path.startsWith("http") ? "" : API_BASE_URL}${path}`;
@@ -27,38 +23,10 @@ export default function ProductImages({ mainImage, galleryImages }) {
 
   return (
     <div className="flex flex-col gap-6">
+      {/* Main image container */}
       <div
-        onMouseDown={(e) => {
-          if (e.button === 0) {
-            setIsDragging(true);
-            setHasDragged(false);
-            setStartX(e.clientX);
-          }
-        }}
-        onMouseMove={(e) => {
-          if (!isDragging) return;
-
-          const diff = e.clientX - startX;
-
-          if (Math.abs(diff) > 60) {
-            navigateImage(diff > 0 ? -1 : 1);
-            setStartX(e.clientX);
-            setHasDragged(true);
-          }
-        }}
-        onMouseUp={() => {
-          setIsDragging(false);
-
-          if (!hasDragged && !isClickingArrow) {
-            setZoomOpen(true);
-          }
-
-          setIsClickingArrow(false);
-        }}
-
-        onMouseLeave={() => setIsDragging(false)}
-        className="group w-full aspect-[3/4] md:aspect-[9/10] relative cursor-grab active:cursor-grabbing"
-
+        onClick={() => setZoomOpen(true)}
+        className="group w-full aspect-[3/4] md:aspect-[9/10] relative cursor-pointer"
       >
         <Image
           src={getFullImageUrl(currentImage)}
@@ -69,6 +37,8 @@ export default function ProductImages({ mainImage, galleryImages }) {
           style={{ objectFit: "contain" }}
           priority
         />
+
+        {/* Zoom indicator overlay */}
         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none">
           <div className="w-14 h-14 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center">
             <FiPlus size={28} className="text-white" />
@@ -82,7 +52,6 @@ export default function ProductImages({ mainImage, galleryImages }) {
 
         {/* Navigation arrows */}
         <button
-          onMouseDown={() => setIsClickingArrow(true)}
           onClick={(e) => {
             e.stopPropagation();
             navigateImage(-1);
@@ -93,12 +62,10 @@ export default function ProductImages({ mainImage, galleryImages }) {
           <IoChevronBackOutline size={24} className="text-gray-800" />
         </button>
         <button
-          onMouseDown={() => setIsClickingArrow(true)}
           onClick={(e) => {
             e.stopPropagation();
             navigateImage(1);
           }}
-
           className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white backdrop-blur-sm rounded-full p-3 shadow-md opacity-70 group-hover:opacity-100 transition-all duration-300 hover:scale-105"
           aria-label="Next image"
         >
@@ -106,6 +73,7 @@ export default function ProductImages({ mainImage, galleryImages }) {
         </button>
       </div>
 
+      {/* Thumbnail gallery */}
       <div className="grid grid-cols-5 gap-4 relative mx-4 my-4">
         {allImages
           .slice(0, allImages.length > 8 ? 7 : 8)
@@ -113,8 +81,8 @@ export default function ProductImages({ mainImage, galleryImages }) {
             <div
               key={index}
               onClick={() => setCurrentImage(image)}
-              className={`cursor-pointer w-full aspect-square overflow-hidden  transition-all duration-300 relative
-        ${currentImage === image
+              className={`cursor-pointer w-full aspect-square overflow-hidden transition-all duration-300 relative
+                ${currentImage === image
                   ? "ring-2 ring-offset-2 ring-blue-500 shadow-lg transform scale-105 z-10"
                   : "opacity-80 hover:opacity-100 hover:shadow-md"
                 }`}
@@ -125,8 +93,8 @@ export default function ProductImages({ mainImage, galleryImages }) {
                 fill
                 sizes="(max-width: 768px) 20vw, 10vw"
                 className={`transition-all ${currentImage === image
-                  ? "brightness-105"
-                  : "hover:brightness-100"
+                    ? "brightness-105"
+                    : "hover:brightness-100"
                   }`}
                 style={{ objectFit: "contain" }}
               />
@@ -154,6 +122,8 @@ export default function ProductImages({ mainImage, galleryImages }) {
           </div>
         )}
       </div>
+
+      {/* Zoom modal */}
       {zoomOpen && (
         <div
           onClick={() => setZoomOpen(false)}
@@ -170,7 +140,6 @@ export default function ProductImages({ mainImage, galleryImages }) {
           </div>
         </div>
       )}
-
     </div>
   );
 }

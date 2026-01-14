@@ -179,11 +179,18 @@ export default function CategoryMenu({ categories = [], isMobile = false }) {
                           }
   `}
                       >
-
-                        <span className="font-semibold">
-                          {category.name}
-                        </span>
-
+                        <div className=" flex flex-cols gap-2">
+                          <Image
+                            src={new URL(category.imageUrl, API_BASE_URL).href}
+                            alt={category.name}
+                            className="w-6 h-6 object-contain"
+                            width={24}
+                            height={24}
+                          />
+                          <span className="font-semibold">
+                            {category.name}
+                          </span>
+                        </div>
 
                         <ChevronRight
                           className={`w-4 h-4 ${activeCategory && activeCategory._id === category._id
@@ -234,7 +241,7 @@ export default function CategoryMenu({ categories = [], isMobile = false }) {
                 )}
 
                 {!showAllCategories && categories.length > 10 && !isMobile && (
-                  <div className="h-30 bg-white"></div>
+                  <div className="h-18 bg-white"></div>
                 )}
               </div>
             </div>
@@ -274,9 +281,19 @@ export default function CategoryMenu({ categories = [], isMobile = false }) {
                             ? "bg-blue-50 text-[#C94669] border-l-4 border-[#263B96]"
                             : "hover:bg-gray-50"
                             }`}>
-                            <span className="font-semibold">
-                              {category.name}
-                            </span>
+                            <div className=" flex flex-cols gap-2">
+                              <Image
+                                src={new URL(category.imageUrl, API_BASE_URL).href}
+                                alt={category.name}
+                                className="w-6 h-6 object-contain"
+                                width={24}
+                                height={24}
+                              />
+
+                              <span className="font-semibold">
+                                {category.name}
+                              </span>
+                            </div>
                             <ChevronRight className="w-4 h-4 text-gray-400" />
                           </div>
                         </div>
@@ -349,7 +366,7 @@ export default function CategoryMenu({ categories = [], isMobile = false }) {
                             THƯƠNG HIỆU NỔI BẬT
                           </h4>
 
-                          <div className="flex flex-col gap-3">
+                          <div className="grid grid-cols-3 gap-3">
                             {activeCategory.brands.map((brand) => (
                               <Link
                                 href={`/${activeCategory.slug}/${brand.slug}`}
@@ -357,7 +374,7 @@ export default function CategoryMenu({ categories = [], isMobile = false }) {
                                 onClick={closeMobileMenu}
                                 className="group flex items-center gap-3 text-sm text-gray-600 py-2 px-3 rounded hover:bg-gray-50 hover:text-[#263B96]"
                               >
-                                <div className="bg-gray-50 w-16 h-16 rounded-lg flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow">
+                                <div className="bg-gray-50 w-15 h-15 rounded-lg flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow">
                                   <Image
                                     src={new URL(brand.imageUrl, API_BASE_URL).href}
                                     alt={brand.name}
@@ -367,9 +384,7 @@ export default function CategoryMenu({ categories = [], isMobile = false }) {
                                   />
                                 </div>
 
-                                <span className="font-medium text-sm">
-                                  {brand.name}
-                                </span>
+
                               </Link>
                             ))}
                           </div>
@@ -429,7 +444,7 @@ export default function CategoryMenu({ categories = [], isMobile = false }) {
                     <h4 className="font-semibold text-[#263B96] mb-3 text-sm uppercase tracking-wide">
                       THƯƠNG HIỆU NỔI BẬT
                     </h4>
-                    <div className="flex flex-col gap-4">
+                    <div className="grid grid-cols-3 gap-4">
                       {activeCategory.brands.map((brand) => (
                         <Link
                           href={`/${activeCategory.slug}/${brand.slug}`}
@@ -441,9 +456,16 @@ export default function CategoryMenu({ categories = [], isMobile = false }) {
                           }}
                           className="group flex items-center transition-transform hover:scale-105"
                         >
-                          <span className="font-medium text-sm">
-                            {brand.name}
-                          </span>
+                          <div className="bg-gray-50 w-15 h-15 rounded-lg flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow">
+                            <Image
+                              src={new URL(brand.imageUrl, API_BASE_URL).href}
+                              alt={brand.name}
+                              className="w-full h-full object-contain"
+                              width={64}
+                              height={64}
+                            />
+                          </div>
+
                         </Link>
                       ))}
                     </div>
@@ -472,6 +494,7 @@ export default function CategoryMenu({ categories = [], isMobile = false }) {
                           }}
                           className="group flex items-center transition-transform hover:scale-105"
                         >
+
                           <span className="font-medium text-sm">
                             {sub.name}
                           </span>
