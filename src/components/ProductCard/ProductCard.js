@@ -72,7 +72,7 @@ const ProductCard = ({
 
   const isNew =
     new Date(createdAt) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
-  const newPrice = price + (price * discountPercent) / 100;
+  const newPrice = price - (price * discountPercent) / 100;
   const truncatedOldPrice = price
     .toString()
     .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -194,13 +194,13 @@ const ProductCard = ({
 
             <div className="flex flex-col items-start my-0.5">
               <span className="text-xl font-bold text-red-600 max-sm:text-lg">
-                {truncatedOldPrice}
+                {truncatedNewPrice}
                 <span className="underline">đ</span>
               </span>
               <div className="flex justify-between items-center w-full">
                 {discountPercent > 0 && (
                   <span className="text-sm text-gray-500 line-through max-sm:text-xs">
-                    {truncatedNewPrice}
+                    {truncatedOldPrice}
                     <span className="underline">đ</span>
                   </span>
                 )}
@@ -409,12 +409,12 @@ const ProductCard = ({
                   <div className="flex items-center gap-3">
                     <span className="font-bold text-gray-800 text-medium">Giá:</span>
                     <span className="text-medium font-bold text-red-600">
-                      {truncatedOldPrice}đ
+                      {truncatedNewPrice}đ
                     </span>
                     {discountPercent > 0 && (
                       <>
                         <span className="text-medium text-gray-500 line-through">
-                          {truncatedNewPrice}đ
+                          {truncatedOldPrice}đ
                         </span>
                         <span className="px-2 py-1 bg-white-100 text-red-700 rounded text-sm  border border-red-500">
                           -{discountPercent}%
