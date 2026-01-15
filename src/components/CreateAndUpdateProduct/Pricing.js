@@ -24,7 +24,7 @@ const Pricing = ({ formFields, onChangeFormFields }) => {
             value={formFields.price || ""}
             onChange={handleInputChange}
             className="w-full border border-gray-300 rounded-lg px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 placeholder-gray-400"
-            placeholder="Giá niêm yết(VND)(*)"
+            placeholder="Giá niêm yết(VNĐ)(*)"
             min="0"
             step="0.01"
           />
@@ -32,11 +32,11 @@ const Pricing = ({ formFields, onChangeFormFields }) => {
         <div>
           <input
             type="number"
-            name="discountPercent"
-            value={formFields.discountPercent}
+            name="salePrice"
+            value={formFields.salePrice}
             onChange={handleInputChange}
             className="w-full border border-gray-300 rounded-lg px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 placeholder-gray-400"
-            placeholder="Giá bán thị trường(VND)"
+            placeholder="Giá bán thị trường(VNĐ)"
             min="0"
             step="0.01"
           />

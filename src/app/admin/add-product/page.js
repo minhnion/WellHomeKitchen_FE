@@ -32,6 +32,7 @@ const initialFormState = {
   description: "",
   mainImage: null,
   price: "",
+  salePrice: "",
   discountPercent: "",
   specifications: [{ _id: Date.now(), key: "", value: "" }],
   category: "",
@@ -118,10 +119,10 @@ export default function AddProductPage() {
       let newSpecifications =
         categoryAttributesData?.attributes?.length > 0
           ? categoryAttributesData.attributes.map((attrKey, index) => ({
-              _id: Date.now() + index,
-              key: attrKey,
-              value: "",
-            }))
+            _id: Date.now() + index,
+            key: attrKey,
+            value: "",
+          }))
           : [{ _id: Date.now(), key: "", value: "" }];
       setFormFields((prev) => ({
         ...prev,
@@ -160,6 +161,16 @@ export default function AddProductPage() {
         })
       );
 
+      const originalPrice = parseFloat(formFields.price);
+      const salePrice = parseFloat(formFields.salePrice);
+
+      let computedDiscountPercent = 0;
+
+      if (originalPrice && salePrice && salePrice < originalPrice) {
+        computedDiscountPercent = ((originalPrice - salePrice) / originalPrice) * 100;
+      }
+
+
       const validSpecifications = formFields.specifications.filter(
         (spec) => spec.key.trim() && spec.value.trim()
       );
@@ -175,9 +186,8 @@ export default function AddProductPage() {
         const images = doc.querySelectorAll("img[src^='data:image/']");
         const uploadPromises = Array.from(images).map(async (img) => {
           const base64Src = img.getAttribute("src");
-          const imageName = `${
-            formFields.name || "desc"
-          }_content_${Date.now()}.png`;
+          const imageName = `${formFields.name || "desc"
+            }_content_${Date.now()}.png`;
           const imageFile = base64ToFile(base64Src, imageName);
           const uploadedUrl = await uploadImage(imageFile, imageName);
           img.setAttribute("src", uploadedUrl);
@@ -193,9 +203,8 @@ export default function AddProductPage() {
             block.data.url &&
             block.data.url.startsWith("data:image/")
           ) {
-            const imageName = `${
-              formFields.name || "intro"
-            }_content_${Date.now()}.png`;
+            const imageName = `${formFields.name || "intro"
+              }_content_${Date.now()}.png`;
             const imageFile = base64ToFile(block.data.url, imageName);
             const uploadedUrl = await uploadImage(imageFile, imageName);
             return { ...block, data: { ...block.data, url: uploadedUrl } };
@@ -210,9 +219,7 @@ export default function AddProductPage() {
         description: processedDescription,
         mainImage: mainImageUrl,
         price: parseFloat(formFields.price),
-        discountPercent: formFields.discountPercent
-          ? parseFloat(formFields.discountPercent)
-          : 0,
+        discountPercent: computedDiscountPercent,
         category: formFields.category,
         subCategory: formFields.subCategory,
         brand: formFields.brand,

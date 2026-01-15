@@ -127,8 +127,13 @@ export default function UpdateProductForm() {
           setBrandOptions([]);
         }
 
+        const dbPrice = data.price || 0;
+        const dbDiscount = data.discountPercent || 0;
+        const calculatedSalePrice = dbPrice * (1 - dbDiscount / 100);
+
         setFormFields({
           ...data,
+          salePrice: calculatedSalePrice,
           galleryImages: transformedGallery,
           specifications: finalSpecifications,
           description: data.description || "", // Keep as string
@@ -246,6 +251,15 @@ export default function UpdateProductForm() {
           .filter(Boolean)
       );
 
+      const originalPrice = parseFloat(formFields.price);
+      const salePrice = parseFloat(formFields.salePrice);
+      let computedDiscountPercent = 0;
+
+      if (originalPrice && salePrice && salePrice < originalPrice) {
+        computedDiscountPercent = ((originalPrice - salePrice) / originalPrice) * 100;
+      }
+
+
       const validSpecifications = formFields.specifications.filter(
         (spec) => spec.key.trim() && spec.value.trim()
       );
@@ -266,9 +280,8 @@ export default function UpdateProductForm() {
         const images = doc.querySelectorAll("img[src^='data:image/']");
         const uploadPromises = Array.from(images).map(async (img) => {
           const base64Src = img.getAttribute("src");
-          const imageName = `${
-            formFields.name || "desc"
-          }_content_${Date.now()}.png`;
+          const imageName = `${formFields.name || "desc"
+            }_content_${Date.now()}.png`;
           const imageFile = base64ToFile(base64Src, imageName);
           const uploadedUrl = await uploadImage(imageFile, imageName);
           img.setAttribute("src", uploadedUrl);
@@ -284,9 +297,8 @@ export default function UpdateProductForm() {
             block.data.url &&
             block.data.url.startsWith("data:image/")
           ) {
-            const imageName = `${
-              formFields.name || "intro"
-            }_content_${Date.now()}.png`;
+            const imageName = `${formFields.name || "intro"
+              }_content_${Date.now()}.png`;
             const imageFile = base64ToFile(block.data.url, imageName);
             return {
               ...block,
@@ -304,8 +316,8 @@ export default function UpdateProductForm() {
         ...formFields,
         mainImage: finalMainImageUrl,
         galleryImages: finalGalleryImageUrls,
-        price: parseFloat(formFields.price),
-        discountPercent: parseFloat(formFields.discountPercent || 0),
+        price: originalPrice,
+        discountPercent: computedDiscountPercent,
         specifications: specificationsToSave,
         description: processedDescription, // Send as HTML string
         introductionContent: processedIntroductionContent,
