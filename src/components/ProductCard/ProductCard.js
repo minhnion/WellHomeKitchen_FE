@@ -218,7 +218,7 @@ const ProductCard = ({
       shrink-0
     "
                   >
-                    -{discountPercent}%
+                    -{discountPercent.toFixed(2)}%
                   </span>
                 )}
 
