@@ -267,12 +267,12 @@ export const AllProducts = ({
     }));
   };
 
-  // Xử lý xem thêm sản phẩm
+
   const handleLoadMore = () => {
     setShowAllProducts(true);
   };
 
-  // Kiểm tra xem có cần hiển thị nút "Xem thêm" không
+
 
   const shouldShowLoadMore = products.length > initialDisplayCount && !showAllProducts;
 
@@ -461,7 +461,7 @@ export const AllProducts = ({
               </div>
 
               {isSortDropdownOpen && (
-                <div className="absolute top-full right-0 mt-1 w-full bg-white border shadow-lg z-20">
+                <div className="absolute top-full right-0 mt-1 w-full bg-white shadow-lg z-20">
                   {[
                     { id: "newest", name: "Mới" },
                     { id: "bestseller", name: "Bán chạy" },
@@ -520,7 +520,7 @@ export const AllProducts = ({
 
 
 
-        {/* PRODUCTS GRID - CHỈ SỬA PHẦN NÀY */}
+        {/* PRODUCTS GRID */}
         <div className="mt-4">
           {displayedProducts.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-y-3 gap-x-3">

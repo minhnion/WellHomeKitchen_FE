@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import Modal from "react-modal";
-import { FaTimes, FaUpload } from "react-icons/fa";
+import { FaTimes, FaUpload, FaPlus, FaTrash } from "react-icons/fa";
 import Image from "next/image";
 import Select from "react-select";
 import { AsyncPaginate } from "react-select-async-paginate";
@@ -111,6 +111,20 @@ export function UpdateModal({
           }
         }
       }
+      const salesField = fields.find(
+        (f) => f.type === "custom" && f.name === "sales"
+      );
+
+      if (salesField && Array.isArray(initialData.sales)) {
+        initData.sales = initialData.sales;
+      }
+
+      if (salesField && !Array.isArray(initData.sales)) {
+        initData.sales = [
+          { productId: null, salePercent: "", saleQuantity: "" },
+        ];
+      }
+
 
       setFormData(initData);
       setPreviews(initPreviews);
@@ -162,8 +176,8 @@ export function UpdateModal({
         ? selected.map((o) => o.value)
         : []
       : selected
-      ? selected.value
-      : null;
+        ? selected.value
+        : null;
     setFormData((prev) => ({ ...prev, [field.name]: value }));
   };
 
@@ -184,19 +198,32 @@ export function UpdateModal({
   const submit = (e) => {
     e.preventDefault();
     const payload = {};
+
     fields.forEach((field) => {
-      if (field.async) {
-        if (field.multiple) {
-          payload[field.name] = formData[field.name]?.map((o) => o.value) || [];
-        } else {
-          payload[field.name] = formData[field.name]?.value || null;
-        }
-      } else {
+      if (field.type === "custom" && field.name === "sales") {
+        payload.products = formData.sales
+          ?.filter(
+            (s) => s.productId?.value && s.salePercent && s.saleQuantity
+          )
+          .map((s) => ({
+            productId: s.productId.value,
+            salePercent: Number(s.salePercent),
+            saleQuantity: Number(s.saleQuantity),
+          })) || [];
+      }
+      else if (field.async) {
+        payload[field.name] = field.multiple
+          ? formData[field.name]?.map(o => o.value) || []
+          : formData[field.name]?.value || null;
+      }
+      else {
         payload[field.name] = formData[field.name];
       }
     });
+
     onUpdate(payload);
   };
+
 
   return (
     <>
@@ -253,82 +280,219 @@ export function UpdateModal({
                         <span className="ml-2 text-gray-700">Không</span>
                       </label>
                     </div>
-                  ) : f.async ? (
-                    <AsyncPaginate
-                      key={f.name + JSON.stringify(formData[f.name])}
-                      isMulti={f.multiple}
-                      value={formData[f.name] || (f.multiple ? [] : null)}
-                      loadOptions={f.loadOptions}
-                      onChange={(selected) =>
-                        handleAsyncSelectChange(selected, f)
-                      }
-                      placeholder={f.placeholder || "Chọn..."}
-                      className="react-select-container"
-                      classNamePrefix="react-select"
-                      isClearable
-                    />
-                  ) : f.type === "select" ? (
-                    <Select
-                      key={f.name + JSON.stringify(formData[f.name])}
-                      options={f.options}
-                      value={getSelectValue(f)}
-                      onChange={(selected) => handleSelectChange(selected, f)}
-                      isMulti={f.multiple}
-                      placeholder={f.placeholder || "Chọn..."}
-                      className="react-select-container"
-                      classNamePrefix="react-select"
-                      isClearable
-                    />
-                  ) : f.type === "text" ||
-                    f.type === "number" ||
-                    f.type === "date" ? (
-                    <input
-                      type={f.type}
-                      value={formData[f.name] ?? ""}
-                      onChange={(e) => handleChange(e, f.name, f.type)}
-                      placeholder={f.placeholder}
-                      className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      required={f.required}
-                    />
-                  ) : f.type === "file" ? (
-                    <div className="space-y-2">
-                      <input
-                        type="file"
-                        ref={(el) => (inputRefs.current[f.name] = el)}
-                        onChange={(e) => handleFile(e, f.name)}
-                        accept={f.accept}
-                        className="hidden"
-                      />
-                      <div
-                        onClick={() => inputRefs.current[f.name]?.click()}
-                        className="border-2 border-dashed rounded-lg p-4 flex items-center justify-center cursor-pointer h-40 border-gray-300 hover:border-blue-500"
-                      >
-                        {previews[f.name] ? (
-                          <div className="relative w-full h-full">
-                            <Image
-                              src={previews[f.name]}
-                              alt="preview"
-                              fill
-                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                              className="object-contain"
-                            />
+                  ) :
+                    f.type === "custom" && f.name === "sales" ? (
+                      <div className="border border-gray-300 rounded-lg p-4">
+                        {/* HEADER */}
+                        <div className="grid grid-cols-12 gap-2 mb-2 text-sm font-medium text-gray-600">
+                          <div className="col-span-5">Sản phẩm</div>
+                          <div className="col-span-3">Giảm (%)</div>
+                          <div className="col-span-3">Số lượng</div>
+                          <div className="col-span-1"></div>
+                        </div>
+
+                        {/* ROWS */}
+                        {formData.sales?.map((item, index) => (
+                          <div
+                            key={index}
+                            className="grid grid-cols-12 gap-3 items-end mb-3"
+                          >
+                            {/* PRODUCT */}
+                            <div className="col-span-5">
+                              <AsyncPaginate
+                                value={item.productId}
+                                loadOptions={async (search, loaded, additional) => {
+                                  const res = await f.subFields[0].loadOptions(search, loaded, additional);
+
+                                  const selectedProducts = (formData.sales || [])
+                                    .map(s => s.productId)
+                                    .filter(Boolean);
+
+                                  const map = new Map();
+
+                                  // 1️⃣ add sale products trước
+                                  selectedProducts.forEach(p => {
+                                    map.set(String(p.value), p);
+                                  });
+
+
+                                  res.options.forEach(opt => {
+                                    map.set(String(opt.value), opt);
+                                  });
+
+                                  return {
+                                    ...res,
+                                    options: Array.from(map.values()),
+                                  };
+                                }}
+
+                                defaultOptions={true}
+                                getOptionLabel={(opt) => opt.label}
+                                onChange={(val) => {
+                                  const newSales = [...formData.sales];
+                                  newSales[index].productId = val;
+                                  setFormData({ ...formData, sales: newSales });
+                                }}
+                                menuPortalTarget={document.body}
+                                styles={{
+                                  menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                                  menu: (base) => ({ ...base, minWidth: "400px" }),
+                                }}
+                                additional={{ page: 1 }}
+                              />
+
+
+                            </div>
+
+                            {/* SALE % */}
+                            <div className="col-span-3">
+                              <input
+                                type="number"
+                                min={1}
+                                max={100}
+                                value={item.salePercent}
+                                onChange={(e) => {
+                                  const newSales = [...formData.sales];
+                                  newSales[index].salePercent = e.target.value;
+                                  setFormData({ ...formData, sales: newSales });
+                                }}
+                                className="w-full border rounded px-3 py-2"
+                              />
+                            </div>
+
+                            {/* QUANTITY */}
+                            <div className="col-span-3">
+                              <input
+                                type="number"
+                                min={1}
+                                value={item.saleQuantity}
+                                onChange={(e) => {
+                                  const newSales = [...formData.sales];
+                                  newSales[index].saleQuantity = e.target.value;
+                                  setFormData({ ...formData, sales: newSales });
+                                }}
+                                className="w-full border rounded px-3 py-2"
+                              />
+                            </div>
+
+                            {/* DELETE */}
+                            <div className="col-span-1 flex justify-end">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const newSales = formData.sales.filter(
+                                    (_, i) => i !== index
+                                  );
+                                  setFormData({ ...formData, sales: newSales });
+                                }}
+                                className="text-red-500 hover:text-red-700"
+                              >
+                                ✕
+                              </button>
+                            </div>
+                            {/* ADD PRODUCT */}
+
+
                           </div>
-                        ) : (
-                          <div className="text-center text-gray-500">
-                            <FaUpload className="mx-auto text-3xl mb-2" />
-                            <p>Chọn {f.label.toLowerCase()}</p>
-                          </div>
-                        )}
+                        ))}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setFormData({
+                              ...formData,
+                              sales: [
+                                ...(formData.sales || []),
+                                {
+                                  productId: null,
+                                  salePercent: "",
+                                  saleQuantity: "",
+                                },
+                              ],
+                            });
+                          }}
+                          className="mt-2 text-sm text-blue-600 hover:text-blue-800"
+                        >
+                          + Thêm sản phẩm
+                        </button>
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => handleOpenFileSelect(f.name)}
-                        className="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200"
-                      >
-                        Chọn ảnh từ hệ thống
-                      </button>
-                    </div>
-                  ) : null}
+                    )
+
+                      : f.async ? (
+                        <AsyncPaginate
+                          key={f.name + JSON.stringify(formData[f.name])}
+                          isMulti={f.multiple}
+                          value={formData[f.name] || (f.multiple ? [] : null)}
+                          loadOptions={f.loadOptions}
+                          onChange={(selected) =>
+                            handleAsyncSelectChange(selected, f)
+                          }
+                          placeholder={f.placeholder || "Chọn..."}
+                          className="react-select-container"
+                          classNamePrefix="react-select"
+                          isClearable
+                        />
+                      ) : f.type === "select" ? (
+                        <Select
+                          key={f.name + JSON.stringify(formData[f.name])}
+                          options={f.options}
+                          value={getSelectValue(f)}
+                          onChange={(selected) => handleSelectChange(selected, f)}
+                          isMulti={f.multiple}
+                          placeholder={f.placeholder || "Chọn..."}
+                          className="react-select-container"
+                          classNamePrefix="react-select"
+                          isClearable
+                        />
+                      ) : f.type === "text" ||
+                        f.type === "number" ||
+                        f.type === "date" ? (
+                        <input
+                          type={f.type}
+                          value={formData[f.name] ?? ""}
+                          onChange={(e) => handleChange(e, f.name, f.type)}
+                          placeholder={f.placeholder}
+                          className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          required={f.required}
+                        />
+                      ) : f.type === "file" ? (
+                        <div className="space-y-2">
+                          <input
+                            type="file"
+                            ref={(el) => (inputRefs.current[f.name] = el)}
+                            onChange={(e) => handleFile(e, f.name)}
+                            accept={f.accept}
+                            className="hidden"
+                          />
+                          <div
+                            onClick={() => inputRefs.current[f.name]?.click()}
+                            className="border-2 border-dashed rounded-lg p-4 flex items-center justify-center cursor-pointer h-40 border-gray-300 hover:border-blue-500"
+                          >
+                            {previews[f.name] ? (
+                              <div className="relative w-full h-full">
+                                <Image
+                                  src={previews[f.name]}
+                                  alt="preview"
+                                  fill
+                                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                  className="object-contain"
+                                />
+                              </div>
+                            ) : (
+                              <div className="text-center text-gray-500">
+                                <FaUpload className="mx-auto text-3xl mb-2" />
+                                <p>Chọn {f.label.toLowerCase()}</p>
+                              </div>
+                            )}
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => handleOpenFileSelect(f.name)}
+                            className="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200"
+                          >
+                            Chọn ảnh từ hệ thống
+                          </button>
+                        </div>
+                      ) : null}
                 </div>
               ))}
               <div className="flex justify-end space-x-3 mt-6">

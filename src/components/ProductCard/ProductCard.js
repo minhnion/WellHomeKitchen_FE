@@ -7,7 +7,7 @@ import { Sparkles, Star, Eye, X } from "lucide-react";
 import EnhancedLabel from "./EnhancedLabel";
 import { ShoppingBag } from "lucide-react";
 import { addToCartLS } from "@/utils/cartUtils";
-
+import { createPortal } from "react-dom";
 
 
 
@@ -128,31 +128,20 @@ const ProductCard = ({
 ">
               {/* Nút mắt ở TRUNG TÂM ảnh */}
               {showEye && (
-                <div className="absolute inset-0 flex items-center justify-center z-50 bg-black/10">
+                <div className="hidden sm:flex absolute inset-0 items-center justify-center z-50 bg-black/10">
                   <button
-                    onClick={openModal}
-                    className="
-        w-8 h-8
-        flex items-center justify-center
-        rounded-full
-        bg-white/90
-        text-gray-700
-        shadow-lg
-        backdrop-blur-sm
-
-        transition-all
-        duration-200
-        hover:bg-white
-        hover:scale-110
-
-        active:bg-gray-300
-        active:scale-95
-      "
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      openModal(e);
+                    }}
+                    className="w-8 h-8 flex items-center justify-center rounded-full bg-white/90 text-gray-700 shadow-lg backdrop-blur-sm transition-all duration-200 hover:bg-white hover:scale-110 active:bg-gray-300 active:scale-95"
                   >
                     <Eye className="w-6 h-6" />
                   </button>
                 </div>
               )}
+
 
 
               <img
@@ -304,172 +293,177 @@ const ProductCard = ({
       </div>
 
 
-      {showModal && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/50">
+      {showModal &&
+        typeof document !== "undefined" &&
+        createPortal(
           <div
-            className="bg-white rounded-xl w-full max-w-3xl max-h-[90vh] overflow-hidden"
-            onClick={(e) => e.stopPropagation()}
+            className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/50"
+            onClick={() => setShowModal(false)}
           >
-            <div className="flex justify-between items-center  ">
-
-              <button
-                onClick={() => setShowModal(false)}
-                className="
-    ml-auto
-    p-2
-    rounded-full
-    text-gray-500
-    hover:bg-gray-100
-    hover:text-gray-800
-    transition
-  "
-              >
-                <X className="w-5 h-5" />
-              </button>
-
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
-              {/* Image */}
-              <div>
-                {/* ẢNH LỚN */}
-                <div className="relative mb-4">
-                  <img
-                    src={`${API_BASE_URL}${images[currentImage]}`}
-                    alt={name}
-                    className="w-full h-64 object-contain bg-gray-50 rounded-lg"
-                  />
-
-                  {/* Nút PREV */}
-                  <button
-                    onClick={() =>
-                      setCurrentImage((prev) =>
-                        prev === 0 ? images.length - 1 : prev - 1
-                      )
-                    }
-                    className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full shadow hover:bg-white"
-                  >
-                    ❮
-                  </button>
-
-                  {/* Nút NEXT */}
-                  <button
-                    onClick={() =>
-                      setCurrentImage((prev) =>
-                        prev === images.length - 1 ? 0 : prev + 1
-                      )
-                    }
-                    className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full shadow hover:bg-white"
-                  >
-                    ❯
-                  </button>
-                </div>
-
-
-                {/* ảnh nhỏ*/}
-                <div className="flex gap-2">
-                  {galleryImages?.map((img, index) => (
-                    <img
-                      key={index}
-                      src={`${API_BASE_URL}${img}`}
-                      alt={`${name} ${index + 1}`}
-                      onClick={() => setCurrentImage(index + 1)}
-                      className={`
-        w-20 h-20 object-contain bg-gray-50 rounded border cursor-pointer
-        ${currentImage === index + 1 ? "border-blue-500" : "border-gray-200"}
-      `}
-                    />
-                  ))}
-                </div>
-
-              </div>
-
-
-              {/* Cột thông tin */}
-              <div>
-                <div className="mb-4">
-                  <p className="text-lg font-semibold text-blue-900 mb-1">{name}</p>
-                  <p className="text-sm text-gray-600 mb-1">
-                    Mã sản phẩm:{" "}
-                    <span className="text-blue-800 font-medium">
-                      {id}
-                    </span>
-                  </p>
-                  <p className="text-sm text-gray-600 mb-3">
-                    Thương hiệu:{" "}
-                    <span className="font-medium text-blue-800">
-                      {brand?.name || "Đang cập nhật"}
-                    </span>
-                  </p>
-
-                </div>
-
-                <div className="mb-6">
-
-                  <div className="flex items-center gap-3">
-                    <span className="font-bold text-gray-800 text-medium">Giá:</span>
-                    <span className="text-medium font-bold text-red-600">
-                      {truncatedNewPrice}đ
-                    </span>
-                    {discountPercent > 0 && (
-                      <>
-                        <span className="text-medium text-gray-500 line-through">
-                          {truncatedOldPrice}đ
-                        </span>
-                        <span className="px-2 py-1 bg-white-100 text-red-700 rounded text-sm  border border-red-500">
-                          -{discountPercent}%
-                        </span>
-                      </>
-                    )}
-                  </div>
-                </div>
-
-                <div className="my-6 flex items-center gap-4">
-                  <h3 className="font-bold text-gray-800 whitespace-nowrap">
-                    Số lượng:
-                  </h3>
-
-                  <div className="flex items-center border rounded w-20 h-9">
-                    <button
-                      onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                      className="px-3 py-2 hover:bg-gray-100"
-                    >
-                      -
-                    </button>
-
-                    <span className="flex-1 text-center">{quantity}</span>
-
-                    <button
-                      onClick={() => setQuantity((q) => q + 1)}
-                      className="px-3 py-2 hover:bg-gray-100"
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
-
-
+            <div
+              className="bg-white rounded-xl w-full max-w-3xl max-h-[90vh] overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div className="flex justify-between items-center">
                 <button
-                  onClick={handleAddToCart}
-                  className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded"
+                  onClick={() => setShowModal(false)}
+                  className="
+              ml-auto
+              p-2
+              rounded-full
+              text-gray-500
+              hover:bg-gray-100
+              hover:text-gray-800
+              transition
+            "
                 >
-                  THÊM VÀO GIỎ
+                  <X className="w-5 h-5" />
                 </button>
+              </div>
 
-
-
+              {/* Content */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
+                {/* LEFT: IMAGE */}
                 <div>
-                  <Link href={`/san-pham/${slug}`}>
-                    <button className="text-gray-600  font-medium text-xs">
-                      Xem chi tiết sản phẩm &gt;
+                  <div className="relative mb-4">
+                    <img
+                      src={`${API_BASE_URL}${images[currentImage]}`}
+                      alt={name}
+                      className="w-full h-64 object-contain bg-gray-50 rounded-lg"
+                    />
+
+                    <button
+                      onClick={() =>
+                        setCurrentImage((prev) =>
+                          prev === 0 ? images.length - 1 : prev - 1
+                        )
+                      }
+                      className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full shadow hover:bg-white"
+                    >
+                      ❮
                     </button>
-                  </Link>
+
+                    <button
+                      onClick={() =>
+                        setCurrentImage((prev) =>
+                          prev === images.length - 1 ? 0 : prev + 1
+                        )
+                      }
+                      className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full shadow hover:bg-white"
+                    >
+                      ❯
+                    </button>
+                  </div>
+
+                  <div className="flex gap-2">
+                    {galleryImages?.map((img, index) => (
+                      <img
+                        key={index}
+                        src={`${API_BASE_URL}${img}`}
+                        alt={`${name} ${index + 1}`}
+                        onClick={() => setCurrentImage(index + 1)}
+                        className={`
+                    w-20 h-20 object-contain bg-gray-50 rounded border cursor-pointer
+                    ${currentImage === index + 1
+                            ? "border-blue-500"
+                            : "border-gray-200"
+                          }
+                  `}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                {/* RIGHT: INFO */}
+                <div>
+                  <div className="mb-4">
+                    <p className="text-lg font-semibold text-blue-900 mb-1">
+                      {name}
+                    </p>
+
+                    <p className="text-sm text-gray-600 mb-1">
+                      Mã sản phẩm:{" "}
+                      <span className="text-blue-800 font-medium">{id}</span>
+                    </p>
+
+                    <p className="text-sm text-gray-600 mb-3">
+                      Thương hiệu:{" "}
+                      <span className="font-medium text-blue-800">
+                        {brand?.name || "Đang cập nhật"}
+                      </span>
+                    </p>
+                  </div>
+
+                  <div className="mb-6">
+                    <div className="flex items-center gap-3">
+                      <span className="font-bold text-gray-800 text-medium">
+                        Giá:
+                      </span>
+
+                      <span className="text-medium font-bold text-red-600">
+                        {truncatedNewPrice}đ
+                      </span>
+
+                      {discountPercent > 0 && (
+                        <>
+                          <span className="text-medium text-gray-500 line-through">
+                            {truncatedOldPrice}đ
+                          </span>
+                          <span className="px-2 py-1 text-red-700 rounded text-sm border border-red-500">
+                            -{discountPercent.toFixed(2)}%
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="my-6 flex items-center gap-4">
+                    <h3 className="font-bold text-gray-800 whitespace-nowrap">
+                      Số lượng:
+                    </h3>
+
+                    <div className="flex items-center border rounded w-20 h-9">
+                      <button
+                        onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                        className="px-3 py-2 hover:bg-gray-100"
+                      >
+                        -
+                      </button>
+
+                      <span className="flex-1 text-center">{quantity}</span>
+
+                      <button
+                        onClick={() => setQuantity((q) => q + 1)}
+                        className="px-3 py-2 hover:bg-gray-100"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={handleAddToCart}
+                    className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded"
+                  >
+                    THÊM VÀO GIỎ
+                  </button>
+
+                  <div className="mt-2">
+                    <Link href={`/san-pham/${slug}`}>
+                      <button className="text-gray-600 font-medium text-xs">
+                        Xem chi tiết sản phẩm &gt;
+                      </button>
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body
+        )}
+
+
     </>
   );
 };

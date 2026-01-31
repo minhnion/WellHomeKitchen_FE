@@ -45,8 +45,8 @@ const AdminPagination = ({
           onClick={() => setCurrentPage(1)}
           disabled={currentPage === 1}
           className={`px-3 py-1 rounded ${currentPage === 1
-              ? "bg-gray-200 text-gray-500"
-              : "bg-white text-gray-700 hover:bg-gray-50"
+            ? "bg-gray-200 text-gray-500"
+            : "bg-white text-gray-700 hover:bg-gray-50"
             }`}
         >
           <FaAngleDoubleLeft />
@@ -57,8 +57,8 @@ const AdminPagination = ({
           onClick={() => setCurrentPage(currentPage - 1)}
           disabled={currentPage === 1}
           className={`px-3 py-1 rounded ${currentPage === 1
-              ? "bg-gray-200 text-gray-500"
-              : "bg-white text-gray-700 hover:bg-gray-50"
+            ? "bg-gray-200 text-gray-500"
+            : "bg-white text-gray-700 hover:bg-gray-50"
             }`}
         >
           <FaAngleLeft />
@@ -85,8 +85,8 @@ const AdminPagination = ({
             key={number}
             onClick={() => setCurrentPage(number)}
             className={`px-3 py-1 rounded ${currentPage === number
-                ? "bg-blue-600 text-white"
-                : "bg-white text-gray-700 hover:bg-gray-50"
+              ? "bg-blue-600 text-white"
+              : "bg-white text-gray-700 hover:bg-gray-50"
               }`}
           >
             {number}
@@ -113,8 +113,8 @@ const AdminPagination = ({
           onClick={() => setCurrentPage(currentPage + 1)}
           disabled={currentPage === totalPages}
           className={`px-3 py-1 rounded ${currentPage === totalPages
-              ? "bg-gray-200 text-gray-500"
-              : "bg-white text-gray-700 hover:bg-gray-50"
+            ? "bg-gray-200 text-gray-500"
+            : "bg-white text-gray-700 hover:bg-gray-50"
             }`}
         >
           <FaAngleRight />
@@ -125,8 +125,8 @@ const AdminPagination = ({
           onClick={() => setCurrentPage(totalPages)}
           disabled={currentPage === totalPages}
           className={`px-3 py-1 rounded ${currentPage === totalPages
-              ? "bg-gray-200 text-gray-500"
-              : "bg-white text-gray-700 hover:bg-gray-50"
+            ? "bg-gray-200 text-gray-500"
+            : "bg-white text-gray-700 hover:bg-gray-50"
             }`}
         >
           <FaAngleDoubleRight />

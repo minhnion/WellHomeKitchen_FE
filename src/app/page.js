@@ -5,6 +5,7 @@ import { getAllCategories } from "@/apiServices/categories";
 import { getPostCategories } from "@/apiServices/postCategory";
 import { getAllPosts } from "@/apiServices/posts";
 import { getAllProducts, getTopSellingProducts } from "@/apiServices/products";
+import { getSaleProducts } from "@/apiServices/saleOccasion";
 import BannerSlider from "@/components/BannerSlider/BannerSlider";
 import CategoriesGrid from "@/components/CategoriesGrid/CategoriesGrid";
 import CategoryProducts from "@/components/CategoryProducts/CategoryProducts";
@@ -16,8 +17,10 @@ import SpecialProductsFrame from "@/components/SpecialProductsFrame/SpecialProdu
 import ProductCard from "@/components/ProductCard/ProductCard";
 import ProductRowCard from "@/components/ProductRowCard/ProductRowCard";
 import PartnerBanners from "@/components/PartnerBanners/PartnerBanners";
+import SaleOccasionProductFrame from "@/components/SaleOccasionProductFrame/SaleOccasionProductFrame";
 
 export default async function Home() {
+  const now = new Date().toISOString();
   const topSellingResponse = await getTopSellingProducts(1, 5, null);
   const top5Products = topSellingResponse?.data || [];
 
@@ -75,6 +78,12 @@ export default async function Home() {
     null,
     true
   );
+  const saleOccasionProducts = await getSaleProducts({
+    time: now,
+    category: null,
+    limit,
+    page: currentPage,
+  });
 
   const isShow = true;
   const banners = await getBanners(currentPage, 30, isShow);
@@ -155,6 +164,17 @@ export default async function Home() {
         <HorizontalBanners banners={sliderPartHorizontalBanners.slice(0, 4)} />
       )}
 
+      {/* SaleOccasion Products */}
+      {saleOccasionProducts?.data?.products?.length > 0 && (
+        <>
+
+          <SaleOccasionProductFrame
+            sale={saleOccasionProducts.data.sale}
+            products={saleOccasionProducts.data.products}
+          />
+        </>
+      )}
+
       {/* Best sell products */}
       {top5Products.length > 0 && (
         <>
@@ -176,8 +196,8 @@ export default async function Home() {
       {/* Special Products */}
       {specialProducts && specialProducts.data.length > 0 && (
         <>
-          <h2 className="text-xl font-bold text-gray-900 px-4 py-2 inline-block">
-            Sản phẩm đặc biệt
+          <h2 className="text-xl font-bold text-blue-900  py-2 inline-block">
+            SẢN PHẨM ĐẶC BIỆT
           </h2>
           <SpecialProductsFrame
             banner={sliderFullBanners[3]}
@@ -186,6 +206,7 @@ export default async function Home() {
           />
         </>
       )}
+
 
       <ProductViewHistory />
 

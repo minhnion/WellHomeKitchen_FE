@@ -66,11 +66,10 @@ export default function Footer({ config }) {
   ];
 
   const policyInfo = [
-    { title: "Giao hàng và lắp đặt", linkTo: "/gioi-thieu-kitchen-care" },
-    { title: "Bảo hành và đổi sản phẩm", linkTo: "/gioi-thieu-kitchen-care" },
-    { title: "Quyền lợi sau mua hàng", linkTo: "/gioi-thieu-kitchen-care" },
-    { title: "Chính sách thanh toán", linkTo: "/gioi-thieu-kitchen-care" },
-    { title: "Đăng kí gia hạn bảo hành", linkTo: "/gioi-thieu-kitchen-care" },
+    { title: "Miễn phí vận chuyển lắp đặt", linkTo: "/pages/chinh-sach-van-chuyen-lap-dat" },
+    { title: "Vận chuyển hỏa tốc 4h", linkTo: "/pages/chinh-sach-van-chuyen-lap-dat" },
+    { title: "Bảo hành từ 2 - 5 năm", linkTo: "/pages/chinh-sach-bao-hanh" },
+    { title: "1 đổi 1 trong 30 ngày ", linkTo: "/pages/chinh-sach-doi-1-1" },
   ];
 
   return (

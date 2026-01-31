@@ -19,7 +19,7 @@ export default function SpecialProductsFrame({
   const bannerUrl = banner ? new URL(banner.url, API_BASE_URL).href : "";
 
   return (
-    <div className="bg-white shadow-md rounded-lg overflow-hidden border border-gray-200">
+    <div className="bg-white shadow-md rounded-lg overflow-hidden border border-gray-200 mb-6">
       {/* Banner */}
       {banner && (
         <div className="relative w-full">
