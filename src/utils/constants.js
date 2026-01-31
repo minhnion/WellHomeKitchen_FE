@@ -17,6 +17,7 @@ import {
   FaFolderOpen,
   FaFileAlt,
   FaThList,
+  FaMagic,
 } from "react-icons/fa";
 
 export const allMenuItems = [
@@ -87,6 +88,7 @@ export const allMenuItems = [
         link: "/admin/labels",
         roles: ["product-manager", "admin"],
       },
+
     ],
   },
   {
@@ -105,7 +107,7 @@ export const allMenuItems = [
       {
         label: "Danh mục bài viết",
         icon: <FaFolderOpen size={16} />,
-        link: "/admin/news-categories",
+        link: "/admin/aaa",
         roles: ["content-creator", "admin"],
       },
       {
@@ -135,6 +137,12 @@ export const allMenuItems = [
     roles: ["content-creator", "product-manager", "admin"],
   },
   {
+    label: "Đợt khuyến mãi",
+    icon: <FaMagic size={18} />,
+    link: "/admin/sales",
+    roles: ["product-manager", "admin"],
+  },
+  {
     label: "Quản lý tài khoản",
     icon: <FaUsers size={18} />,
     link: "/admin/accounts",
@@ -154,4 +162,5 @@ export const typeMessageNavigation = {
   POST: "/admin/posts",
   COMMENT: "/admin/comments",
   REVIEW: "/admin/reviews",
+  SALE: "/admin/sales",
 };

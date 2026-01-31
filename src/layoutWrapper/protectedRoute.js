@@ -26,6 +26,7 @@ const routePermissions = {
   "/admin/accounts": ["admin"],
   "/admin/settings": ["admin"],
   "/admin/reviews-and-comments": ["admin", "product-manager"],
+  "/admin/sales": ["admin", "product-manager"],
 };
 
 export default function ProtectedRoute({ children }) {

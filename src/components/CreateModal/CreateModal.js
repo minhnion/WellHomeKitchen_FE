@@ -57,6 +57,8 @@ export default function CreateModal({
         initial[field.name] = [];
       } else if (field.type === "number" || field.type === "date") {
         initial[field.name] = "";
+      } else if (field.type === "custom" && field.name === "sales") {
+        initial[field.name] = [{ productId: null, salePercent: "", saleQuantity: "" }];
       } else if (field.type === "custom" && field.name === "products") {
         initial[field.name] = [{ productId: null, quantity: "" }];
       } else if (field.type === "boolean") {
@@ -149,7 +151,22 @@ export default function CreateModal({
             productId: product.productId.value,
             quantity: Number(product.quantity),
           }));
-      } else {
+      } else if (field.type === "custom" && field.name === "sales") {
+        payload.products = formData.sales
+          .filter(
+            (item) =>
+              item.productId?.value &&
+              item.salePercent &&
+              item.saleQuantity
+          )
+          .map((item) => ({
+            productId: item.productId.value,
+            salePercent: Number(item.salePercent),
+            saleQuantity: Number(item.saleQuantity),
+          }));
+      }
+
+      else {
         payload[field.name] = formData[field.name];
       }
     });
@@ -207,6 +224,100 @@ export default function CreateModal({
                       />
                       <span className="ml-2 text-gray-700">Không</span>
                     </label>
+                  </div>
+                ) : field.type === "custom" && field.name === "sales" ? (
+                  <div className="border border-gray-300 rounded-lg p-4">
+                    {formData.sales?.map((item, index) => (
+                      <div key={index} className="flex items-center gap-3 mb-2">
+                        {/* product */}
+                        <div className="flex-1">
+                          <AsyncPaginate
+                            value={item.productId}
+                            loadOptions={
+                              field.subFields.find(sf => sf.name === "productId").loadOptions
+                            }
+                            onChange={(selected) =>
+                              setFormData(prev => {
+                                const arr = [...prev.sales];
+                                arr[index] = { ...arr[index], productId: selected };
+                                return { ...prev, sales: arr };
+                              })
+                            }
+                            placeholder="Chọn sản phẩm"
+                            additional={{ page: 1 }}
+                            isClearable
+                          />
+                        </div>
+
+                        {/* salePercent */}
+                        <input
+                          type="number"
+                          placeholder="%"
+                          min={1}
+                          max={100}
+                          value={item.salePercent}
+                          onChange={(e) =>
+                            setFormData(prev => {
+                              const arr = [...prev.sales];
+                              arr[index] = {
+                                ...arr[index],
+                                salePercent: e.target.value,
+                              };
+                              return { ...prev, sales: arr };
+                            })
+                          }
+                          className="w-20 px-2 py-2 border rounded"
+                        />
+
+                        {/* saleQuantity */}
+                        <input
+                          type="number"
+                          placeholder="SL"
+                          min={1}
+                          value={item.saleQuantity}
+                          onChange={(e) =>
+                            setFormData(prev => {
+                              const arr = [...prev.sales];
+                              arr[index] = {
+                                ...arr[index],
+                                saleQuantity: e.target.value,
+                              };
+                              return { ...prev, sales: arr };
+                            })
+                          }
+                          className="w-24 px-2 py-2 border rounded"
+                        />
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setFormData(prev => ({
+                              ...prev,
+                              sales: prev.sales.filter((_, i) => i !== index),
+                            }))
+                          }
+                          className="text-red-600"
+                        >
+                          <FaTrash />
+                        </button>
+                      </div>
+                    ))}
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setFormData(prev => ({
+                          ...prev,
+                          sales: [
+                            ...prev.sales,
+                            { productId: null, salePercent: "", saleQuantity: "" },
+                          ],
+                        }))
+                      }
+                      className="mt-2 flex items-center text-blue-600"
+                    >
+                      <FaPlus className="mr-1" /> Thêm sản phẩm sale
+                    </button>
                   </div>
                 ) : field.type === "custom" && field.name === "products" ? (
                   <div className="border border-gray-300 rounded-lg p-4">
@@ -304,11 +415,11 @@ export default function CreateModal({
                     value={
                       field.multiple
                         ? field.options.filter((option) =>
-                            formData[field.name]?.includes(option.value)
-                          )
+                          formData[field.name]?.includes(option.value)
+                        )
                         : field.options.find(
-                            (option) => option.value === formData[field.name]
-                          )
+                          (option) => option.value === formData[field.name]
+                        )
                     }
                     onChange={(selected) => {
                       if (field.multiple) {
