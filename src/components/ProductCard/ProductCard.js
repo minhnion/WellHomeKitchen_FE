@@ -74,12 +74,9 @@ const ProductCard = ({
     new Date(createdAt) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
   const newPrice = price - (price * discountPercent) / 100;
   const truncatedOldPrice = price
-    .toString()
-    .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    .toLocaleString("vi-VN");
   const truncatedNewPrice = newPrice
-    .toString()
-    .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-
+    .toLocaleString("vi-VN");
   const star = starAverage > 0 ? starAverage : 4.5;
 
   return (

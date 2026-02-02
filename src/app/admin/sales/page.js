@@ -97,6 +97,7 @@ export default function SaleOccasionPage() {
                 setSearchTerm={setSearchTerm}
                 itemsPerPage={itemsPerPage}
                 setItemsPerPage={setItemsPerPage}
+                status={status}
                 setStatus={setStatus}
                 onCreate={() => setOpenCreate(true)}
             />

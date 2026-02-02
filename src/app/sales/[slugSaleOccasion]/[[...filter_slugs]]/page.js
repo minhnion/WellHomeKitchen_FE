@@ -1,62 +1,59 @@
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
-import { getSaleProducts, getAllSaleProducts } from "@/apiServices/saleOccasion";
+import { getSaleProducts, getAllSaleProducts, getSaleCategories } from "@/apiServices/saleOccasion";
 import SaleProductsClient from "../components/SaleProductClient/SaleProductClient";
 
 export default async function SaleOccasionPage(props) {
     const params = await props.params;
     const searchParams = await props.searchParams;
-
     const { slugSaleOccasion } = params;
 
-    //  nếu user vào /sales thì chuyển sang /sales/all
-    if (!slugSaleOccasion) {
-        redirect("/sales/all");
-    }
 
     const page = searchParams.page ? parseInt(searchParams.page) : 1;
     const limit = 20;
     const now = new Date().toISOString();
+    const categorySlug =
+        typeof searchParams.category === "string"
+            ? searchParams.category
+            : null;
 
-    let res;
+    const categories = await getSaleCategories(now);
 
-    if (slugSaleOccasion === "all") {
-        res = await getAllSaleProducts({
-            time: now,
-            category: null,
-            limit,
-            page,
-        });
-    } else {
-        res = await getSaleProducts({
-            time: now,
-            category: null,
-            limit,
-            page,
-        });
-    }
+    const categoryId = categorySlug
+        ? categories.find((c) => c.slug === categorySlug)?._id || null
+        : null;
+
+    const res = await getSaleProducts({
+        time: now,
+        category: categoryId,
+        limit,
+        page,
+    });
+
+
+
+
+
 
     if (!res?.data?.sale) notFound();
 
     const { sale, products } = res.data;
 
-    //  chỉ check slug khi KHÔNG phải all
-    if (slugSaleOccasion !== "all" && sale.slug !== slugSaleOccasion) {
+
+    if (sale.slug !== slugSaleOccasion) {
         notFound();
     }
+
+
+
 
     const breadcrumbItems = [
         { href: "/", label: "Trang chủ" },
         {
-            href:
-                slugSaleOccasion === "all"
-                    ? "/sales/all"
-                    : `/sales/${sale.slug}`,
-            label:
-                slugSaleOccasion === "all"
-                    ? "Tất cả sản phẩm ưu đãi"
-                    : sale.name,
+            href: `/sales/${sale.slug}`,
+            label: sale.name,
         },
+
     ];
 
     return (
@@ -92,6 +89,7 @@ export default async function SaleOccasionPage(props) {
                 sale={sale}
                 initialProducts={products}
                 totalProducts={res.pagination?.total || 0}
+                categories={categories}
             />
         </div>
     );

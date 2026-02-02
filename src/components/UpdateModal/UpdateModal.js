@@ -96,7 +96,7 @@ export function UpdateModal({
               const products = await Promise.all(productPromises);
               const options = products
                 .filter((p) => p?._id)
-                .map((p) => ({ value: p._id, label: p.name }));
+                .map((p) => ({ value: p._id, label: p.name, price: p.price, }));
 
               initData[field.name] = field.multiple
                 ? options
@@ -115,13 +115,41 @@ export function UpdateModal({
         (f) => f.type === "custom" && f.name === "sales"
       );
 
-      if (salesField && Array.isArray(initialData.sales)) {
-        initData.sales = initialData.sales;
+      if (salesField && Array.isArray(initialData.products)) {
+        initData.sales = initialData.products.map((p) => {
+          const originalPrice = p.productId?.price || 0;
+
+          let salePrice = "";
+          if (originalPrice && p.salePercent !== undefined) {
+            salePrice = Math.round(
+              originalPrice * (1 - p.salePercent / 100)
+            );
+          }
+
+          return {
+            productId: p.productId
+              ? {
+                value: p.productId._id,
+                label: p.productId.name,
+                price: originalPrice,
+              }
+              : null,
+            salePrice,
+            salePercent: p.salePercent ?? "",
+            saleQuantity: p.saleQuantity ?? "",
+          };
+        });
       }
+
 
       if (salesField && !Array.isArray(initData.sales)) {
         initData.sales = [
-          { productId: null, salePercent: "", saleQuantity: "" },
+          {
+            productId: null,
+            salePrice: "",
+            salePercent: "",
+            saleQuantity: "",
+          }
         ];
       }
 
@@ -201,15 +229,23 @@ export function UpdateModal({
 
     fields.forEach((field) => {
       if (field.type === "custom" && field.name === "sales") {
-        payload.products = formData.sales
-          ?.filter(
-            (s) => s.productId?.value && s.salePercent && s.saleQuantity
-          )
-          .map((s) => ({
-            productId: s.productId.value,
-            salePercent: Number(s.salePercent),
-            saleQuantity: Number(s.saleQuantity),
-          })) || [];
+        payload.products =
+          formData.sales
+            ?.filter(
+              (s) =>
+                s.productId?.value &&
+                s.saleQuantity
+            )
+            .map((s) => ({
+              productId: s.productId.value,
+              saleQuantity: Number(s.saleQuantity),
+              salePercent:
+                s.salePercent !== "" && s.salePercent !== undefined
+                  ? Number(s.salePercent)
+                  : undefined,
+            })) || [];
+
+
       }
       else if (field.async) {
         payload[field.name] = field.multiple
@@ -286,7 +322,7 @@ export function UpdateModal({
                         {/* HEADER */}
                         <div className="grid grid-cols-12 gap-2 mb-2 text-sm font-medium text-gray-600">
                           <div className="col-span-5">Sản phẩm</div>
-                          <div className="col-span-3">Giảm (%)</div>
+                          <div className="col-span-3">Giá bán</div>
                           <div className="col-span-3">Số lượng</div>
                           <div className="col-span-1"></div>
                         </div>
@@ -329,10 +365,18 @@ export function UpdateModal({
                                 defaultOptions={true}
                                 getOptionLabel={(opt) => opt.label}
                                 onChange={(val) => {
-                                  const newSales = [...formData.sales];
-                                  newSales[index].productId = val;
-                                  setFormData({ ...formData, sales: newSales });
+                                  const arr = [...formData.sales];
+
+                                  arr[index] = {
+                                    ...arr[index],
+                                    productId: val,
+                                    salePrice: "",
+                                    salePercent: "",
+                                  };
+
+                                  setFormData({ ...formData, sales: arr });
                                 }}
+
                                 menuPortalTarget={document.body}
                                 styles={{
                                   menuPortal: (base) => ({ ...base, zIndex: 9999 }),
@@ -344,21 +388,36 @@ export function UpdateModal({
 
                             </div>
 
-                            {/* SALE % */}
+                            {/* SALE PRICE */}
                             <div className="col-span-3">
                               <input
                                 type="number"
-                                min={1}
-                                max={100}
-                                value={item.salePercent}
+                                min={0}
+                                value={item.salePrice || ""}
                                 onChange={(e) => {
-                                  const newSales = [...formData.sales];
-                                  newSales[index].salePercent = e.target.value;
-                                  setFormData({ ...formData, sales: newSales });
+                                  const arr = [...formData.sales];
+                                  const salePrice = Number(e.target.value);
+
+                                  const originalPrice = arr[index].productId?.price;
+
+                                  let salePercent = "";
+                                  if (originalPrice && salePrice > 0 && salePrice < originalPrice) {
+                                    salePercent = ((originalPrice - salePrice) / originalPrice) * 100;
+                                  }
+
+                                  arr[index] = {
+                                    ...arr[index],
+                                    salePrice,
+                                    salePercent,
+                                  };
+
+                                  setFormData({ ...formData, sales: arr });
                                 }}
                                 className="w-full border rounded px-3 py-2"
+                                placeholder="Nhập giá sale"
                               />
                             </div>
+
 
                             {/* QUANTITY */}
                             <div className="col-span-3">
@@ -404,6 +463,7 @@ export function UpdateModal({
                                 ...(formData.sales || []),
                                 {
                                   productId: null,
+                                  salePrice: "",
                                   salePercent: "",
                                   saleQuantity: "",
                                 },
