@@ -1,29 +1,16 @@
 "use client";
 
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import ProductCard from "../ProductCard/ProductCard";
-import { useRef, useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper/modules";
+import "swiper/css";
 
 const SaleOccasionProductFrame = ({ sale, products = [] }) => {
-    const sliderRef = useRef(null);
+    const swiperRef = useRef(null);
+    const [timeLeft, setTimeLeft] = useState(null);
 
     if (!sale || products.length === 0) return null;
-
-    const scrollLeft = () => {
-        sliderRef.current?.scrollBy({
-            left: -320,
-            behavior: "smooth",
-        });
-    };
-
-    const scrollRight = () => {
-        sliderRef.current?.scrollBy({
-            left: 320,
-            behavior: "smooth",
-        });
-    };
-
-    const [timeLeft, setTimeLeft] = useState(null);
 
     useEffect(() => {
         if (!sale?.endAt) return;
@@ -86,37 +73,63 @@ const SaleOccasionProductFrame = ({ sale, products = [] }) => {
                 </div>
 
                 <div className="hidden sm:flex gap-2 self-end sm:self-auto">
-
                     <button
-                        onClick={scrollLeft}
-                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white flex items-center justify-center"
+                        className="sale-products-prev w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white flex items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors"
                     >
-                        <ChevronLeft size={16} />
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            className="w-4 h-4"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M15 19l-7-7 7-7"
+                            />
+                        </svg>
                     </button>
                     <button
-                        onClick={scrollRight}
-                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white flex items-center justify-center"
+                        className="sale-products-next w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white flex items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors"
                     >
-                        <ChevronRight size={16} />
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            className="w-4 h-4"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M9 5l7 7-7 7"
+                            />
+                        </svg>
                     </button>
                 </div>
             </div>
 
             {/* ===== Product List ===== */}
-            <div
-                ref={sliderRef}
-                className="
-        flex gap-3 sm:gap-4 overflow-x-auto scroll-smooth
-        [&::-webkit-scrollbar]:hidden
-        [-ms-overflow-style:none]
-        [scrollbar-width:none]"
+            <Swiper
+                ref={swiperRef}
+                modules={[Navigation]}
+                navigation={{
+                    nextEl: ".sale-products-next",
+                    prevEl: ".sale-products-prev",
+                }}
+                spaceBetween={12}
+                breakpoints={{
+                    320: { slidesPerView: 2, slidesPerGroup: 1 },
+                    640: { slidesPerView: 3, slidesPerGroup: 1 },
+                    1024: { slidesPerView: 5, slidesPerGroup: 1 },
+                }}
+                className="sale-products-slider"
             >
-
                 {products.map((item) => (
-                    <div
-                        key={item.productId}
-                        className="w-[180px] sm:w-[230px] flex-shrink-0"
-                    >
+                    <SwiperSlide key={item.productId}>
                         <ProductCard
                             id={item.productId}
                             name={item.name}
@@ -126,9 +139,9 @@ const SaleOccasionProductFrame = ({ sale, products = [] }) => {
                             discountPercent={item.salePercent}
                             fluid
                         />
-                    </div>
+                    </SwiperSlide>
                 ))}
-            </div>
+            </Swiper>
 
             {/* ===== Footer ===== */}
             <div className="flex justify-center mt-4 sm:mt-5">

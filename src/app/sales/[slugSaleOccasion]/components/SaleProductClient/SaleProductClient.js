@@ -39,6 +39,11 @@ export default function SaleProductsClient({
     /* ================= CONSTANT ================= */
     const DISPLAY_LIMIT = 10;
 
+    /* ================= MEMOIZE CATEGORIES (GIỮ NGUYÊN THỨ TỰ) ================= */
+    const sortedCategories = useMemo(() => {
+        return [...categories].sort((a, b) => a.name.localeCompare(b.name, 'vi'));
+    }, [categories]);
+
     /* ================= FILTER + SORT ================= */
     const filteredProducts = useMemo(() => {
         let result = [...products];
@@ -145,7 +150,7 @@ export default function SaleProductsClient({
                             </Link>
 
                             {/* CATEGORY trong đợt sale */}
-                            {categories.map((cat) => (
+                            {sortedCategories.map((cat) => (
                                 <Link
                                     key={cat.slug}
                                     href={`/sales/${sale.slug}?category=${cat.slug}`}

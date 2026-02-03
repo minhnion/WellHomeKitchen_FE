@@ -48,7 +48,7 @@ const SaleHeader = ({
                 </div>
 
                 {/* RIGHT ACTIONS */}
-                <div className="flex gap-75">
+                <div className="flex gap-60">
                     {/* STATUS FILTER */}
                     <select
                         className="border rounded-lg px-3 py-1.5 text-sm"
