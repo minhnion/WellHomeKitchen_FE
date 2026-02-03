@@ -105,12 +105,17 @@ const SaleOccasionProductFrame = ({ sale, products = [] }) => {
             {/* ===== Product List ===== */}
             <div
                 ref={sliderRef}
-                className="flex gap-3 sm:gap-4 overflow-x-auto scroll-smooth no-scrollbar"
+                className="
+        flex gap-3 sm:gap-4 overflow-x-auto scroll-smooth
+        [&::-webkit-scrollbar]:hidden
+        [-ms-overflow-style:none]
+        [scrollbar-width:none]"
             >
+
                 {products.map((item) => (
                     <div
                         key={item.productId}
-                        className="min-w-[180px] sm:min-w-[230px]"
+                        className="w-[180px] sm:w-[230px] flex-shrink-0"
                     >
                         <ProductCard
                             id={item.productId}

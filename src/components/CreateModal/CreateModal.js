@@ -58,7 +58,9 @@ export default function CreateModal({
       } else if (field.type === "number" || field.type === "date") {
         initial[field.name] = "";
       } else if (field.type === "custom" && field.name === "sales") {
-        initial[field.name] = [{ productId: null, salePercent: "", saleQuantity: "" }];
+        initial[field.name] = [{ productId: null, salePrice: "", salePercent: "", saleQuantity: "", },
+        ];
+
       } else if (field.type === "custom" && field.name === "products") {
         initial[field.name] = [{ productId: null, quantity: "" }];
       } else if (field.type === "boolean") {
@@ -156,14 +158,15 @@ export default function CreateModal({
           .filter(
             (item) =>
               item.productId?.value &&
-              item.salePercent &&
-              item.saleQuantity
+              item.saleQuantity &&
+              item.salePercent !== ""
           )
           .map((item) => ({
             productId: item.productId.value,
             salePercent: Number(item.salePercent),
             saleQuantity: Number(item.saleQuantity),
           }));
+
       }
 
       else {
@@ -227,10 +230,22 @@ export default function CreateModal({
                   </div>
                 ) : field.type === "custom" && field.name === "sales" ? (
                   <div className="border border-gray-300 rounded-lg p-4">
+                    {/* HEADER */}
+                    <div className="grid grid-cols-12 gap-2 mb-2 text-sm font-medium text-gray-600">
+                      <div className="col-span-5">Sản phẩm</div>
+                      <div className="col-span-3">Giá sale</div>
+                      <div className="col-span-3">Số lượng</div>
+                      <div className="col-span-1"></div>
+                    </div>
+
+                    {/* ROWS */}
                     {formData.sales?.map((item, index) => (
-                      <div key={index} className="flex items-center gap-3 mb-2">
-                        {/* product */}
-                        <div className="flex-1">
+                      <div
+                        key={index}
+                        className="grid grid-cols-12 gap-3 items-end mb-3"
+                      >
+                        {/* PRODUCT */}
+                        <div className="col-span-5">
                           <AsyncPaginate
                             value={item.productId}
                             loadOptions={
@@ -239,86 +254,130 @@ export default function CreateModal({
                             onChange={(selected) =>
                               setFormData(prev => {
                                 const arr = [...prev.sales];
-                                arr[index] = { ...arr[index], productId: selected };
+                                arr[index] = {
+                                  ...arr[index],
+                                  productId: selected,
+                                  salePrice: "",
+                                  salePercent: "",
+                                };
                                 return { ...prev, sales: arr };
                               })
                             }
                             placeholder="Chọn sản phẩm"
                             additional={{ page: 1 }}
                             isClearable
+
+
+                            menuPortalTarget={document.body}
+                            styles={{
+                              menuPortal: base => ({ ...base, zIndex: 9999 }),
+                              menu: base => ({
+                                ...base,
+                                minWidth: "400px",
+                              }),
+                              control: base => ({
+                                ...base,
+                                minHeight: "40px",
+                              }),
+                            }}
+                          />
+
+                        </div>
+
+                        {/* SALE PRICE */}
+                        <div className="col-span-3">
+                          <input
+                            type="number"
+                            min={1}
+                            placeholder="Giá sale"
+                            value={item.salePrice || ""}
+                            onChange={(e) =>
+                              setFormData(prev => {
+                                const arr = [...prev.sales];
+                                const salePrice = Number(e.target.value);
+                                const originalPrice = arr[index].productId?.price;
+
+                                let salePercent = "";
+                                if (originalPrice && salePrice > 0 && salePrice < originalPrice) {
+                                  salePercent =
+                                    ((originalPrice - salePrice) / originalPrice) * 100;
+                                }
+
+                                arr[index] = {
+                                  ...arr[index],
+                                  salePrice: salePrice || "",
+                                  salePercent,
+                                };
+
+                                return { ...prev, sales: arr };
+                              })
+                            }
+                            className="w-full border rounded px-3 py-2"
                           />
                         </div>
 
-                        {/* salePercent */}
-                        <input
-                          type="number"
-                          placeholder="%"
-                          min={1}
-                          max={100}
-                          value={item.salePercent}
-                          onChange={(e) =>
-                            setFormData(prev => {
-                              const arr = [...prev.sales];
-                              arr[index] = {
-                                ...arr[index],
-                                salePercent: e.target.value,
-                              };
-                              return { ...prev, sales: arr };
-                            })
-                          }
-                          className="w-20 px-2 py-2 border rounded"
-                        />
+                        {/* QUANTITY */}
+                        <div className="col-span-3">
+                          <input
+                            type="number"
+                            min={1}
+                            placeholder="SL"
+                            value={item.saleQuantity}
+                            onChange={(e) =>
+                              setFormData(prev => {
+                                const arr = [...prev.sales];
+                                arr[index] = {
+                                  ...arr[index],
+                                  saleQuantity: e.target.value,
+                                };
+                                return { ...prev, sales: arr };
+                              })
+                            }
+                            className="w-full border rounded px-3 py-2"
+                          />
+                        </div>
 
-                        {/* saleQuantity */}
-                        <input
-                          type="number"
-                          placeholder="SL"
-                          min={1}
-                          value={item.saleQuantity}
-                          onChange={(e) =>
-                            setFormData(prev => {
-                              const arr = [...prev.sales];
-                              arr[index] = {
-                                ...arr[index],
-                                saleQuantity: e.target.value,
-                              };
-                              return { ...prev, sales: arr };
-                            })
-                          }
-                          className="w-24 px-2 py-2 border rounded"
-                        />
-
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setFormData(prev => ({
-                              ...prev,
-                              sales: prev.sales.filter((_, i) => i !== index),
-                            }))
-                          }
-                          className="text-red-600"
-                        >
-                          <FaTrash />
-                        </button>
+                        {/* DELETE */}
+                        <div className="col-span-1 flex justify-end">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setFormData(prev => ({
+                                ...prev,
+                                sales: prev.sales.filter((_, i) => i !== index),
+                              }))
+                            }
+                            className="text-red-500 hover:text-red-700"
+                          >
+                            <FaTrash />
+                          </button>
+                        </div>
                       </div>
                     ))}
 
+                    {/* ADD */}
                     <button
                       type="button"
                       onClick={() =>
                         setFormData(prev => ({
                           ...prev,
                           sales: [
-                            ...prev.sales,
-                            { productId: null, salePercent: "", saleQuantity: "" },
+                            ...(prev.sales || []),
+                            {
+                              productId: null,
+                              salePrice: "",
+                              salePercent: "",
+                              saleQuantity: "",
+                            },
                           ],
                         }))
                       }
-                      className="mt-2 flex items-center text-blue-600"
+                      className="mt-2 text-sm text-blue-600 hover:text-blue-800"
                     >
-                      <FaPlus className="mr-1" /> Thêm sản phẩm sale
+                      + Thêm sản phẩm sale
                     </button>
                   </div>
+
                 ) : field.type === "custom" && field.name === "products" ? (
                   <div className="border border-gray-300 rounded-lg p-4">
                     {formData.products?.map((product, index) => (

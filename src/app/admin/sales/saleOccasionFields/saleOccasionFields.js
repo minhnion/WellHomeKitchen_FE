@@ -33,7 +33,7 @@ export const saleOccasionFields = [
                 loadOptions: async (search, loadedOptions, { page = 1 }) => {
                     const res = await getAllProducts(
                         page,
-                        10,
+                        1000000,
                         null,
                         null,
                         null,
@@ -44,6 +44,7 @@ export const saleOccasionFields = [
                         options: res.data.map((p) => ({
                             value: p._id,
                             label: p.name,
+                            price: p.price,
                         })),
                         hasMore: page * 10 < res.pagination.total,
                         additional: { page: page + 1 },
@@ -51,12 +52,11 @@ export const saleOccasionFields = [
                 },
             },
             {
-                name: "salePercent",
-                label: "Giảm (%)",
+                name: "salePrice",
+                label: "Giá bán",
                 type: "number",
                 required: true,
-                min: 1,
-                max: 100,
+                min: 0,
             },
             {
                 name: "saleQuantity",

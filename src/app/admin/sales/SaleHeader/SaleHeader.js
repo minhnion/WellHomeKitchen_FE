@@ -12,6 +12,12 @@ const SaleHeader = ({
     onCreate,
 }) => {
     const [inputValue, setInputValue] = useState(searchTerm);
+    const STATUS_LABEL = {
+        upcoming: "Chưa diễn ra",
+        active: "Đang diễn ra",
+        ended: "Đã kết thúc",
+    };
+
 
     // sync input khi reset
     useEffect(() => {
@@ -99,7 +105,7 @@ const SaleHeader = ({
 
                     {status !== "all" && (
                         <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-800">
-                            Trạng thái: {status}
+                            Trạng thái: {STATUS_LABEL[status]}
                             <button
                                 onClick={() => setStatus("all")}
                                 className="ml-1 w-4 h-4 text-green-600 hover:bg-green-200 rounded-full"
@@ -108,6 +114,7 @@ const SaleHeader = ({
                             </button>
                         </span>
                     )}
+
                 </div>
             )}
         </>

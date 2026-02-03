@@ -4,12 +4,17 @@ import { useState, useMemo } from "react";
 import ProductCard from "@/components/ProductCard/ProductCard";
 import { ChevronDown, ChevronUp, Filter as FilterIcon } from "lucide-react";
 import FilterPanelNew from "./components/FilterPanelNew";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function SaleProductsClient({
     sale,
     initialProducts,
     totalProducts,
+    categories = [],
 }) {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+
     /* ================= DATA ================= */
     const products = initialProducts || [];
 
@@ -88,6 +93,21 @@ export default function SaleProductsClient({
     const showLoadMore =
         products.length > DISPLAY_LIMIT && !showAll;
 
+    const updateQuery = (newParams) => {
+        const params = new URLSearchParams(searchParams.toString());
+
+        Object.entries(newParams).forEach(([key, value]) => {
+            if (value === null || value === undefined) {
+                params.delete(key);
+            } else {
+                params.set(key, value);
+            }
+        });
+
+        router.push(`?${params.toString()}`, { scroll: false });
+    };
+
+
     /* ================= RENDER ================= */
     return (
         <div className="mt-6 grid grid-cols-1 md:grid-cols-[280px_1fr] gap-6">
@@ -116,13 +136,26 @@ export default function SaleProductsClient({
                             }`}
                     >
                         <div className="p-4 space-y-2">
+                            {/* TẤT CẢ trong đợt sale */}
                             <Link
-                                href="/sales/all"
-                                className="block px-3 py-2  transition font-medium"
+                                href={`/sales/${sale.slug}`}
+                                className="block px-3 py-2 font-medium hover:bg-gray-100 rounded"
                             >
-                                Tất cả sản phẩm ưu đãi
+                                Tất cả
                             </Link>
+
+                            {/* CATEGORY trong đợt sale */}
+                            {categories.map((cat) => (
+                                <Link
+                                    key={cat.slug}
+                                    href={`/sales/${sale.slug}?category=${cat.slug}`}
+                                    className="block px-3 py-2 hover:bg-gray-100 rounded"
+                                >
+                                    {cat.name}
+                                </Link>
+                            ))}
                         </div>
+
                     </div>
 
                 </div>
@@ -165,16 +198,19 @@ export default function SaleProductsClient({
                                         <input
                                             type="checkbox"
                                             checked={checked}
-                                            onChange={() =>
-                                                setPriceFilter(
-                                                    checked
-                                                        ? null
-                                                        : {
-                                                            min: p.min,
-                                                            max: p.max,
-                                                        }
-                                                )
-                                            }
+                                            onChange={() => {
+                                                if (checked) {
+                                                    setPriceFilter(null);
+                                                    updateQuery({ minPrice: null, maxPrice: null });
+                                                } else {
+                                                    setPriceFilter({ min: p.min, max: p.max });
+                                                    updateQuery({
+                                                        minPrice: p.min,
+                                                        maxPrice: p.max,
+                                                    });
+                                                }
+                                            }}
+
                                             className="accent-blue-600"
                                         />
                                         <span>{p.label}</span>
@@ -220,7 +256,6 @@ export default function SaleProductsClient({
                                     {[
                                         { id: "newest", label: "Mới nhất" },
                                         { id: "bestseller", label: "Bán chạy" },
-                                        { id: "discount", label: "Giảm giá" },
                                         { id: "price-asc", label: "Giá thấp - cao" },
                                         { id: "price-desc", label: "Giá cao - thấp" },
                                     ].map((o) => (
@@ -229,7 +264,19 @@ export default function SaleProductsClient({
                                             onClick={() => {
                                                 setSortOption(o.id);
                                                 setSortOpen(false);
+
+                                                updateQuery({
+                                                    sort: o.id,
+                                                    sortPrice:
+                                                        o.id === "price-asc"
+                                                            ? "asc"
+                                                            : o.id === "price-desc"
+                                                                ? "desc"
+                                                                : null,
+                                                });
                                             }}
+
+
                                             className="block w-full px-4 py-2 text-left hover:bg-gray-100"
                                         >
                                             {o.label}
