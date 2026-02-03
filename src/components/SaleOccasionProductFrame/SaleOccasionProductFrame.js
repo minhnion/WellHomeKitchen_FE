@@ -113,6 +113,7 @@ const SaleOccasionProductFrame = ({ sale, products = [] }) => {
             </div>
 
             {/* ===== Product List ===== */}
+
             <Swiper
                 ref={swiperRef}
                 modules={[Navigation]}
@@ -120,11 +121,12 @@ const SaleOccasionProductFrame = ({ sale, products = [] }) => {
                     nextEl: ".sale-products-next",
                     prevEl: ".sale-products-prev",
                 }}
-                spaceBetween={12}
+                spaceBetween={50}
                 breakpoints={{
-                    320: { slidesPerView: 2, slidesPerGroup: 1 },
-                    640: { slidesPerView: 3, slidesPerGroup: 1 },
-                    1024: { slidesPerView: 5, slidesPerGroup: 1 },
+                    320: { slidesPerView: 2, slidesPerGroup: 2 },
+                    640: { slidesPerView: 3, slidesPerGroup: 3 },
+                    768: { slidesPerView: 4, slidesPerGroup: 4 },
+                    1024: { slidesPerView: 5, slidesPerGroup: 5 },
                 }}
                 className="sale-products-slider"
             >
@@ -137,7 +139,7 @@ const SaleOccasionProductFrame = ({ sale, products = [] }) => {
                             mainImage={item.mainImage}
                             price={item.price}
                             discountPercent={item.salePercent}
-                            fluid
+
                         />
                     </SwiperSlide>
                 ))}
