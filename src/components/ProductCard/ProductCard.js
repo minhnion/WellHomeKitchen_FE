@@ -90,7 +90,7 @@ const ProductCard = ({
     group relative
 
     ${fluid
-            ? "w-full h-auto"
+            ? "w-full h-auto "
             : "w-63 aspect-[9/12] max-xl:w-48 max-sm:aspect-[9/14] max-sm:w-44 max-[25rem]:w-40  "}
   `}
         onMouseEnter={() => setShowEye(true)}
