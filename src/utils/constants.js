@@ -107,7 +107,7 @@ export const allMenuItems = [
       {
         label: "Danh mục bài viết",
         icon: <FaFolderOpen size={16} />,
-        link: "/admin/aaa",
+        link: "/admin/news-categories",
         roles: ["content-creator", "admin"],
       },
       {
