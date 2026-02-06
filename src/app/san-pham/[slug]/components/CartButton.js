@@ -72,7 +72,7 @@ export default function CartButtons({ product }) {
         <button
           onClick={handleAddToCart}
           disabled={isAdding}
-          className="relative overflow-hidden border-2 border-red-600 rounded-lg font-medium 
+          className=" w-full relative overflow-hidden border-2 border-red-600 rounded-lg font-medium 
              flex items-center justify-center gap-2 px-3 py-2 sm:px-4 sm:py-3
              text-red-600 text-sm sm:text-base
              transition-colors duration-300
@@ -92,7 +92,7 @@ export default function CartButtons({ product }) {
         <button
           onClick={handleBuyNow}
           className="
-    bg-red-600 text-white
+    w-full bg-red-600 text-white
     hover:bg-red-500
     px-3 py-2 sm:px-4 sm:py-3
     rounded-lg font-medium

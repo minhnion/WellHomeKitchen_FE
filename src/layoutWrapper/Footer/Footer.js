@@ -58,7 +58,7 @@ export default function Footer({ config }) {
   };
 
   const companyInfo = [
-    { title: "Giới thiệu về Bepanphu", linkTo: "/gioi-thieu-kitchen-care" },
+    { title: "Giới thiệu về Bepanphu", linkTo: "ban-tin/gioi-thieu/gioi-thieu-ve-bep-an-phu" },
     { title: "Quy định chung", linkTo: "/gioi-thieu-kitchen-care" },
     { title: "Kinh nghiệm hay", linkTo: "/gioi-thieu-kitchen-care" },
     { title: "Khuyến mại", linkTo: "/gioi-thieu-kitchen-care" },
