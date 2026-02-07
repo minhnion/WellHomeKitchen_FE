@@ -148,7 +148,8 @@ export default async function ProductDetailPage(props) {
               />
 
             </div>
-            <div className="md:w-3/5 py-6 pl-6 border-t md:border-t-0 md:border-l border-gray-200">
+            <div className="md:w-3/5 py-6 pl-2 pr-2 md:pl-6 border-t md:border-t-0 md:border-l border-gray-200">
+
               <h1 className=" text-3xl font-semibold text-blue-800 mb-1 max-sm:text-xl">
                 {name}
               </h1>
