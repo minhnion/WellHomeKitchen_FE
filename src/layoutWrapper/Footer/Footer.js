@@ -59,10 +59,10 @@ export default function Footer({ config }) {
 
   const companyInfo = [
     { title: "Giới thiệu về Bepanphu", linkTo: "ban-tin/gioi-thieu/gioi-thieu-ve-bep-an-phu" },
-    { title: "Quy định chung", linkTo: "/gioi-thieu-kitchen-care" },
-    { title: "Kinh nghiệm hay", linkTo: "/gioi-thieu-kitchen-care" },
-    { title: "Khuyến mại", linkTo: "/gioi-thieu-kitchen-care" },
-    { title: "Thư mời hợp tác đại lý", linkTo: "/gioi-thieu-kitchen-care" },
+    { title: "Quy định chung", linkTo: "ban-tin/gioi-thieu/gioi-thieu-ve-bep-an-phu" },
+    { title: "Kinh nghiệm hay", linkTo: "ban-tin/gioi-thieu/gioi-thieu-ve-bep-an-phu" },
+    { title: "Khuyến mại", linkTo: "ban-tin/gioi-thieu/gioi-thieu-ve-bep-an-phu" },
+    { title: "Thư mời hợp tác đại lý", linkTo: "ban-tin/gioi-thieu/gioi-thieu-ve-bep-an-phu" },
   ];
 
   const policyInfo = [

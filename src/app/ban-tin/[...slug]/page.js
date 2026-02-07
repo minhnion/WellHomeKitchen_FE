@@ -95,7 +95,7 @@ export default async function SlugPage({ params: paramsPromise, searchParams: se
             </li>
           </ol>
         </nav>
-        <article className="max-w-5xl my-6 bg-white p-6 md:p-10 rounded-lg shadow-lg">
+        <article className="mx-auto my-6 bg-white p-6 md:p-10 rounded-lg shadow-lg">
           <header className="mb-8 border-b pb-6">
             <h1 className="text-3xl lg:text-4xl font-bold mb-4">
               {post.title}
