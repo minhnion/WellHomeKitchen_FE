@@ -141,7 +141,7 @@ export default function Footer({ config }) {
                   <p className="text-gray-700">{primary_location}</p>
                   <Link
                     target="_blank"
-                    href="https://maps.app.goo.gl/vAokL1dkZuNYLcfH7"
+                    href="https://maps.app.goo.gl/K5Qv3S8BqsVC9imG9"
                     className="text-blue-600 text-sm mt-1 flex items-center transition-colors duration-300 hover:text-blue-800 group"
                   >
                     Bản đồ đường đi
@@ -160,7 +160,7 @@ export default function Footer({ config }) {
                   <p className="text-gray-700">{secondary_location}</p>
                   <Link
                     target="_blank"
-                    href="https://maps.app.goo.gl/K6vzHtnMR4uCyhFo7"
+                    href="https://maps.app.goo.gl/K5Qv3S8BqsVC9imG9"
                     className="text-blue-600 text-sm mt-1 flex items-center transition-colors duration-300 hover:text-blue-800 group"
                   >
                     Bản đồ đường đi
