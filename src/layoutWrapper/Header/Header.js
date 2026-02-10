@@ -414,7 +414,7 @@ export default function Header({ phoneNumber, categories }) {
               <span className="font-semibold text-gray-300">Hotline:</span>
               <span className="text-white font-medium">{phoneNumber}</span>
               <span className="text-white font-medium">
-                (9h-12h,13h00-18h,T2-T6)
+                (8h-12h,13h-21h,T2-CN)
               </span>
             </div>
           </div>

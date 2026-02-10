@@ -152,7 +152,7 @@ export default function Footer({ config }) {
                 </div>
               </div>
 
-              <div className="flex items-start">
+              {/* <div className="flex items-start">
                 <div className="mr-3 text-blue-600 mt-1">
                   <Icons.Home />
                 </div>
@@ -169,7 +169,7 @@ export default function Footer({ config }) {
                     </span>
                   </Link>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
 
