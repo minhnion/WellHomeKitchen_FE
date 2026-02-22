@@ -29,8 +29,99 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+# WellHomeKitchen - Frontend (FE)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Frontend cho dự án WellHomeKitchen, xây dựng bằng **Next.js 16+**, chạy bằng **Docker**.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## Công nghệ sử dụng
+
+- Next.js 16+ (App Router)
+- Tailwind CSS
+- Docker & Docker Compose
+
+---
+
+## Cấu trúc thư mục
+
+```
+WellHomeKitchen_FE/
+├── src/                # Source code chính
+├── public/             # Static assets (ảnh, icon,...)
+├── nginx/              # Cấu hình nginx (nếu có)
+├── next.config.mjs     # Cấu hình Next.js
+├── tailwind.config.js  # Cấu hình Tailwind CSS
+├── postcss.config.mjs
+├── jsconfig.json
+├── docker-compose.yml
+├── Dockerfile
+└── package.json
+```
+
+---
+
+## Biến môi trường
+
+Tạo file `.env.production` ở thư mục gốc:
+
+```dotenv
+NEXT_PUBLIC_API_URL=https://bepanphu.vn
+```
+
+---
+
+## Chạy dự án bằng Docker
+
+### Khởi động
+
+```bash
+cd WellHomeKitchen_FE
+docker compose up -d
+```
+
+Container `wellhomekitchen-fe` sẽ chạy ở port 3000.
+
+### Dừng
+
+```bash
+docker compose down
+```
+
+### Xem log
+
+```bash
+docker logs wellhomekitchen-fe --tail=50
+```
+
+### Rebuild lại image (khi có thay đổi code)
+
+```bash
+docker compose down
+docker compose up -d --build
+```
+
+---
+
+## Triển khai (Deploy)
+
+Server đang chạy trên VPS với **aaPanel** + **Nginx** + **Docker**.
+
+Nginx proxy toàn bộ request `/` vào port 3000, riêng `/api/*` được proxy sang BE port 4000.
+
+Sau khi chỉnh sửa code, để deploy lại:
+
+```bash
+cd /home/Bep_An_Phu/WellHomeKitchen_FE
+git pull
+docker compose down
+docker compose up -d --build
+```
+
+---
+
+## Ghi chú
+
+- FE build theo kiểu **Next.js standalone output**, image Docker nhỏ gọn hơn.
+- Mọi request API từ FE đều đi qua `NEXT_PUBLIC_API_URL`, tức là qua Nginx rồi mới tới BE.
+- Static files của BE (ảnh upload,...) được serve trực tiếp qua Nginx tại đường dẫn `/public/`.
